@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -104,11 +108,11 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.nicwsajhxfynxflfklti',
-        'PASSWORD': 'Spring@0@1@0#',
-        'HOST': 'aws-1-ap-southeast-1.pooler.supabase.com',
-        'PORT': '6543',
+        'NAME': os.environ.get('SUPABASE_DB', 'postgres'),
+        'USER': os.environ.get('SUPABASE_USER'),
+        'PASSWORD': os.environ.get('SUPABASE_PASSWORD'),
+        'HOST': os.environ.get('SUPABASE_HOST'),
+        'PORT': os.environ.get('SUPABASE_PORT', '5432'),
         'OPTIONS': {
             'sslmode': 'require',
         },
