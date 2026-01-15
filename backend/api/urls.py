@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import SignupView, OTPView, LoginView, PasswordChangeView, LogoutView, BlogUploadView, BlogListAPIView, \
+from api.views import SignupView, OTPView, LoginView, PasswordChangeView, LogoutView, BlogUploadView, BlogListAPIView, \
     BlogEditView, BlogDeleteView, MeetingRUDView, MeetingCreateView, MeetingListView, MeetingAttendanceListView, \
-    MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView, api_home, \
+    MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView, api_root, \
     EventRUDView, EventImageRUDView, AdminRUDView, EventListCreateView, PublicStudentsListView, \
     BillListCreateView, BillRUDView, InlineImageUploadView
 
@@ -9,7 +9,7 @@ from .views import SignupView, OTPView, LoginView, PasswordChangeView, LogoutVie
 #  GET , PUT, PATCH, DELETE
 urlpatterns = [
     # Root
-    path('', api_home, name='home'),
+    path('', api_root, name='home'),
 
     # Authentication
     path('auth/signup/', SignupView.as_view(), name='signup'),
@@ -34,13 +34,13 @@ urlpatterns = [
     path('blogs/upload-inline-image/', InlineImageUploadView.as_view(), name='inline-image-upload'),
 
     # Meetings
-    path('meetings/', MeetingListView.as_view(), name='meeting-list'),
-    path('meetings/create/', MeetingCreateView.as_view(), name='meeting-create'),
-    path('meetings/<int:pk>/', MeetingRUDView.as_view(), name='meeting-RUD'),
+    path('meetings/', MeetingListView.as_view(), name='meeting.py-list'),
+    path('meetings/create/', MeetingCreateView.as_view(), name='meeting.py-create'),
+    path('meetings/<int:pk>/', MeetingRUDView.as_view(), name='meeting.py-RUD'),
     path('meetings/<int:pk>/attendance/', MeetingAttendanceListView.as_view(), name='attendance-list'),
     path('meetings/<int:pk>/attendance/<int:att_pk>', MeetingAttendanceRUDView.as_view(), name='attendance-RUD'),
     path('meetings/<int:pk>/attendance/<int:att_pk>', MeetingAttendanceRUDView.as_view(), name='attendance-RUD'),  # Accepted requests (for instance): GET , PUT, PATCH, DELETE
-    path("meetings/<int:pk>/pdf/", MeetingPDFView.as_view(), name="meeting-pdf"),
+    path("meetings/<int:pk>/pdf/", MeetingPDFView.as_view(), name="meeting.py-pdf"),
         
     # Events
     path('events/', EventListCreateView.as_view(), name='event-list-create'),
