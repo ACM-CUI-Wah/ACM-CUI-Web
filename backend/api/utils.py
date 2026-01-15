@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import send_mail
 
@@ -44,3 +46,6 @@ def send_password(destination: str, **data):
         recipient_list=[destination],
         fail_silently=False,
     )
+
+def current_time():
+    return datetime.now().time()
