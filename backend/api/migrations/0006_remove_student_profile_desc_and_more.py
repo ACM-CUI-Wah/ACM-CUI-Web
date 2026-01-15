@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
             name="title",
         ),
         migrations.AlterField(
-            model_name="meeting",
+            model_name="meeting.py",
             name="start_time",
             field=models.TimeField(default="07:21 PM"),
         ),

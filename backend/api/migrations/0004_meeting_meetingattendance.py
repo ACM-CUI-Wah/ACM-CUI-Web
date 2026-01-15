@@ -57,11 +57,11 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "meeting",
+                    "meeting.py",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="attendance",
-                        to="api.meeting",
+                        to="api.meeting.py",
                     ),
                 ),
                 (

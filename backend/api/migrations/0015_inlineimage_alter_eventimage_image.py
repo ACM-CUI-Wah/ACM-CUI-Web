@@ -15,13 +15,13 @@ class Migration(migrations.Migration):
             name='InlineImage',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to=api.models.temp_inline_upload_path)),
+                ('image', models.ImageField(upload_to=api.models.blog.temp_inline_upload_path)),
                 ('uploaded_at', models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.AlterField(
             model_name='eventimage',
             name='image',
-            field=models.ImageField(blank=True, default='D:\\ACM-codehub\\codehub-website\\backend\\media/events/default.png', null=True, upload_to=api.models.event_image_upload_path),
+            field=models.ImageField(blank=True, default='D:\\ACM-codehub\\codehub-website\\backend\\media/events/default.png', null=True, upload_to=api.models.event.event_image_upload_path),
         ),
     ]

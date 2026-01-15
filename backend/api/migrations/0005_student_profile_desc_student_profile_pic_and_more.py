@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             field=models.CharField(default="", max_length=50),
         ),
         migrations.AlterField(
-            model_name="meeting",
+            model_name="meeting.py",
             name="start_time",
             field=models.TimeField(default="05:38 PM"),
         ),

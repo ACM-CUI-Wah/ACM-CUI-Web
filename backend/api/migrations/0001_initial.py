@@ -163,7 +163,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "image",
-                    models.ImageField(upload_to=api.models.blog_image_upload_path),
+                    models.ImageField(upload_to=api.models.blog.blog_image_upload_path),
                 ),
                 (
                     "blog",
