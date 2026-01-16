@@ -45,6 +45,8 @@ import BillDetailPage from "./pages/Bills/BillDetailPage.jsx";
 import MemberProfile from "./components/members/MemberProfile.jsx";
 import ApplicationSubmitted from "./pages/Recruitment/ApplicationSubmitted.jsx";
 import RecruitmentManagement from "./pages/Recruitment/RecruitmentManagement.jsx";
+import HackathonManagement from "./pages/Hackathon/HackathonManagement.jsx";
+import StudentWeekManagement from "./pages/StudentWeek/StudentWeekManagement.jsx";
 
 // Redirect component for dashboard based on role
 const DashboardRedirect = () => {
@@ -112,6 +114,8 @@ function App() {
           <Route path="members" element={<TrackMembersPage />} />
           <Route path="signup" element={<RegPage />} />
           <Route path="recruitment" element={<RecruitmentManagement />} />
+          <Route path="hackathon" element={<HackathonManagement />} />
+          <Route path="student-week" element={<StudentWeekManagement />} />
 
           {/* Blogs */}
           <Route path="blogs" element={<BlogListingPage />} />

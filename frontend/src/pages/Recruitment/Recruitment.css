@@ -287,3 +287,46 @@ body:not(.dark-mode) .r-table td {
 .action-btn:hover {
     opacity: 0.8;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .recruitment-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr; /* Stack cards on mobile */
+    gap: 1rem;
+  }
+
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input,
+  .filter-select {
+    width: 100%;
+    min-width: 0; /* Allow flex item to shrink */
+  }
+
+  .recruitment-table-container {
+    padding: 1rem;
+    overflow-x: auto; /* Enable horizontal scroll */
+  }
+  
+  /* Ensure the table doesn't shrink below a readable width causes layout issues */
+  .r-table {
+    min-width: 600px; 
+  }
+
+  /* Adjust status badge for mobile if needed */
+  .status-badge {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+  }
+}
