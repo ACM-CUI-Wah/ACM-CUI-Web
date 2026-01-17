@@ -136,6 +136,7 @@ function App() {
 
     {/* Recruitment */}
     <Route path="/Recruitment" element={<RecruitmentPage />} />
+    <Route path="/recruitment/submitted" element={<ApplicationSubmitted />} />
 
 
     {/* Public Routes */}
@@ -152,5 +153,6 @@ function App() {
   );
 
 }
+
 
 export default App;
