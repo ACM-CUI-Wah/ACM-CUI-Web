@@ -1,7 +1,7 @@
 // src/components/EventListPage.js
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axios";
-import "./EventsList.css";
+import "./EventsListPage.css";
 import { Link } from "react-router-dom";
 
 

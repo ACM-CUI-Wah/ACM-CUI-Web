@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../axios";
-import "./Events.css";
+import "./EventsCreatePage.css";
 
 
 const EventCreatePage = () => {
