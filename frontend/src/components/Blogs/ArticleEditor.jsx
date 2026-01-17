@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import "./ArticleEditor.css";
+import "./articleEditor.css";
 import { useArticleStore } from "../../store/useArticleStore";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,7 @@ function ArticleEditor({ mode = "create", blogData = null, onSuccess }) {
   const { uploadInlineImage, saveBlog, loading, error } = useArticleStore();
   const quillRef = useRef(null);
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (mode === "edit" && blogData) {
@@ -55,18 +55,18 @@ const navigate = useNavigate();
         const range = editor.getSelection();
         editor.insertEmbed(range.index, "image", imageUrl);
 
-      } catch (err){
+      } catch (err) {
         alert(" Image upload failed. Please try again.");
         set({
-    error:
-      err.response?.data?.message ||
-      err.response?.data ||
-      "Failed to save blog",
-  });
-  throw err;  
+          error:
+            err.response?.data?.message ||
+            err.response?.data ||
+            "Failed to save blog",
+        });
+        throw err;
 
+      };
     };
-  };
   }
   const modules = {
     toolbar: {
@@ -148,7 +148,7 @@ const navigate = useNavigate();
         required
       />
 
- 
+
       <label className="mt-3">Cover Image:</label>
       <input type="file" accept="image/*" onChange={handleCoverChange} />
       {coverPreview && (
@@ -171,10 +171,10 @@ const navigate = useNavigate();
         placeholder="Write your blog content here..."
       />
 
-      
+
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-   
+
       <button type="submit" className="btn-submit mt-3" disabled={loading}>
         {loading ? "Saving..." : mode === "edit" ? "Update" : "Publish"}
       </button>

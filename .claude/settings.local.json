@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(npm install)",
+      "Bash(python3:*)",
+      "Bash(source .venv/bin/activate)",
+      "Bash(pip install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(python backend/manage.py runserver:*)",
+      "Bash(python backend/manage.py migrate:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(DJANGO_SUPERUSER_PASSWORD=admin python backend/manage.py createsuperuser:*)",
+      "Bash(grep:*)",
+      "Bash(curl:*)",
+      "Bash(python backend/manage.py shell:*)",
+      "Bash(cat:*)",
+      "Bash(git checkout frontend/src/pages/Members/TrackMembersPage.jsx)",
+      "Bash(git checkout frontend/src/pages/Members/TrackMemberPage.css)",
+      "Bash(python manage.py runserver:*)",
+      "Bash(source venv/bin/activate)",
+      "Bash(python manage.py migrate:*)",
+      "Bash(ls:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

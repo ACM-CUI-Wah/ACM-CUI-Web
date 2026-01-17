@@ -1,0 +1,332 @@
+/* Recruitment Pages CSS */
+
+/* --- Application Submitted Page --- */
+.submission-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--background-color, #1a1b2e); /* Default dark theme fallback */
+  color: var(--text-color, #ffffff);
+}
+
+.submission-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.submission-card {
+  background-color: #242542; /* Slightly lighter than bg */
+  padding: 3rem;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body:not(.dark-mode) .submission-page {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+body:not(.dark-mode) .submission-card {
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.success-icon-wrapper {
+  margin-bottom: 2rem;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  color: #4ade80; /* Green */
+}
+
+.submission-card h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.submission-card p {
+  color: #a0a0a0;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+body:not(.dark-mode) .submission-card p {
+    color: #6c757d;
+}
+
+.btn-recruit-back {
+  background-color: #ffffff;
+  color: #1a1b2e;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-recruit-back:hover {
+  opacity: 0.9;
+}
+
+body:not(.dark-mode) .btn-recruit-back {
+    background-color: #1a1b2e;
+    color: #ffffff;
+}
+
+/* --- Recruitment Management Page --- */
+.recruitment-dashboard {
+  padding: 2rem;
+  color: white; /* Default dark mode text */
+}
+
+body:not(.dark-mode) .recruitment-dashboard {
+    color: #212529;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: #a0a0a0;
+}
+body:not(.dark-mode) .dashboard-header p {
+    color: #6c757d;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: #242542;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: range;
+  align-items: flex-start;
+  position: relative;
+}
+
+body:not(.dark-mode) .stat-card {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #eaeaea;
+}
+
+.stat-info h3 {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+body:not(.dark-mode) .stat-info h3 {
+    color: #6c757d;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.stat-sub {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+}
+
+.stat-icon {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+/* Table Section */
+.recruitment-table-container {
+  background-color: #242542;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+body:not(.dark-mode) .recruitment-table-container {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #eaeaea;
+}
+
+.table-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  background-color: #1a1b2e;
+  border: 1px solid #363752;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  color: white;
+  min-width: 250px;
+}
+
+body:not(.dark-mode) .search-input {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    color: #212529;
+}
+
+.filter-select {
+  background-color: #1a1b2e;
+  border: 1px solid #363752;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  color: white;
+  min-width: 150px;
+}
+
+body:not(.dark-mode) .filter-select {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    color: #212529;
+}
+
+.r-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.r-table th {
+  text-align: left;
+  padding: 1rem;
+  color: #a0a0a0;
+  font-weight: 600;
+  border-bottom: 1px solid #363752;
+}
+
+.r-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #363752;
+  vertical-align: middle;
+}
+
+body:not(.dark-mode) .r-table th, 
+body:not(.dark-mode) .r-table td {
+    border-color: #eaeaea;
+}
+
+.status-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  min-width: 100px;
+}
+
+.status-under-review {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.status-accepted {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-interviews {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.action-btn:hover {
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .recruitment-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr; /* Stack cards on mobile */
+    gap: 1rem;
+  }
+
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input,
+  .filter-select {
+    width: 100%;
+    min-width: 0; /* Allow flex item to shrink */
+  }
+
+  .recruitment-table-container {
+    padding: 1rem;
+    overflow-x: auto; /* Enable horizontal scroll */
+  }
+  
+  /* Ensure the table doesn't shrink below a readable width causes layout issues */
+  .r-table {
+    min-width: 600px; 
+  }
+
+  /* Adjust status badge for mobile if needed */
+  .status-badge {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+  }
+}

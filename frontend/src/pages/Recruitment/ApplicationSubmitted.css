@@ -1,0 +1,74 @@
+.application-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f8fb;
+}
+
+/* Center content */
+.application-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+/* Card */
+.application-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Success Icon */
+.success-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background-color: #e7f8ef;
+  color: #22c55e;
+  font-size: 32px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Heading */
+.application-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+/* Text */
+.application-card p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* Button */
+.back-btn {
+  background-color: #0b4da2;
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #093d82;
+}

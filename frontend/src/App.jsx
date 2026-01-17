@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
-import "./styles/layout.css";
+import "./styles/Layout.css";
 
 import LandingPage from "./pages/Landing/LandingPage.jsx";
 import DashboardPage from "./pages/DashboardPage/DashboardPage.jsx";
@@ -45,6 +45,10 @@ import BillDetailPage from "./pages/Bills/BillDetailPage.jsx";
 import MemberProfile from "./components/members/MemberProfile.jsx";
 import RecruitmentPage from "./pages/Recruitment/RecruitmentPage.jsx";
 
+import ApplicationSubmitted from "./pages/Recruitment/ApplicationSubmitted.jsx";
+import RecruitmentManagement from "./pages/Recruitment/RecruitmentManagement.jsx";
+import HackathonManagement from "./pages/Hackathon/HackathonManagement.jsx";
+import StudentWeekManagement from "./pages/StudentWeek/StudentWeekManagement.jsx";
 
 // Redirect component for dashboard based on role
 const DashboardRedirect = () => {
@@ -94,22 +98,25 @@ function App() {
     <Route path="/member/:id" element={<MemberProfile />} />
     <Route path="/blogs" element={<BlogListingPage />} />
 
-    {/* Dashboard */}
-    <Route path="/dashboard" element={<DashboardPage />}>
-      <Route index element={<DashboardRedirect />} />
-      <Route path="bills" element={<BillsListPage />} />
-      <Route path="bills/create" element={<CreateBillPage />} />
-      <Route path="bills/:id" element={<BillDetailPage />} />
-      <Route path="mark-attendance" element={<MarkAttendance />} />
-      <Route path="meeting-history" element={<MeetingList />} />
-      <Route path="meetings/:id" element={<ViewAttendancePage />} />
-      <Route path="meetings/:id/edit" element={<EditAttendancePage />} />
+     {/* Dashboard */}
+        <Route path="/dashboard" element={<DashboardPage />}>
+          <Route index element={<DashboardRedirect />} />
+          <Route path="bills" element={<BillsListPage />} />
+          <Route path="bills/create" element={<CreateBillPage />} />
+          <Route path="bills/:id" element={<BillDetailPage />} />
+          <Route path="mark-attendance" element={<MarkAttendance />} />
+          <Route path="meeting-history" element={<MeetingList />} />
+          <Route path="meetings/:id" element={<ViewAttendancePage />} />
+          <Route path="meetings/:id/edit" element={<EditAttendancePage />} />
 
-      <Route path="otp" element={<ReqOTP />} />
-      <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="otp" element={<ReqOTP />} />
+          <Route path="reset-password" element={<ResetPassword />} />
 
-      <Route path="members" element={<TrackMembersPage />} />
-      <Route path="signup" element={<RegPage />} />
+          <Route path="members" element={<TrackMembersPage />} />
+          <Route path="signup" element={<RegPage />} />
+          <Route path="recruitment" element={<RecruitmentManagement />} />
+          <Route path="hackathon" element={<HackathonManagement />} />
+         <Route path="student-week" element={<StudentWeekManagement />} />
 
       {/* Blogs */}
       <Route path="blogs" element={<BlogListingPage />} />
@@ -141,7 +148,7 @@ function App() {
 
   </Routes>
 </Router>
-
+      
   );
 
 }

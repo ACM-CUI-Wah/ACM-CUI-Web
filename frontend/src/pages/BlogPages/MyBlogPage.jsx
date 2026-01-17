@@ -3,7 +3,7 @@ import Navbar from "../../components/DashboardNavbar/Navbar.jsx";
 
 import BlogGrid from "../../components/Blogs/BlogGrid.jsx";
 import useAuthStore from "../../store/authStore.js";
-import BlogOwner from "../../components/Blogs/BlogOwner.jsx";
+import BlogOwner from "../../components/Blogs/blogowner.jsx";
 
 
 const MyBlogPage = () => {
@@ -11,10 +11,10 @@ const MyBlogPage = () => {
 
   return (
     <div>
-   
+
 
       <div className="container mt-4">
-        <BlogOwner/>
+        <BlogOwner />
         <h2>My Blogs</h2>
         <BlogGrid
           userId={user_id}
@@ -23,7 +23,7 @@ const MyBlogPage = () => {
           blogListing={false}
         />
       </div>
-     
+
     </div>
   );
 };
