@@ -31,7 +31,7 @@ const ApplicationSubmitted = () => {
 
           <button
             className="back-btn"
-            onClick={() => navigate("/recruitment")}
+            onClick={() => navigate("/recruitmentForm")}
           >
             Back to Recruitment
           </button>
