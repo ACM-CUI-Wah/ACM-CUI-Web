@@ -43,6 +43,8 @@ import BillsListPage from "./pages/Bills/BillsListPage.jsx";
 import CreateBillPage from "./pages/Bills/CreateBillPage.jsx";
 import BillDetailPage from "./pages/Bills/BillDetailPage.jsx";
 import MemberProfile from "./components/members/MemberProfile.jsx";
+import RecruitmentPage from "./pages/Recruitment/RecruitmentPage.jsx";
+
 import ApplicationSubmitted from "./pages/Recruitment/ApplicationSubmitted.jsx";
 import RecruitmentManagement from "./pages/Recruitment/RecruitmentManagement.jsx";
 import HackathonManagement from "./pages/Hackathon/HackathonManagement.jsx";
@@ -85,19 +87,18 @@ function App() {
 
   return (
     <Router>
-      <Routes>
+  <Routes>
 
-        <Route path="/" element={<LandingPage />} />
+    <Route path="/" element={<LandingPage />} />
 
-        <Route path="/login" element={<><LoginPage /><Footer /></>} />
+    <Route path="/login" element={<><LoginPage /><Footer /></>} />
 
-        <Route path="/contact" element={<><ContactPage /><Footer /></>} />
-        <Route path="/mission" element={<><MissionPage /><Footer /></>} />
-        <Route path="/recruitment/submitted" element={<ApplicationSubmitted />} />
-        <Route path="/member/:id" element={<MemberProfile />} />
-        <Route path="/blogs" element={<BlogListingPage />} />
+    <Route path="/contact" element={<><ContactPage /><Footer /></>} />
+    <Route path="/mission" element={<><MissionPage /><Footer /></>} />
+    <Route path="/member/:id" element={<MemberProfile />} />
+    <Route path="/blogs" element={<BlogListingPage />} />
 
-        {/* Dashboard */}
+     {/* Dashboard */}
         <Route path="/dashboard" element={<DashboardPage />}>
           <Route index element={<DashboardRedirect />} />
           <Route path="bills" element={<BillsListPage />} />
@@ -115,36 +116,43 @@ function App() {
           <Route path="signup" element={<RegPage />} />
           <Route path="recruitment" element={<RecruitmentManagement />} />
           <Route path="hackathon" element={<HackathonManagement />} />
-          <Route path="student-week" element={<StudentWeekManagement />} />
+         <Route path="student-week" element={<StudentWeekManagement />} />
 
-          {/* Blogs */}
-          <Route path="blogs" element={<BlogListingPage />} />
-          <Route path="admin-blogs" element={<AdminBlogPage />} />
-          <Route path="myblog" element={<MyBlogPage />} />
-          <Route path="article" element={<ArticlePage />} />
+      {/* Blogs */}
+      <Route path="blogs" element={<BlogListingPage />} />
+      <Route path="admin-blogs" element={<AdminBlogPage />} />
+      <Route path="myblog" element={<MyBlogPage />} />
+      <Route path="article" element={<ArticlePage />} />
 
-          {/* Profile */}
-          <Route path="edit-profile" element={<ProfilePage />} />
-          <Route path="view-profile" element={<ViewProfilePage />} />
+      {/* Profile */}
+      <Route path="edit-profile" element={<ProfilePage />} />
+      <Route path="view-profile" element={<ViewProfilePage />} />
 
-          {/* Events */}
-          <Route path="events" element={<EventsListPage />} />
-          <Route path="events/create" element={<EventCreatePage />} />
-        </Route>
+      {/* Events */}
+      <Route path="events" element={<EventsListPage />} />
+      <Route path="events/create" element={<EventCreatePage />} />
+    </Route>
 
-        {/* Public Routes */}
-        <Route path="/teams" element={<><TeamSection /><Footer /></>} />
-        <Route path="/blog/:id" element={<><SinglePostPage /><Footer /></>} />
-        <Route path="/blogs/:id/edit" element={<><EditBlogWrapper /><Footer /></>} />
-        <Route path="/events/:id" element={<><EventDetailPage /><Footer /></>} />
-        <Route path="/team/:title" element={<><TeamPage /><Footer /></>} />
-        <Route path="/achievement" element={<><AchievementPage /><Footer /></>} />
 
-      </Routes>
-    </Router>
+    {/* Recruitment */}
+    <Route path="/Recruitment" element={<RecruitmentPage />} />
+    <Route path="/recruitment/submitted" element={<ApplicationSubmitted />} />
 
+
+    {/* Public Routes */}
+    <Route path="/teams" element={<><TeamSection /><Footer /></>} />
+    <Route path="/blog/:id" element={<><SinglePostPage /><Footer /></>} />
+    <Route path="/blogs/:id/edit" element={<><EditBlogWrapper /><Footer /></>} />
+    <Route path="/events/:id" element={<><EventDetailPage /><Footer /></>} />
+    <Route path="/team/:title" element={<><TeamPage /><Footer /></>} />
+    <Route path="/achievement" element={<><AchievementPage /><Footer /></>} />
+
+  </Routes>
+</Router>
+      
   );
 
 }
+
 
 export default App;
