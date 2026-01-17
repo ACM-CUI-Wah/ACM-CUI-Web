@@ -1,0 +1,109 @@
+.event-create-container {
+  max-width: 480px; 
+  margin: 20px auto; 
+  padding: 15px; 
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.event-create-title {
+  font-weight: 600;
+  font-size: 24px; 
+  margin-bottom: 15px;
+  color: #120808;
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* tighter gap */
+}
+
+.event-form label {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 3px;
+  color: #444;
+}
+
+.event-form input[type="text"],
+.event-form input[type="date"],
+.event-form textarea,
+.event-form input[type="file"] {
+  padding: 8px; /* smaller padding */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.event-form textarea {
+  min-height: 100px; /* slightly smaller */
+}
+
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* smaller gap */
+  margin-top: 8px;
+}
+
+.image-preview-box {
+  position: relative;
+  width: 90px; /* smaller box */
+  height: 75px; /* smaller box */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background: rgba(255, 0, 0, 0.8);
+  border: none;
+  color: white;
+  font-size: 12px; /* smaller */
+  border-radius: 50%;
+  cursor: pointer;
+  width: 18px; /* smaller */
+  height: 18px; /* smaller */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-image-btn:hover {
+  background: red;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px; /* smaller margin */
+}
+
+.btn-design {
+  font-size: 14px; /* smaller font */
+  font-weight: 600; 
+  color: #1a1a1a; 
+  padding: 5px 12px; /* smaller padding */
+  border-radius: 25px; 
+  border: 2px solid transparent;
+  background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(to right, #4182E6, #1A54A6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.btn-design:hover {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+}
