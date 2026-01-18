@@ -1,6 +1,7 @@
 import React from 'react';
 import './RecruitmentHero.css';
 
+
 const RecruitmentHero = () => {
   return (
     <section className="hero-container">
@@ -41,7 +42,7 @@ const RecruitmentHero = () => {
       <div className="hero-image-container">
         
         <img 
-          src="src\assets\RecruitmentTable.png" 
+          src="..\..\src\assets\RecruitmentTable.png" 
           alt="Interview Illustration" 
           className="hero-illustration"
         />

@@ -137,7 +137,7 @@ function App() {
 
 
     {/* Recruitment */}
-    <Route path="/Recruitment" element={<RecruitmentPage />} />
+    <Route path="/Recruitment" element={<><RecruitmentPage /><Footer /></>} />
     <Route path="/recruitment/submitted" element={<ApplicationSubmitted />} />
 
 
