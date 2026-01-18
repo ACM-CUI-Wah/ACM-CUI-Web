@@ -1,5 +1,5 @@
-/* Root Variables for Light and Dark Mode */
-:root {
+/* Scoped Variables for Recruitment Page Only */
+.recruitment-page {
   --bg-primary: #f5f7fa;
   --bg-secondary: #ffffff;
   --text-primary: #0B4184;
@@ -13,9 +13,15 @@
   --progress-fill: #2563eb;
   --button-bg: #2563eb;
   --button-hover: #1d4ed8;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding-bottom: 60px;
+  width: 100%;
 }
 
-[data-theme="dark"] {
+/* Dark mode only for recruitment page */
+.recruitment-page[data-theme="dark"] {
   --bg-primary: #1a1f2e;
   --bg-secondary: #252b3b;
   --text-primary: #ffffff;
@@ -31,20 +37,7 @@
   --button-hover: #1d4ed8;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-/* Main Container */
-.recruitment-page {
-  min-height: 100vh;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  padding-bottom: 60px;
-  width: 100%;
-}
 
 /* Header Section */
 .form-header {
