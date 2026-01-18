@@ -32,8 +32,7 @@ const RecruitmentPage = () => {
       </main>
      
 
-      {/* Footer */}
-      <Footer />
+     
 
     </div>
   );

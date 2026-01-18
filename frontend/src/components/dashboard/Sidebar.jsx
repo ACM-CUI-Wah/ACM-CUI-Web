@@ -195,14 +195,7 @@ const Sidebar = ({ onNavigate }) => {
         return renderLeadNav();
       case "STUDENT":
         return renderStudentNav();
-      default:
-        return (
-          <>
-            <NavLink to="/dashboard/recruitment">Recruitment</NavLink>
-            <NavLink to="/dashboard/hackathon">Hackathon</NavLink>
-            <NavLink to="/dashboard/student-week">Student Week</NavLink>
-          </>
-        );
+     
     }
   };
 

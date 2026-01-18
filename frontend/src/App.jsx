@@ -46,6 +46,7 @@ import MemberProfile from "./components/members/MemberProfile.jsx";
 import RecruitmentPage from "./pages/Recruitment/RecruitmentPage.jsx";
 
 import ApplicationSubmitted from "./pages/Recruitment/ApplicationSubmitted.jsx";
+import RecruitmentForm from "./pages/Recruitment/RecruitmentForm.jsx";
 import RecruitmentManagement from "./pages/Recruitment/RecruitmentManagement.jsx";
 import HackathonManagement from "./pages/Hackathon/HackathonManagement.jsx";
 import StudentWeekManagement from "./pages/StudentWeek/StudentWeekManagement.jsx";
@@ -93,10 +94,11 @@ function App() {
 
     <Route path="/login" element={<><LoginPage /><Footer /></>} />
 
-    <Route path="/contact" element={<><ContactPage /><Footer /></>} />
-    <Route path="/mission" element={<><MissionPage /><Footer /></>} />
-    <Route path="/member/:id" element={<MemberProfile />} />
-    <Route path="/blogs" element={<BlogListingPage />} />
+        <Route path="/contact" element={<><ContactPage /><Footer /></>} />
+        <Route path="/mission" element={<><MissionPage /><Footer /></>} />
+        <Route path="/recruitmentForm" element={<><RecruitmentForm /><Footer /></>} />
+        <Route path="/member/:id" element={<MemberProfile />} />
+        <Route path="/blogs" element={<BlogListingPage />} />
 
      {/* Dashboard */}
         <Route path="/dashboard" element={<DashboardPage />}>
@@ -135,7 +137,7 @@ function App() {
 
 
     {/* Recruitment */}
-    <Route path="/Recruitment" element={<RecruitmentPage />} />
+    <Route path="/Recruitment" element={<><RecruitmentPage /><Footer /></>} />
     <Route path="/recruitment/submitted" element={<ApplicationSubmitted />} />
 
 
