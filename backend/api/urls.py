@@ -44,10 +44,12 @@ urlpatterns = [
         
     # Events
     path('events/', EventListCreateView.as_view(), name='event-list-create'),
+
+    # Aroosad edited below
     path('events/<int:pk>/', EventRUDView.as_view(), name='event-RUD'),
-    path('events/<int:pk>/image/<int:img_pk>', EventImageRUDView.as_view(), name='eventimage-RUD'),
+    path('events/<int:pk>/images/<int:img_pk>/', EventImageRUDView.as_view(), name='eventimage-RUD'),
 
     # Bills
     path('bills/', BillListCreateView.as_view(), name='bill-list-create'),
-    path('bills/<int:pk>/', BillRUDView.as_view(), name='bill-RUD')
+    path('bills/<int:pk>/', BillRUDView.as_view(), name='bill-RUD'),
 ]
