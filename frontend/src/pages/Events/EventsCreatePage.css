@@ -1,109 +1,259 @@
-.event-create-container {
-  max-width: 480px; 
-  margin: 20px auto; 
-  padding: 15px; 
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* Event Create Page Container */
+.event-create-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
 }
 
-.event-create-title {
+.event-create-header {
+  margin-bottom: 30px;
+}
+
+.event-create-page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #003d82;
+  margin-bottom: 8px;
+}
+
+.event-create-page-subtitle {
+  font-size: 16px;
+  color: #666;
+  font-weight: 400;
+}
+
+/* Event Details Card */
+.event-details-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.event-details-heading {
+  font-size: 22px;
   font-weight: 600;
-  font-size: 24px; 
-  margin-bottom: 15px;
-  color: #120808;
+  color: #1a1a1a;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e8e8e8;
 }
 
-.event-form {
+/* Form Styles */
+.event-form-new {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* tighter gap */
+  gap: 24px;
 }
 
-.event-form label {
-  font-weight: 600;
-  font-size: 13px;
-  margin-bottom: 3px;
-  color: #444;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-.event-form input[type="text"],
-.event-form input[type="date"],
-.event-form textarea,
-.event-form input[type="file"] {
-  padding: 8px; /* smaller padding */
-  border: 1px solid #ccc;
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-field label .required {
+  color: #e74c3c;
+  margin-left: 2px;
+}
+
+.form-field input[type="text"],
+.form-field input[type="date"],
+.form-field input[type="time"],
+.form-field input[type="number"],
+.form-field select,
+.form-field textarea {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: white;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #9ca3af;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #003d82;
+  box-shadow: 0 0 0 3px rgba(0, 61, 130, 0.1);
+}
+
+.form-field textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.form-field select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+/* File Upload Styles */
+.file-upload-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.file-upload-btn {
+  background-color: #003d82;
+  color: white;
+  padding: 10px 20px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  white-space: nowrap;
 }
 
-.event-form textarea {
-  min-height: 100px; /* slightly smaller */
+.file-upload-btn:hover {
+  background-color: #002a5c;
 }
 
-.image-preview-container {
+.file-upload-text {
+  margin-left: 16px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Image Preview (New) */
+.image-preview-container-new {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* smaller gap */
-  margin-top: 8px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
-.image-preview-box {
+.image-preview-box-new {
   position: relative;
-  width: 90px; /* smaller box */
-  height: 75px; /* smaller box */
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  width: 120px;
+  height: 120px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.image-preview {
+.image-preview-new {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.remove-image-btn {
+.remove-image-btn-new {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  background: rgba(255, 0, 0, 0.8);
+  top: 6px;
+  right: 6px;
+  background: rgba(239, 68, 68, 0.9);
   border: none;
   color: white;
-  font-size: 12px; /* smaller */
+  font-size: 14px;
   border-radius: 50%;
   cursor: pointer;
-  width: 18px; /* smaller */
-  height: 18px; /* smaller */
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.2s;
 }
 
-.remove-image-btn:hover {
-  background: red;
+.remove-image-btn-new:hover {
+  background: rgba(220, 38, 38, 1);
 }
 
-.form-buttons {
+/* Submit Button */
+.form-submit-wrapper {
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 8px; /* smaller margin */
+  justify-content: flex-start;
+  margin-top: 16px;
 }
 
-.btn-design {
-  font-size: 14px; /* smaller font */
-  font-weight: 600; 
-  color: #1a1a1a; 
-  padding: 5px 12px; /* smaller padding */
-  border-radius: 25px; 
-  border: 2px solid transparent;
-  background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(to right, #4182E6, #1A54A6);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+.create-event-btn {
+  background-color: #003d82;
+  color: white;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
-.btn-design:hover {
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+.create-event-btn:hover {
+  background-color: #002a5c;
+  transform: translateY(-1px);
+}
+
+.create-event-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .event-create-page-container {
+    padding: 30px 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-create-page-container {
+    padding: 20px 15px;
+  }
+
+  .event-details-card {
+    padding: 24px;
+  }
+
+  .event-create-page-title {
+    font-size: 24px;
+  }
+
+  .event-create-header {
+    margin-bottom: 20px;
+  }
 }
