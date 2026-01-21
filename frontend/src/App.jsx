@@ -104,7 +104,7 @@ function App() {
 
         {/* ✅ FIXED EVENTS ROUTES */}
         <Route path="/events" element={<EventsListPage />} />
-        <Route path="/events/:id" element={<><EventDetailPage /><Footer /></>} />
+        <Route path="/events/:id" element={<><EventDetailPage /></>} />
 
         {/* Recruitment */}
         <Route path="/recruitment" element={<RecruitmentPage />} />
