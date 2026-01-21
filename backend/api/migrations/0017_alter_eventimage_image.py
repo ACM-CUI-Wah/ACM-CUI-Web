@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 default="/home/hafeez/Downloads/codehub-website/codehub-website/backend/media/events/default.png",
                 null=True,
-                upload_to=api.models.event_image_upload_path,
+                upload_to=api.models.event.event_image_upload_path,
             ),
         ),
     ]

@@ -318,7 +318,7 @@ const RecruitmentForm = () => {
 
          
         </div>
-         <button type="submit" className="submit-btn">
+         <button type="submit" className="submitApp-btn">
             Submit Application
           </button>
       </form>

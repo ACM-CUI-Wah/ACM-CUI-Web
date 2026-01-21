@@ -1,0 +1,97 @@
+/* Overall Page Layout */
+.event-success-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f8fb;
+  font-family: "Ubuntu", sans-serif;
+}
+
+/* Centering the card in the viewport */
+.event-success-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+/* Success Card */
+.event-success-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+/* Large Success Icon */
+.success-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background-color: #e7f8ef; /* Light green background */
+  color: #22c55e;           /* Success green color */
+  font-size: 32px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Heading */
+.event-success-card h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+/* Description Text */
+.event-success-card p {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  padding: 0 10px;
+}
+
+/* Explore Events Button */
+.explore-btn {
+  background-color: #003d7c; /* Navy Blue from registration page */
+  color: #ffffff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 61, 124, 0.15);
+}
+
+.explore-btn:hover {
+  background-color: #002a55;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 61, 124, 0.2);
+}
+
+.explore-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Scaling */
+@media (max-width: 480px) {
+  .event-success-card {
+    padding: 30px 20px;
+  }
+  
+  .event-success-card h2 {
+    font-size: 22px;
+  }
+}

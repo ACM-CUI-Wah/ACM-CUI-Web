@@ -5,8 +5,8 @@
 }
 
 .event-heading-text {
-   font-weight: 600;
-  font-size: 24px; 
+  font-weight: 600;
+  font-size: 24px;
   margin-bottom: 15px;
   color: #120808;
 }
@@ -16,7 +16,7 @@
   flex-direction: row;
   align-items: stretch;
   margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
@@ -106,7 +106,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,7 +121,7 @@
   max-width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content h3 {
@@ -179,7 +179,7 @@
   height: 100px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .preview-box img {
@@ -192,7 +192,7 @@
   position: absolute;
   top: 5px;
   right: 5px;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
   border-radius: 50%;
@@ -203,4 +203,64 @@
   line-height: 18px;
   text-align: center;
   padding: 0;
+}
+
+/* Large Modal for Edit Event */
+.modal-content-large {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  width: 900px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+  color: #333;
+}
+
+/* Cancel Button */
+.cancel-event-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.cancel-event-btn:hover {
+  background-color: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.cancel-event-btn:active {
+  transform: translateY(0);
 }
