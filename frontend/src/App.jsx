@@ -36,6 +36,8 @@ import ProfilePage from "./pages/Profile/ProfilePage.jsx";
 import EventsListPage from "./pages/Events/EventsListPage.jsx";
 import EventCreatePage from "./pages/Events/EventsCreatePage.jsx";
 import EventDetailPage from "./pages/Events/EventDetailPage.jsx";
+import EventIndividualForm from "./pages/Events/EventIndividualForm.jsx";
+import EventTeamForm from "./pages/Events/EventTeamForm.jsx";
 
 import Footer from "./components/Footer/Footer.jsx";
 import AchievementPage from "./pages/AchievementPage.jsx";
@@ -139,6 +141,8 @@ function App() {
         <Route path="/blog/:id" element={<><SinglePostPage /><Footer /></>} />
         <Route path="/blogs/:id/edit" element={<><EditBlogWrapper /><Footer /></>} />
         <Route path="/events/:id" element={<><EventDetailPage /><Footer /></>} />
+        <Route path="events/individualform" element={<EventIndividualForm />} />
+          <Route path="events/teamform" element={<EventTeamForm />} />
         <Route path="/team/:title" element={<><TeamPage /><Footer /></>} />
         <Route path="/achievement" element={<><AchievementPage /><Footer /></>} />
 
