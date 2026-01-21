@@ -57,7 +57,6 @@ import RecruitmentManagement from "./pages/Recruitment/RecruitmentManagement.jsx
 
 // Management
 import HackathonManagement from "./pages/Hackathon/HackathonManagement.jsx";
-import StudentWeekManagement from "./pages/StudentWeek/StudentWeekManagement.jsx";
 
 // Bills
 import BillsListPage from "./pages/Bills/BillsListPage.jsx";
@@ -67,6 +66,7 @@ import BillDetailPage from "./pages/Bills/BillDetailPage.jsx";
 // Components
 import Footer from "./components/Footer/Footer.jsx";
 import TeamSection from "./components/teams/TeamSection.jsx";
+import EventDashboard from "./pages/Events/EventDashboard.jsx";
 
 // 🔁 Dashboard redirect based on role
 const DashboardRedirect = () => {
@@ -160,11 +160,11 @@ function App() {
           {/* Management */}
           <Route path="recruitment" element={<RecruitmentManagement />} />
           <Route path="hackathon" element={<HackathonManagement />} />
-          <Route path="student-week" element={<StudentWeekManagement />} />
 
           {/* Events inside dashboard */}
           <Route path="events" element={<EventsListPage />} />
           <Route path="events/create" element={<EventCreatePage />} />
+          <Route path="events/management" element={<EventDashboard/>} />
         </Route>
 
       </Routes>
