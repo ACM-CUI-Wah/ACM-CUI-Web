@@ -46,6 +46,7 @@ import ViewProfilePage from "./pages/Profile/ViewProfilePage.jsx";
 
 // Events
 import EventsListPage from "./pages/Events/EventsListPage.jsx";
+import PublicEventListingPage from "./pages/Events/PublicEventListingPage.jsx";
 import EventCreatePage from "./pages/Events/EventsCreatePage.jsx";
 import EventDetailPage from "./pages/Events/EventDetailPage.jsx";
 import EventIndividualForm from "./pages/Events/EventIndividualForm.jsx";
@@ -55,7 +56,6 @@ import EventTeamForm from "./pages/Events/EventTeamForm.jsx";
 import RecruitmentPage from "./pages/Recruitment/RecruitmentPage.jsx";
 import RecruitmentForm from "./pages/Recruitment/RecruitmentForm.jsx";
 import ApplicationSubmitted from "./pages/Recruitment/ApplicationSubmitted.jsx";
-import RecruitmentForm from "./pages/Recruitment/RecruitmentForm.jsx";
 import RecruitmentManagement from "./pages/Recruitment/RecruitmentManagement.jsx";
 
 // Management
@@ -106,7 +106,7 @@ function App() {
         <Route path="/mission" element={<><MissionPage /><Footer /></>} />
 
         {/* ✅ FIXED EVENTS ROUTES */}
-        <Route path="/events" element={<EventsListPage />} />
+        <Route path="/events" element={<PublicEventListingPage />} />
         <Route path="/events/:id" element={<><EventDetailPage /></>} />
 
         {/* Recruitment */}
@@ -167,7 +167,7 @@ function App() {
           <Route path="hackathon" element={<HackathonManagement />} />
 
           {/* Events inside dashboard */}
-          <Route path="events" element={<EventsListPage />} />
+          <Route path="events-list" element={<EventsListPage />} />
           <Route path="events/create" element={<EventCreatePage />} />
           <Route path="events/management" element={<EventDashboard/>} />
         </Route>
