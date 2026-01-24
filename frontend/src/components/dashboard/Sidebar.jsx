@@ -110,7 +110,7 @@ const Sidebar = ({ onNavigate }) => {
       <NavLink to="/dashboard/events/management">Student Week</NavLink>
       <NavLink to="/dashboard/members">Member Management</NavLink>
       <NavLink to="/dashboard/blogs">Handle Blogs</NavLink>
-      <NavLink to="/dashboard/events">Events</NavLink>
+      <NavLink to="/dashboard/events-list">Events</NavLink>
       <NavLink to="/dashboard/events/create">Create Event</NavLink>
       <NavLink to="/dashboard/signup">Signup New Members</NavLink>
       <NavLink to="/dashboard/otp">Reset Password</NavLink>

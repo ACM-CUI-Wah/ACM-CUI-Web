@@ -3,9 +3,8 @@ import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent
 import Footer from "../../components/Footer/Footer.jsx";
 import EventHero from "../../components/LandingPage/Events/EventHeroSection.jsx";
 import EventListing from "../../components/LandingPage/Events/EventListing.jsx";
-import "./EventsListPage.css";
 
-const EventsListPage = () => {
+const PublicEventsListPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -24,4 +23,4 @@ const EventsListPage = () => {
     );
 };
 
-export default EventsListPage;
+export default PublicEventsListPage;
