@@ -1,4 +1,3 @@
-
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from api.views import (
@@ -12,9 +11,18 @@ from api.views import (
     # Recruitment Views
     ActiveRecruitmentSessionView,
     ApplicationSubmitView,
-
+    RecruitmentSessionViewSet,
+    ApplicationReviewViewSet,
+    ApplicationStatusUpdateViewSet,
 )
 
+# -------------------
+# Recruitment Router 
+# -------------------
+recruitment_router = DefaultRouter()
+recruitment_router.register(r'recruitment-sessions', RecruitmentSessionViewSet, basename='recruitment-sessions')
+recruitment_router.register(r'application-review', ApplicationReviewViewSet, basename='application-review')
+recruitment_router.register(r'application-status', ApplicationStatusUpdateViewSet, basename='application-status')
 
 urlpatterns = [
     # Root
@@ -61,4 +69,6 @@ urlpatterns = [
     path('recruitment/active-session/', ActiveRecruitmentSessionView.as_view({'get': 'list'}), name='active-session'),  
     path('recruitment/submit-application/', ApplicationSubmitView.as_view({'post': 'create'}), name='submit-application'),  
 
+    # Admin Recruitment Views (via router)
+    path('recruitment/', include(recruitment_router.urls)), 
 ]
