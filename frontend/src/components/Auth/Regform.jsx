@@ -477,6 +477,7 @@ if (!phonePattern.test(formData.user.phone_number)) {
                   onChange={handleChange}
                 >
                   <option value="NULL">-- NULL (STUDENT AND LEADS) --</option>
+                  <option value="GENERAL MEMBER">GENERAL MEMBER</option>
                   <option value="PRESIDENT">PRESIDENT</option>
                   <option value="VICE PRESIDENT">VICE PRESIDENT</option>
                   <option value="TREASURER">TREASURER</option>

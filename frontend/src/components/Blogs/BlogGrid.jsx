@@ -85,7 +85,7 @@ const BlogGrid = ({ userId = null, userRole, filterByUser = false, blogListing =
   if (blogs.length === 0) return <p>No blogs found.</p>;
 
   return (
-    <Container className="my-4">
+    <div className="my-4">
       <Row className="justify-content-center g-4">
         {blogs.slice(0, visibleCount).map((blog) => (
           <Col key={blog.id} xs={11} sm={6} md={4} lg={4} xl={3}>
@@ -107,7 +107,7 @@ const BlogGrid = ({ userId = null, userRole, filterByUser = false, blogListing =
           </Button>
         </div>
       )}
-    </Container>
+    </div>
   );
 };
 

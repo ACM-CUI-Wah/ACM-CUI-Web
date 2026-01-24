@@ -13,7 +13,7 @@ const BlogBanner = () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get('/blogs/');
-        
+
         // Get the first blog as featured or the most recent one
         if (response.data && response.data.length > 0) {
           setFeaturedBlog(response.data[0]);
@@ -32,10 +32,10 @@ const BlogBanner = () => {
   // Format date
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   };
 
@@ -65,27 +65,32 @@ const BlogBanner = () => {
     );
   }
 
+  // Inside the return of BlogBanner
   return (
     <div
-      className="blog-banner-wrapper position-relative text-white d-flex align-items-end mx-5"
+      className="blog-banner-wrapper position-relative text-white d-flex align-items-end"
       style={{
         backgroundImage: `url(${getBackgroundImage()})`,
-        opacity:0.9,
+        opacity: 0.9,
+        borderRadius: '12px', // Slightly more rounded like the design
       }}
     >
       <div className="blog-banner-overlay w-100 h-100 position-absolute top-0 start-0"></div>
-      
-      <div className="container position-relative z-2 py-4 px-5">
-        <span className="badge bg-primary mb-2">Technology</span>
-        
-        <h2 className="blog-banner-title fw-bold mb-3">
+
+      <div className="container position-relative z-2 py-5 px-4">
+        <span className="badge bg-primary mb-2 px-3">Technology</span>
+
+        <h1 className="blog-banner-title fw-bold mb-3">
           {featuredBlog.title}
-        </h2>
-        
-        <div className="d-flex align-items-center gap-2 blog-banner-meta">
-          {/* <img src={profileImg} alt="Author" className="blog-author-img" /> */}
-          <span>{featuredBlog.createdBy || 'Anonymous'}</span>
-          <span>{formatDate(featuredBlog.createdAt)}</span>
+        </h1>
+
+        <div className="d-flex align-items-center gap-3 blog-banner-meta">
+          {/* Add author image if available */}
+          {featuredBlog.authorImg && (
+            <img src={featuredBlog.authorImg} alt="Author" className="blog-author-img" />
+          )}
+          <span className="fw-semibold">{featuredBlog.authorName || 'Anonymous'}</span>
+          <span className="opacity-75">{formatDate(featuredBlog.createdAt)}</span>
         </div>
       </div>
     </div>

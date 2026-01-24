@@ -117,7 +117,7 @@ function App() {
         <Route path="/member/:id" element={<MemberProfile />} />
 
         {/* Blogs */}
-        <Route path="/blogs" element={<BlogListingPage />} />
+        <Route path="/blogs" element={<><BlogListingPage /><Footer/></>} />
         <Route path="/blog/:id" element={<><SinglePostPage /><Footer /></>} />
         <Route path="/blogs/:id/edit" element={<><EditBlogWrapper /><Footer /></>} />
 

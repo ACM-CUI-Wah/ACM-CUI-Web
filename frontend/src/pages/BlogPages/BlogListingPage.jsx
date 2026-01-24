@@ -2,34 +2,39 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import BlogBanner from '../../components/Blogs/BlogBanner'
 import BlogGrid from '../../components/Blogs/BlogGrid'
-import Navbar from '../../components/DashboardNavbar/Navbar'
+import NavbarComponent from '../../components/LandingPage/Navbar/NavbarComponent';
 
 import useAuthStore from '../../store/authStore'
 
 const BlogListingPage = () => {
-  const { user_id, role } = useAuthStore()
+  const { role } = useAuthStore()
   const location = useLocation()
-  const blogListing = true
-
-  // Show Navbar only if route is NOT /blogs
-  const shouldShowNavbar = location.pathname == '/blogs'
+  const shouldShowNavbar = location.pathname === '/blogs'
 
   return (
-    <>
-      {shouldShowNavbar && <Navbar />}
-   
-      <div>
-        <h2 className="mt-5 text-center">ACM CUI WAH BLOGS</h2>
-        <p className="text-center" style={{fontSize:'20px'}}>Home</p>
+    <div className="blog-listing-page-wrapper">
+      <NavbarComponent/>
+      
+      {/* Wrap everything in a standard container for centered layout */}
+      <div className="container mt-5">
+        <div className="text-center mb-4">
+          <h2 className="fw-bold" style={{fontSize: '32px', letterSpacing: '1px'}}>
+            ACM CUI WAH BLOGS
+          </h2>
+          <p className="text-muted" style={{fontSize:'16px'}}>Home</p>
+        </div>
+
+        <BlogBanner />
+
+        <div className="mt-5">
+          <BlogGrid
+            userRole={role}
+            filterByUser={false}
+            blogListing={true}
+          />
+        </div>
       </div>
-      <BlogBanner/>
-      <BlogGrid
-        userRole={role}
-        filterByUser={false}
-        blogListing={true}
-      />
-    </>
+    </div>
   )
 }
-
 export default BlogListingPage
