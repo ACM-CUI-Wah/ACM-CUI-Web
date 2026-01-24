@@ -9,6 +9,8 @@ from api.views import (
     PublicStudentsListView, BillListCreateView, BillRUDView, InlineImageUploadView,
     
     # Recruitment Views
+    ActiveRecruitmentSessionView,
+    ApplicationSubmitView,
     RecruitmentSessionViewSet,
     ApplicationReviewViewSet,
     ApplicationStatusUpdateViewSet,
@@ -60,7 +62,12 @@ urlpatterns = [
     path('bills/', BillListCreateView.as_view(), name='bill-list-create'),
     path('bills/<int:pk>/', BillRUDView.as_view(), name='bill-RUD'),
 
-    # Aroosa's task
+    # -----------------------------
+    # Recruitment URLs
+    # -----------------------------
+    # Public Recruitment Views
+    path('recruitment/active-session/', ActiveRecruitmentSessionView.as_view({'get': 'list'}), name='active-session'),  
+    path('recruitment/submit-application/', ApplicationSubmitView.as_view({'post': 'create'}), name='submit-application'),  
 
     # Admin Recruitment Views (via router)
     path('recruitment/', include(recruitment_router.urls)), 
