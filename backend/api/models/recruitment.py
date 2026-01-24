@@ -2,16 +2,20 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, EmailValidator
 from datetime import date
-# ENUMS/CHOICES
+
+#  ENUMS/CHOICES 
 class ApplicationStatus(models.TextChoices):
     UNDER_REVIEW = "UNDER_REVIEW", "Under Review"
     ACCEPTED = "ACCEPTED", "Accepted"
     REJECTED = "REJECTED", "Rejected"
     INTERVIEWS = "INTERVIEWS", "Interviews"
+
+
 class Program(models.TextChoices):
-    BSCS = "BSCS", "BSCS"
-    BSSE = "BSSE", "BSSE"
-    BSAI = "BSAI", "BSAI"
+    BSCS = "BSCS", "bscs"
+    BSSE = "BSSE", "bsse"
+    BSAI = "BSAI", "bsai"
+
 
 class Role(models.TextChoices):
     CODEHUB = "CODEHUB", "CodeHub"
@@ -20,9 +24,9 @@ class Role(models.TextChoices):
     REGISTRATION_DECOR = "REGISTRATION_DECOR", "Registration & Decor"
     EVENTS_LOGISTICS = "EVENTS_LOGISTICS", "Events & Logistics"
 
-#RECRUITMENT SESSION MODEL
+
+#  RECRUITMENT SESSION MODEL 
 class RecruitmentSession(models.Model):
-    
     uni_session_regex = RegexValidator(
         regex=r'^(FA|SP)\d{2}$',
         message="uni_session must start with 'FA' or 'SP' followed by 2 digits (e.g., FA24, SP25)."
@@ -42,8 +46,10 @@ class RecruitmentSession(models.Model):
         ordering = ['-application_start']
         verbose_name = "Recruitment Session"
         verbose_name_plural = "Recruitment Sessions"
+        
     def __str__(self):
         return f"{self.uni_session} - {self.application_start} to {self.result_date}"
+      
     def clean(self):
         errors = {}
         if self.application_end and self.application_start:
@@ -60,11 +66,13 @@ class RecruitmentSession(models.Model):
                 errors['result_date'] = "Result date must be on or after interview end date."
         if errors:
             raise ValidationError(errors)
+
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
 
-# RECRUITMENT APPLICATION MODEL
+
+# RECRUITMENT APPLICATIONS MODEL
 class RecruitmentApplication(models.Model):
     recruitment_session = models.ForeignKey(
         RecruitmentSession,
@@ -76,13 +84,16 @@ class RecruitmentApplication(models.Model):
         choices=ApplicationStatus.choices,
         default=ApplicationStatus.UNDER_REVIEW
     )
+    
     class Meta:
         ordering = ['id']
         verbose_name = "Recruitment Application"
         verbose_name_plural = "Recruitment Applications"
+        
     def __str__(self):
         return f"Application #{self.id} - {self.recruitment_session.uni_session} - {self.status}"
-#PERSONAL INFO MODEL
+      
+# PERSONAL INFO MODEL
 class PersonalInfo(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,
@@ -104,9 +115,11 @@ class PersonalInfo(models.Model):
         max_length=13,
         validators=[phone_regex]
     )
+    
     class Meta:
         verbose_name = "Personal Information"
         verbose_name_plural = "Personal Information"
+        
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"
     
@@ -140,12 +153,11 @@ class AcademicInfo(models.Model):
     class Meta:
         verbose_name = "Academic Information"
         verbose_name_plural = "Academic Information"
-
     def __str__(self):
         return f"{self.reg_no} - {self.program} - Semester {self.current_semester}"
-
-
-#ROLE PREFERENCES MODEL
+      
+      
+# ROLE PREFERENCES MODEL 
 class RolePreferences(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,

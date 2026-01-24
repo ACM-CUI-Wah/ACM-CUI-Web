@@ -1,12 +1,29 @@
-from django.urls import path
-from api.views import SignupView, OTPView, LoginView, PasswordChangeView, LogoutView, BlogUploadView, BlogListAPIView, \
-    BlogEditView, BlogDeleteView, MeetingRUDView, MeetingCreateView, MeetingListView, MeetingAttendanceListView, \
-    MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView, api_root, \
-    EventRUDView, EventImageRUDView, AdminRUDView, EventListCreateView, PublicStudentsListView, \
-    BillListCreateView, BillRUDView, InlineImageUploadView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from api.views import (
+    SignupView, OTPView, LoginView, PasswordChangeView, LogoutView, 
+    BlogUploadView, BlogListAPIView, BlogEditView, BlogDeleteView, 
+    MeetingRUDView, MeetingCreateView, MeetingListView, MeetingAttendanceListView, 
+    MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView, 
+    api_root, EventRUDView, EventImageRUDView, AdminRUDView, EventListCreateView, 
+    PublicStudentsListView, BillListCreateView, BillRUDView, InlineImageUploadView,
+    
+    # Recruitment Views
+    ActiveRecruitmentSessionView,
+    ApplicationSubmitView,
+    RecruitmentSessionViewSet,
+    ApplicationReviewViewSet,
+    ApplicationStatusUpdateViewSet,
+)
 
-# NOTE: 'RUD' means the endpoint will accept these request types (single instance):
-#  GET , PUT, PATCH, DELETE
+# -------------------
+# Recruitment Router 
+# -------------------
+recruitment_router = DefaultRouter()
+recruitment_router.register(r'recruitment-sessions', RecruitmentSessionViewSet, basename='recruitment-sessions')
+recruitment_router.register(r'application-review', ApplicationReviewViewSet, basename='application-review')
+recruitment_router.register(r'application-status', ApplicationStatusUpdateViewSet, basename='application-status')
+
 urlpatterns = [
     # Root
     path('', api_root, name='home'),
@@ -16,7 +33,7 @@ urlpatterns = [
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/logout', LogoutView.as_view(), name='logout'),
     path('auth/otp/', OTPView.as_view(), name='otp'),
-    path('auth/password/reset', PasswordChangeView.as_view(), name='reset-password'),path('auth/password/reset', PasswordChangeView.as_view(), name='reset-password'),
+    path('auth/password/reset', PasswordChangeView.as_view(), name='reset-password'),
 
     # Students (except creation)
     path('students/', StudentsListView.as_view(), name='students-list'),
@@ -39,15 +56,19 @@ urlpatterns = [
     path('meetings/<int:pk>/', MeetingRUDView.as_view(), name='meeting.py-RUD'),
     path('meetings/<int:pk>/attendance/', MeetingAttendanceListView.as_view(), name='attendance-list'),
     path('meetings/<int:pk>/attendance/<int:att_pk>', MeetingAttendanceRUDView.as_view(), name='attendance-RUD'),
-    path('meetings/<int:pk>/attendance/<int:att_pk>', MeetingAttendanceRUDView.as_view(), name='attendance-RUD'),  # Accepted requests (for instance): GET , PUT, PATCH, DELETE
     path("meetings/<int:pk>/pdf/", MeetingPDFView.as_view(), name="meeting.py-pdf"),
         
-    # Events
-    path('events/', EventListCreateView.as_view(), name='event-list-create'),
-    path('events/<int:pk>/', EventRUDView.as_view(), name='event-RUD'),
-    path('events/<int:pk>/image/<int:img_pk>', EventImageRUDView.as_view(), name='eventimage-RUD'),
-
     # Bills
     path('bills/', BillListCreateView.as_view(), name='bill-list-create'),
-    path('bills/<int:pk>/', BillRUDView.as_view(), name='bill-RUD')
+    path('bills/<int:pk>/', BillRUDView.as_view(), name='bill-RUD'),
+
+    # -----------------------------
+    # Recruitment URLs
+    # -----------------------------
+    # Public Recruitment Views
+    path('recruitment/active-session/', ActiveRecruitmentSessionView.as_view({'get': 'list'}), name='active-session'),  
+    path('recruitment/submit-application/', ApplicationSubmitView.as_view({'post': 'create'}), name='submit-application'),  
+
+    # Admin Recruitment Views (via router)
+    path('recruitment/', include(recruitment_router.urls)), 
 ]
