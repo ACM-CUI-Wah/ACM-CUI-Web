@@ -5,3 +5,6 @@ from .event import EventSerializer, EventImageSerializer, EventImageEditSerializ
 from .meeting import MeetingSerializer, MeetingAttendanceSerializer
 from .user import UserSerializer, UserListSerializer, StudentSerializer, StudentListSerializer, ProfileUserSerializer, \
     ProfileUpdateSerializer, PublicStudentSerializer, PasswordChangeSerializer, OTPSerializer, LoginSerializer
+from .recruitment import RecruitmentApplicationSubmissionSerializer, RecruitmentApplicationSerializer, \
+    ApplicationStatusUpdateSerializer, RecruitmentApplicationDetailSerializer, AcademicInfoSerializer, \
+    PersonalInfoSerializer, RolePreferencesSerializer, RecruitmentSessionSerializer

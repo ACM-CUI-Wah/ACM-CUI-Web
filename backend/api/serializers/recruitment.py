@@ -7,7 +7,7 @@ Based on the ER diagram structure from Django Recruitment API Task Assignment.
 
 Models needed (from Member 1 - Aleesha):
 - RecruitmentSession
-- RecruitmentApplications  
+- RecruitmentApplication
 - PersonalInfo
 - AcademicInfo
 - RolePreferences
@@ -16,7 +16,7 @@ Models needed (from Member 1 - Aleesha):
 from rest_framework import serializers
 from api.models import (
     RecruitmentSession,
-    RecruitmentApplications,
+    RecruitmentApplication,
     PersonalInfo,
     AcademicInfo,
     RolePreferences
@@ -71,7 +71,7 @@ class RecruitmentSessionSerializer(serializers.ModelSerializer):
 
 class PersonalInfoSerializer(serializers.ModelSerializer):
     """
-    Serializer for PersonalInfo model (1-to-1 with RecruitmentApplications).
+    Serializer for PersonalInfo model (1-to-1 with RecruitmentApplication).
     
     Fields:
     - full_name
@@ -89,7 +89,7 @@ class PersonalInfoSerializer(serializers.ModelSerializer):
 
 class AcademicInfoSerializer(serializers.ModelSerializer):
     """
-    Serializer for AcademicInfo model (1-to-1 with RecruitmentApplications).
+    Serializer for AcademicInfo model (1-to-1 with RecruitmentApplication).
     
     Fields:
     - program: ENUM (BSCS, BSSE, BSAI)
@@ -109,7 +109,7 @@ class AcademicInfoSerializer(serializers.ModelSerializer):
 
 class RolePreferencesSerializer(serializers.ModelSerializer):
     """
-    Serializer for RolePreferences model (1-to-1 with RecruitmentApplications).
+    Serializer for RolePreferences model (1-to-1 with RecruitmentApplication).
     
     Fields:
     - preferred_role: Primary role choice
@@ -135,9 +135,9 @@ class RolePreferencesSerializer(serializers.ModelSerializer):
         return data
 
 
-class RecruitmentApplicationsSerializer(serializers.ModelSerializer):
+class RecruitmentApplicationSerializer(serializers.ModelSerializer):
     """
-    Basic serializer for RecruitmentApplications model.
+    Basic serializer for RecruitmentApplication model.
     
     Fields:
     - id: Primary Key
@@ -146,7 +146,7 @@ class RecruitmentApplicationsSerializer(serializers.ModelSerializer):
     - created_at: Timestamp
     """
     class Meta:
-        model = RecruitmentApplications
+        model = RecruitmentApplication
         fields = ['id', 'recruitment_session', 'status', 'created_at']
         read_only_fields = ['created_at']
 
@@ -162,7 +162,7 @@ class RecruitmentApplicationDetailSerializer(serializers.ModelSerializer):
     recruitment_session = RecruitmentSessionSerializer(read_only=True)
     
     class Meta:
-        model = RecruitmentApplications
+        model = RecruitmentApplication
         fields = [
             'id', 'recruitment_session', 'status', 'created_at',
             'personal_info', 'academic_info', 'role_preferences'
@@ -188,7 +188,7 @@ class RecruitmentApplicationSubmissionSerializer(serializers.ModelSerializer):
     role_preferences = RolePreferencesSerializer()
     
     class Meta:
-        model = RecruitmentApplications
+        model = RecruitmentApplication
         fields = [
             'id', 'recruitment_session', 'status', 'created_at',
             'personal_info', 'academic_info', 'role_preferences'
@@ -201,7 +201,7 @@ class RecruitmentApplicationSubmissionSerializer(serializers.ModelSerializer):
         
         Logic:
         1. Extract nested data for personal, academic, and preferences
-        2. Create the parent RecruitmentApplications instance first
+        2. Create the parent RecruitmentApplication instance first
         3. Use the parent's ID to create the three related 1-to-1 records
         """
         # Extract nested data
@@ -210,7 +210,7 @@ class RecruitmentApplicationSubmissionSerializer(serializers.ModelSerializer):
         preferences_data = validated_data.pop('role_preferences')
         
         # Create parent application with default status
-        application = RecruitmentApplications.objects.create(
+        application = RecruitmentApplication.objects.create(
             recruitment_session=validated_data['recruitment_session'],
             status='Under Review'
         )
@@ -243,5 +243,5 @@ class ApplicationStatusUpdateSerializer(serializers.ModelSerializer):
     Used by admins to move applications through the review process.
     """
     class Meta:
-        model = RecruitmentApplications
+        model = RecruitmentApplication
         fields = ['status']
