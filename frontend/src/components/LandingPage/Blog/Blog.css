@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rosario:ital,wght@0,300..700;1,300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
 
-
 .blog-title {
   color: #0C4182;
   font-family: "Montserrat", sans-serif !important;
@@ -12,20 +11,23 @@
   letter-spacing: 2px;
   animation: glow 1.5s ease-in-out infinite;
 }
+
 h2 {
   font-family: 'Montserrat', sans-serif;
 }
-p{
+
+p {
   font-family: 'Roboto', sans-serif;
 }
-.bgstyle{
-  width:100%;
+
+.bgstyle {
+  width: 100%;
   background-image: url("../assets/ellipse.png");
   background-repeat: no-repeat;
   background-size: 20%;
   background-position: right center;
-
 }
+
 @keyframes glow {
   0%, 100% {
     text-shadow: -4px 0 4px #0c4182dc;
@@ -35,11 +37,9 @@ p{
   }
 }
 
-
 .blogs {
   font-family: sans-serif;
 }
-
 
 .blog-container {
   display: flex;
@@ -54,8 +54,25 @@ p{
   width: 80%;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  border-radius: 8px;
 }
 
+/* ✅ Fixed height on desktop/tablet (so all cards equal height) */
+@media (min-width: 768px) {
+  .blog-post-container {
+    height: 300px; /* adjust if you want bigger/smaller */
+  }
+
+  /* Make row fill container height */
+  .blog-post-container .row {
+    height: 100%;
+  }
+
+  /* Ensure columns stretch with the row */
+  .blog-post-container .col-md-6 {
+    height: 100%;
+  }
+}
 
 .blog-image1 {
   max-width: 100%;
@@ -63,6 +80,13 @@ p{
   border-radius: 3px;
 }
 
+/* ✅ Make image occupy available height (desktop) */
+@media (min-width: 768px) {
+  .blog-image1 {
+    width: 100%;
+    height: 100%;
+  }
+}
 
 .blog-post-title {
   font-weight: bold;
@@ -70,25 +94,35 @@ p{
   margin-bottom: 1rem;
 }
 
-
 .highlight {
   background-color: #fff59d;
   padding: 0.1em 0.3em;
   border-radius: 4px;
 }
 
-
 .blog-content {
   display: flex;
   flex-direction: column;
   height: 100%;
+    gap: 16px;   
 }
 
-
+/* ✅ Keep description consistent: grow to fill space, but clamp lines so height stays fixed */
 .blog-content p {
-  flex-grow: 1;
+ flex-grow: 0;         /* ✅ was 1 before */
+  margin: 0;    
+
+  /* line clamp (works on modern browsers) */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5; /* number of lines shown */
+  overflow: hidden;
+
+  /* optional: nicer spacing */
+  margin-bottom: 0;
 }
 
+/* Keep button at bottom */
 .learn-more-btn {
   font-family: 'Montserrat', sans-serif;
   border-radius: 5px;
@@ -101,7 +135,7 @@ p{
   padding: 10px;
   color: white;
   align-self: flex-start;
-  
+  margin-top: auto;
 }
 
 .learn-more-btn:hover {
@@ -109,11 +143,9 @@ p{
   border-color: #1976d2;
 }
 
-
 .blogs .title {
   margin-bottom: 20px;
 }
-
 
 @media (max-width: 767px) {
   .blogs .title {
@@ -124,15 +156,25 @@ p{
     width: 100% !important;
     margin-top: 1rem;
     margin-bottom: 1rem;
+
+    /* ✅ On mobile, let height be natural */
+    height: auto;
   }
 
   .learn-more-btn {
     margin-top: 1rem;
-    
   }
 
   .blog-content {
     padding: 1rem;
-    
+  }
+
+  /* ✅ Allow a bit more text on mobile if you want */
+  .blog-content p {
+    -webkit-line-clamp: 7;
+  }
+
+  .blog-image1 {
+    height: auto;
   }
 }

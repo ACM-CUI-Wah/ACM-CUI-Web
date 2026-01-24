@@ -4,6 +4,7 @@ import { BsArrowRight } from "react-icons/bs";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "./Blog.css";
+
 const textVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -15,18 +16,16 @@ const textVariants = {
   },
 };
 
-const BlogPost = ({ title, description, imageUrl, imageAlt, reverseOrder }) => {
-    const navigate = useNavigate();
+const BlogPost = ({ id, title, description, imageUrl, imageAlt, reverseOrder }) => {
+  const navigate = useNavigate();
 
   const handleLearnMoreClick = () => {
-    // Navigate to public blogs page - accessible to everyone
-    navigate('/blogs');
+    // ✅ Open that specific blog (same pattern as BlogCard)
+    navigate(`/blog/${id}`);
   };
+
   const imageCol = (
-    <Col
-      md={6}
-      className="d-flex justify-content-center align-items-center p-3"
-    >
+    <Col md={6} className="d-flex justify-content-center align-items-center p-3">
       <img src={imageUrl} alt={imageAlt} className="blog-image1 img-fluid" />
     </Col>
   );
@@ -34,7 +33,6 @@ const BlogPost = ({ title, description, imageUrl, imageAlt, reverseOrder }) => {
   const textCol = (
     <Col md={6} className="p-4 d-flex flex-column justify-content-center">
       <div className="blog-content">
-       
         <motion.h2
           className="blog-post-title"
           variants={textVariants}
@@ -45,7 +43,6 @@ const BlogPost = ({ title, description, imageUrl, imageAlt, reverseOrder }) => {
           {title}
         </motion.h2>
 
-       
         <motion.p
           className="text-black"
           variants={textVariants}
@@ -56,10 +53,10 @@ const BlogPost = ({ title, description, imageUrl, imageAlt, reverseOrder }) => {
           {description}
         </motion.p>
 
-      
         <button
+          type="button"
           onClick={handleLearnMoreClick}
-          className="learn-more-btn btn btn-primary d-inline-flex align-items-center"
+          className="learn-more-btn d-inline-flex align-items-center"
         >
           Learn more <BsArrowRight className="ms-2" />
         </button>

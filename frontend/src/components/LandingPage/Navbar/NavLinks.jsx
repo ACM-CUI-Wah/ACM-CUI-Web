@@ -21,6 +21,15 @@ const NavLinks = () => {
         Achievement
       </Nav.Link>
 
+      
+      <Nav.Link
+        as={Link}
+        to="/events"
+        className="fw-semibold mx-2 text-white custom-nav-link"
+      >
+        Events
+      </Nav.Link>
+
       <Nav.Link
         as={Link}
         to="/teams"
@@ -28,6 +37,7 @@ const NavLinks = () => {
       >
         Teams
       </Nav.Link>
+
 
       <Nav.Link
         as={Link}

@@ -218,6 +218,10 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
             <Nav.Link as={Link} to="/achievement" className="text-white fw-semibold">
               Achievement
             </Nav.Link>
+            <Nav.Link as={Link} to="/events" className="text-white fw-semibold">
+              Events
+            </Nav.Link>
+
             <Nav.Link as={Link} to="/teams" className="text-white fw-semibold">
               Teams
             </Nav.Link>
