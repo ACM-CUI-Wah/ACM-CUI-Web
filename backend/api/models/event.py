@@ -30,6 +30,7 @@ class Event(models.Model):
     time_from = models.TimeField(null=True, blank=True)
     time_to = models.TimeField(null=True, blank=True)
     location = models.CharField(max_length=200, blank=True)
+    image = models.ImageField(upload_to=event_image_upload_path, default=f'{settings.MEDIA_ROOT}/events/default.png', blank=True, null=True)
     total_seats = models.PositiveIntegerField(default=0)
 
     class Meta:
