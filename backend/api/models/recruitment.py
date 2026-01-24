@@ -46,9 +46,10 @@ class RecruitmentSession(models.Model):
         ordering = ['-application_start']
         verbose_name = "Recruitment Session"
         verbose_name_plural = "Recruitment Sessions"
+        
     def __str__(self):
         return f"{self.uni_session} - {self.application_start} to {self.result_date}"
-
+      
     def clean(self):
         errors = {}
         if self.application_end and self.application_start:
@@ -72,7 +73,6 @@ class RecruitmentSession(models.Model):
 
 
 # RECRUITMENT APPLICATIONS MODEL
-
 class RecruitmentApplication(models.Model):
     recruitment_session = models.ForeignKey(
         RecruitmentSession,
@@ -84,18 +84,16 @@ class RecruitmentApplication(models.Model):
         choices=ApplicationStatus.choices,
         default=ApplicationStatus.UNDER_REVIEW
     )
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    
     class Meta:
+        ordering = ['id']
         verbose_name = "Recruitment Application"
         verbose_name_plural = "Recruitment Applications"
-
+        
     def __str__(self):
         return f"Application #{self.id} - {self.recruitment_session.uni_session} - {self.status}"
-
-
-#PERSONAL INFO MODEL 
-
+      
+# PERSONAL INFO MODEL
 class PersonalInfo(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,
@@ -117,16 +115,15 @@ class PersonalInfo(models.Model):
         max_length=13,
         validators=[phone_regex]
     )
+    
     class Meta:
         verbose_name = "Personal Information"
         verbose_name_plural = "Personal Information"
-
+        
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"
-
-
-# ACADEMIC INFO MODEL 
-
+    
+# ACADEMIC INFO MODEL
 class AcademicInfo(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,
@@ -158,8 +155,9 @@ class AcademicInfo(models.Model):
         verbose_name_plural = "Academic Information"
     def __str__(self):
         return f"{self.reg_no} - {self.program} - Semester {self.current_semester}"
+      
+      
 # ROLE PREFERENCES MODEL 
-
 class RolePreferences(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,
