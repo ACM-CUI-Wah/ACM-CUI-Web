@@ -15,6 +15,11 @@ class EventType(models.Model):
         verbose_name = 'Event Type'
         verbose_name_plural = 'Event Types'
 
+    def save(self, *args, **kwargs):
+        if self.type:
+            self.type = self.type.upper()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.type
 
