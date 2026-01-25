@@ -1,31 +1,33 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, EmailValidator
+from django.contrib.postgres.fields import ArrayField
 from datetime import date
 
-#  ENUMS/CHOICES 
+#  ENUMS/CHOICES
 class ApplicationStatus(models.TextChoices):
-    UNDER_REVIEW = "UNDER_REVIEW", "Under Review"
-    ACCEPTED = "ACCEPTED", "Accepted"
-    REJECTED = "REJECTED", "Rejected"
-    INTERVIEWS = "INTERVIEWS", "Interviews"
+    UNDER_REVIEW = "UNDER_REVIEW"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
+    INTERVIEWS = "INTERVIEWS"
 
 
 class Program(models.TextChoices):
-    BSCS = "BSCS", "bscs"
-    BSSE = "BSSE", "bsse"
-    BSAI = "BSAI", "bsai"
+    BSCS = "BSCS"
+    BSSE = "BSSE"
+    BSAI = "BSAI"
 
 
 class Role(models.TextChoices):
-    CODEHUB = "CODEHUB", "CodeHub"
-    GRAPHICS_MEDIA = "GRAPHICS_MEDIA", "Graphics & Media"
-    SOCIAL_MEDIA_MARKETING = "SOCIAL_MEDIA_MARKETING", "Social Media and Marketing"
-    REGISTRATION_DECOR = "REGISTRATION_DECOR", "Registration & Decor"
-    EVENTS_LOGISTICS = "EVENTS_LOGISTICS", "Events & Logistics"
+    CODEHUB = "CODEHUB"
+    GRAPHICS = "GRAPHICS"
+    SOCIAL_MEDIA_MARKETING = "SOCIAL_MEDIA_MARKETING"
+    MEDIA = "MEDIA"
+    DECOR = "DECOR"
+    EVENTS_LOGISTICS = "EVENTS_LOGISTICS"
 
 
-#  RECRUITMENT SESSION MODEL 
+#  RECRUITMENT SESSION MODEL
 class RecruitmentSession(models.Model):
     uni_session_regex = RegexValidator(
         regex=r'^(FA|SP)\d{2}$',
@@ -46,6 +48,7 @@ class RecruitmentSession(models.Model):
         ordering = ['-application_start']
         verbose_name = "Recruitment Session"
         verbose_name_plural = "Recruitment Sessions"
+
     def __str__(self):
         return f"{self.uni_session} - {self.application_start} to {self.result_date}"
 
@@ -72,7 +75,6 @@ class RecruitmentSession(models.Model):
 
 
 # RECRUITMENT APPLICATIONS MODEL
-
 class RecruitmentApplication(models.Model):
     recruitment_session = models.ForeignKey(
         RecruitmentSession,
@@ -84,19 +86,16 @@ class RecruitmentApplication(models.Model):
         choices=ApplicationStatus.choices,
         default=ApplicationStatus.UNDER_REVIEW
     )
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
-        ordering = ['-submitted_at']
+        ordering = ['id']
         verbose_name = "Recruitment Application"
         verbose_name_plural = "Recruitment Applications"
 
     def __str__(self):
         return f"Application #{self.id} - {self.recruitment_session.uni_session} - {self.status}"
 
-
-#PERSONAL INFO MODEL 
-
+# PERSONAL INFO MODEL
 class PersonalInfo(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,
@@ -118,6 +117,7 @@ class PersonalInfo(models.Model):
         max_length=13,
         validators=[phone_regex]
     )
+
     class Meta:
         verbose_name = "Personal Information"
         verbose_name_plural = "Personal Information"
@@ -125,9 +125,7 @@ class PersonalInfo(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"
 
-
-# ACADEMIC INFO MODEL 
-
+# ACADEMIC INFO MODEL
 class AcademicInfo(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,
@@ -146,21 +144,24 @@ class AcademicInfo(models.Model):
         max_length=10,
         choices=Program.choices
     )
-    skills = models.JSONField(
+    skills = ArrayField(
+        models.CharField(max_length=50),
+        blank=True,
         default=list,
-        help_text="List of skills (stored as JSON array)"
     )
-    relevant_coursework = models.JSONField(
+    relevant_coursework = ArrayField(
+        models.CharField(max_length=50),
+        blank=True,
         default=list,
-        help_text="List of relevant courses (stored as JSON array)"
     )
     class Meta:
         verbose_name = "Academic Information"
         verbose_name_plural = "Academic Information"
     def __str__(self):
         return f"{self.reg_no} - {self.program} - Semester {self.current_semester}"
-# ROLE PREFERENCES MODEL 
 
+
+# ROLE PREFERENCES MODEL
 class RolePreferences(models.Model):
     application = models.OneToOneField(
         RecruitmentApplication,

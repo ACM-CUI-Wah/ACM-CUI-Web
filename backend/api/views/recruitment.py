@@ -9,9 +9,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from api.permissions import IsAdmin
+
 
 # -------------
 # Admin Views
@@ -23,7 +25,7 @@ class RecruitmentSessionViewSet(ModelViewSet):
     """
     queryset = RecruitmentSession.objects.all()
     serializer_class = RecruitmentSessionSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
 
 class ApplicationReviewViewSet(ReadOnlyModelViewSet):
@@ -37,7 +39,7 @@ class ApplicationReviewViewSet(ReadOnlyModelViewSet):
         "personal_info", "academic_info", "role_preferences"
     )
     serializer_class = RecruitmentApplicationSubmissionSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["status"]
@@ -50,9 +52,9 @@ class ApplicationStatusUpdateViewSet(ModelViewSet):
     """
     queryset = RecruitmentApplication.objects.all()
     serializer_class = RecruitmentApplicationSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
-    http_method_names = ['patch', 'get']  
+    http_method_names = ['patch', 'get']
 
     @action(detail=True, methods=["patch"])
     def update_status(self, request, pk=None):
