@@ -5,7 +5,7 @@ from api.views import (
     BlogUploadView, BlogListAPIView, BlogEditView, BlogDeleteView, 
     MeetingRUDView, MeetingCreateView, MeetingListView, MeetingAttendanceListView, 
     MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView, 
-    api_root, EventRUDView, EventImageRUDView, AdminRUDView, EventListCreateView, 
+    api_root, AdminRUDView,
     PublicStudentsListView, BillListCreateView, BillRUDView, InlineImageUploadView,
     
     # Recruitment Views
@@ -14,6 +14,11 @@ from api.views import (
     RecruitmentSessionViewSet,
     ApplicationReviewViewSet,
     ApplicationStatusUpdateViewSet,
+
+    # Event Views
+    EventDetailView,
+    EventTypeListCreateView,
+    EventListCreateView,
 )
 
 # -------------------
@@ -70,5 +75,10 @@ urlpatterns = [
     path('recruitment/submit-application/', ApplicationSubmitView.as_view({'post': 'create'}), name='submit-application'),  
 
     # Admin Recruitment Views (via router)
-    path('recruitment/', include(recruitment_router.urls)), 
+    path('recruitment/', include(recruitment_router.urls)),
+
+    # Events
+    path('events/', EventListCreateView.as_view()),
+    path('events/<int:pk>/', EventDetailView.as_view()),
+    path('events/types/', EventTypeListCreateView.as_view()),
 ]
