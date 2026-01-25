@@ -74,17 +74,15 @@ class PersonalInfoSerializer(serializers.ModelSerializer):
     Serializer for PersonalInfo model (1-to-1 with RecruitmentApplication).
     
     Fields:
-    - full_name
+    - first_name
+    - last_name
     - email (with validation)
     - phone_number
     - cnic (optional)
     """
     class Meta:
         model = PersonalInfo
-        fields = ['id', 'full_name', 'email', 'phone_number', 'cnic']
-        extra_kwargs = {
-            'cnic': {'required': False, 'allow_blank': True}
-        }
+        fields = ['application_id', 'first_name', 'last_name', 'email', 'phone_number']
 
 
 class AcademicInfoSerializer(serializers.ModelSerializer):
@@ -100,10 +98,10 @@ class AcademicInfoSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = AcademicInfo
-        fields = ['id', 'program', 'semester', 'cgpa', 'skills', 'relevant_coursework']
+        fields = ['application_id', 'program', 'current_semester', 'skills', 'relevant_coursework']
         extra_kwargs = {
-            'skills': {'required': False, 'allow_blank': True},
-            'relevant_coursework': {'required': False, 'allow_blank': True}
+            'skills': {'required': False},
+            'relevant_coursework': {'required': False}
         }
 
 
@@ -114,14 +112,14 @@ class RolePreferencesSerializer(serializers.ModelSerializer):
     Fields:
     - preferred_role: Primary role choice
     - secondary_role: Backup role choice
-    - why_join: Motivation statement
+    - join_purpose: Motivation statement
     """
     class Meta:
         model = RolePreferences
-        fields = ['id', 'preferred_role', 'secondary_role', 'why_join']
+        fields = ['application_id', 'preferred_role', 'secondary_role', 'join_purpose']
         extra_kwargs = {
             'secondary_role': {'required': False},
-            'why_join': {'required': False, 'allow_blank': True}
+            'join_purpose': {'required': False}
         }
     
     def validate(self, data):
