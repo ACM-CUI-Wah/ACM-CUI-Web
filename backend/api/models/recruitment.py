@@ -13,16 +13,17 @@ class ApplicationStatus(models.TextChoices):
 
 
 class Program(models.TextChoices):
-    BSCS = "BSCS", "bscs"
-    BSSE = "BSSE", "bsse"
-    BSAI = "BSAI", "bsai"
+    BSCS = "BSCS"
+    BSSE = "BSSE"
+    BSAI = "BSAI"
 
 
 class Role(models.TextChoices):
     CODEHUB = "CODEHUB"
-    GRAPHICS_MEDIA = "GRAPHICS_MEDIA"
+    GRAPHICS = "GRAPHICS"
     SOCIAL_MEDIA_MARKETING = "SOCIAL_MEDIA_MARKETING"
-    REGISTRATION_DECOR = "REGISTRATION_DECOR"
+    MEDIA = "MEDIA"
+    DECOR = "DECOR"
     EVENTS_LOGISTICS = "EVENTS_LOGISTICS"
 
 
