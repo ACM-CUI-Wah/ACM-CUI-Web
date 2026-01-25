@@ -1,26 +1,26 @@
 // EventTeamForm.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import NavbarComponent from '../../components/LandingPage/Navbar/NavbarComponent';
-import Footer from '../../components/Footer/Footer';
-import './EventTeamForm.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent";
+import Footer from "../../components/Footer/Footer";
+import "./EventTeamForm.css";
 
 const blankMember = () => ({
-  name: '',
-  registration: '',
-  semester: '',
-  department: '',
-  email: '',
-  phone: ''
+  name: "",
+  registration: "",
+  semester: "",
+  department: "",
+  email: "",
+  phone: "",
 });
 
 const MIN_MEMBERS = 1;
 const MAX_MEMBERS = 10;
 
 const ordinalLabel = (n) => {
-  if (n === 1) return 'First';
-  if (n === 2) return 'Second';
-  if (n === 3) return 'Third';
+  if (n === 1) return "First";
+  if (n === 2) return "Second";
+  if (n === 3) return "Third";
   return `${n}th`;
 };
 
@@ -29,13 +29,13 @@ const EventTeamForm = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const [memberCount, setMemberCount] = useState(2);
-  const [memberCountInput, setMemberCountInput] = useState('2');
+  const [memberCountInput, setMemberCountInput] = useState("2");
 
   // ✅ NEW: error message state
-  const [memberCountError, setMemberCountError] = useState('');
+  const [memberCountError, setMemberCountError] = useState("");
 
   const [formData, setFormData] = useState({
-    members: Array.from({ length: 2 }, blankMember)
+    members: Array.from({ length: 2 }, blankMember),
   });
 
   const resizeMembers = (nextCount) => {
@@ -43,7 +43,10 @@ const EventTeamForm = () => {
       const current = prev.members || [];
 
       if (nextCount > current.length) {
-        const extra = Array.from({ length: nextCount - current.length }, blankMember);
+        const extra = Array.from(
+          { length: nextCount - current.length },
+          blankMember,
+        );
         return { ...prev, members: [...current, ...extra] };
       }
 
@@ -55,9 +58,9 @@ const EventTeamForm = () => {
     const raw = e.target.value;
 
     // allow empty while typing (no error)
-    if (raw === '') {
-      setMemberCountInput('');
-      setMemberCountError('');
+    if (raw === "") {
+      setMemberCountInput("");
+      setMemberCountError("");
       return;
     }
 
@@ -81,7 +84,7 @@ const EventTeamForm = () => {
     }
 
     // valid
-    setMemberCountError('');
+    setMemberCountError("");
     setMemberCountInput(raw);
     setMemberCount(n);
     resizeMembers(n);
@@ -91,9 +94,9 @@ const EventTeamForm = () => {
     let raw = memberCountInput;
 
     // if empty/invalid => revert
-    if (raw === '' || !/^\d+$/.test(raw)) {
+    if (raw === "" || !/^\d+$/.test(raw)) {
       setMemberCountInput(String(memberCount));
-      setMemberCountError('');
+      setMemberCountError("");
       return;
     }
 
@@ -106,7 +109,7 @@ const EventTeamForm = () => {
       setMemberCountError(`Min members ${MIN_MEMBERS}`);
       n = MIN_MEMBERS;
     } else {
-      setMemberCountError('');
+      setMemberCountError("");
     }
 
     setMemberCount(n);
@@ -126,13 +129,13 @@ const EventTeamForm = () => {
     e.preventDefault();
 
     if (!isConfirmed) {
-      alert('Please confirm the terms and conditions before submitting');
+      alert("Please confirm the terms and conditions before submitting");
       return;
     }
 
-    console.log('Form submitted:', {
+    console.log("Form submitted:", {
       memberCount,
-      members: formData.members
+      members: formData.members,
     });
   };
 
@@ -145,32 +148,36 @@ const EventTeamForm = () => {
           <h1 className="team-form__title">
             EVENT REGISTRATION <span className="team-form__badge">TEAM</span>
           </h1>
-          <p className="team-form__description">Fill out the application form to sign up!</p>
+          <p className="team-form__description">
+            Fill out the application form to sign up!
+          </p>
         </div>
 
         <form className="team-form__form" onSubmit={handleSubmit}>
           <div className="team-form__card">
             <div className="team-form__section">
               <h3 className="team-form__section-title">Team Size</h3>
-              <p className="team-form__subtitle">How many members do you want to register?</p>
+              <p className="team-form__subtitle">
+                How many members do you want to register?
+              </p>
 
               <div className="team-form__field">
                 <label className="team-form__label">Number of Members*</label>
                 <input
-  className="team-form__input"
-  type="number"
-  min={MIN_MEMBERS}
-  max={MAX_MEMBERS}
-  value={memberCountInput}
-  onChange={handleMemberCountChange}
-  onBlur={handleMemberCountBlur}
-  onWheel={(e) => e.currentTarget.blur()}   // ✅ prevents scroll changing value
-  onKeyDown={(e) => {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault(); // optional
-  }}
-  required
-/>
-
+                  className="team-form__input"
+                  type="number"
+                  min={MIN_MEMBERS}
+                  max={MAX_MEMBERS}
+                  value={memberCountInput}
+                  onChange={handleMemberCountChange}
+                  onBlur={handleMemberCountBlur}
+                  onWheel={(e) => e.currentTarget.blur()} // ✅ prevents scroll changing value
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowUp" || e.key === "ArrowDown")
+                      e.preventDefault(); // optional
+                  }}
+                  required
+                />
 
                 {/* ✅ NEW: error under input */}
                 {memberCountError && (
@@ -194,7 +201,9 @@ const EventTeamForm = () => {
                       type="text"
                       value={member.name}
                       placeholder="Ahmed"
-                      onChange={(e) => handleMemberChange(index, 'name', e.target.value)}
+                      onChange={(e) =>
+                        handleMemberChange(index, "name", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -206,7 +215,13 @@ const EventTeamForm = () => {
                       type="text"
                       value={member.registration}
                       placeholder="FA23-BAI-043"
-                      onChange={(e) => handleMemberChange(index, 'registration', e.target.value)}
+                      onChange={(e) =>
+                        handleMemberChange(
+                          index,
+                          "registration",
+                          e.target.value,
+                        )
+                      }
                       required
                     />
                   </div>
@@ -218,7 +233,9 @@ const EventTeamForm = () => {
                     <select
                       className="team-form__select"
                       value={member.semester}
-                      onChange={(e) => handleMemberChange(index, 'semester', e.target.value)}
+                      onChange={(e) =>
+                        handleMemberChange(index, "semester", e.target.value)
+                      }
                       required
                     >
                       <option value="">Select your semester</option>
@@ -238,7 +255,9 @@ const EventTeamForm = () => {
                     <select
                       className="team-form__select"
                       value={member.department}
-                      onChange={(e) => handleMemberChange(index, 'department', e.target.value)}
+                      onChange={(e) =>
+                        handleMemberChange(index, "department", e.target.value)
+                      }
                       required
                     >
                       <option value="">Select your semester</option>
@@ -256,7 +275,9 @@ const EventTeamForm = () => {
                     type="email"
                     value={member.email}
                     placeholder="Ahmed@example.com"
-                    onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
+                    onChange={(e) =>
+                      handleMemberChange(index, "email", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -268,7 +289,9 @@ const EventTeamForm = () => {
                     type="tel"
                     value={member.phone}
                     placeholder="+90 321 569877"
-                    onChange={(e) => handleMemberChange(index, 'phone', e.target.value)}
+                    onChange={(e) =>
+                      handleMemberChange(index, "phone", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -287,9 +310,10 @@ const EventTeamForm = () => {
                 required
               />
               <label className="team-form__terms-text" htmlFor="confirm">
-                By signing up for this event, I confirm that I have read, understood, and agree to all rules,
-                terms, and conditions. I give my full consent to participate and accept any responsibilities
-                associated with the event.
+                By signing up for this event, I confirm that I have read,
+                understood, and agree to all rules, terms, and conditions. I
+                give my full consent to participate and accept any
+                responsibilities associated with the event.
               </label>
             </div>
           </div>
