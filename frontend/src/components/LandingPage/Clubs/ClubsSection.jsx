@@ -1,137 +1,114 @@
+// ClubsSection.jsx
+
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./ClubsSection.css";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+// ICONS
+import vector1 from "../../../assets/vector 1.png";
+import vector2 from "../../../assets/Vector 2.png";
+import vector3 from "../../../assets/Vector 3.png";
+import vector4 from "../../../assets/vector 4.png";
+import vector5 from "../../../assets/vector 5.png";
 
-const textVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
-
-// Reusable hover props
 const hoverEffect = {
   y: -10,
-  scale: 1.03,
-  boxShadow: "0px 10px 20px rgba(0,0,0,0.15)",
+  scale: 1.04,
+  boxShadow: "0px 18px 35px rgba(12,65,130,0.25)",
 };
 
 const ClubsSection = () => {
   return (
-    <div className="clubs-container container-fluid position-relative">
-      {/* Background Shapes */}
-      <div className="bg-shape bottom-left-triangle"></div>
-      <div className="bg-shape top-right-triangle"></div>
+    <section className="clubs-container">
 
-      {/* Center Circle */}
-      <div
-        className="center-circle text-center d-flex align-items-center justify-content-center"
-        style={{ backgroundColor: "#0c4182" }}
+      {/* 🔥 MODERN HEADING */}
+      <motion.div
+        className="clubs-heading"
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
       >
-        CLUBS
-      </div>
+        <h2>CLUBS</h2>
+        <motion.span
+          className="heading-line"
+          initial={{ width: 0 }}
+          whileInView={{ width: "80px" }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        />
+        <p>
+          A community of innovators, designers, and problem-solvers
+          building impactful technology together.
+        </p>
+      </motion.div>
 
-      {/* Club Boxes Wrapper */}
-      <div className="club-boxes-wrapper">
-        <motion.div
-          className="club-box code-hub text-center"
-          whileHover={hoverEffect}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        >
-          <div className="connector connector-top-left"></div>
+      {/* GRID */}
+      <div className="clubs-grid">
+
+        {/* CODE HUB */}
+        <motion.div className="club-card" whileHover={hoverEffect}>
+          <div className="icon-circle">
+            <img src={vector1} alt="Code Hub" />
+          </div>
           <h4>CODE HUB</h4>
-          <motion.p
-            variants={textVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            Empowering coders through hands-on learning and real-world challenges.
-          </motion.p>
+          <p>Hands-on coding, real-world challenges, and technical growth.</p>
+          <span>Explore</span>
         </motion.div>
 
-        <motion.div
-          className="club-box events-logistics text-center"
-          whileHover={hoverEffect}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        >
-          <div className="connector connector-top-right"></div>
+        {/* EVENTS */}
+        <motion.div className="club-card" whileHover={hoverEffect}>
+          <div className="icon-circle">
+            <img src={vector2} alt="Events & Logistics" />
+          </div>
           <h4>EVENTS & LOGISTICS</h4>
-          <motion.p
-            variants={textVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            Seamlessly managing every detail to create impactful tech experiences.
-          </motion.p>
+          <p>Planning and executing impactful technical events.</p>
+          <span>Explore</span>
         </motion.div>
 
-        <motion.div
-          className="club-box media-marketing text-center"
-          whileHover={hoverEffect}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        >
-          <div className="connector connector-bottom-left"></div>
-          <h4>MEDIA & MARKETING</h4>
-          <motion.p
-            variants={textVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            Spreading the ACM vision through creative and engaging campaigns.
-          </motion.p>
-        </motion.div>
-
-        <motion.div
-          className="club-box decor text-center"
-          whileHover={hoverEffect}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        >
-          <div className="connector connector-bottom"></div>
-          <h4>DECOR</h4>
-          <motion.p
-            variants={textVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            Designing vibrant spaces that reflect the spirit of innovation.
-          </motion.p>
-        </motion.div>
-
-        <motion.div
-          className="club-box graphics text-center"
-          whileHover={hoverEffect}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        >
-          <div className="connector connector-bottom-right"></div>
+        {/* GRAPHICS */}
+        <motion.div className="club-card" whileHover={hoverEffect}>
+          <div className="icon-circle">
+            <img src={vector3} alt="Graphics" />
+          </div>
           <h4>GRAPHICS</h4>
-          <motion.p
-            variants={textVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            Crafting visual stories that capture attention and inspire curiosity.
-          </motion.p>
+          <p>Designing visuals that communicate ideas beautifully.</p>
+          <span>Explore</span>
         </motion.div>
+
+        {/* MEDIA */}
+        <motion.div className="club-card" whileHover={hoverEffect}>
+          <div className="icon-circle">
+            <img src={vector4} alt="Media & Marketing" />
+          </div>
+          <h4>MEDIA & MARKETING</h4>
+          <p>Promoting ACM through engaging digital campaigns.</p>
+          <span>Explore</span>
+        </motion.div>
+
+        {/* DECOR */}
+        <motion.div className="club-card" whileHover={hoverEffect}>
+          <div className="icon-circle">
+            <img src={vector5} alt="Decor" />
+          </div>
+          <h4>DECOR</h4>
+          <p>Transforming spaces to reflect creativity and innovation.</p>
+          <span>Explore</span>
+        </motion.div>
+
+        {/* EMPTY SLOT */}
+        <div className="club-card empty-card"></div>
       </div>
 
-     
-      <Link to="/teams">
-        <button className="btn btn-primary learn-more-btn">Learn more →</button>
-      </Link>
-    </div>
+      <div className="clubs-btn-wrapper">
+        <Link to="/teams">
+          <button className="learn-more-btn">Learn more →</button>
+        </Link>
+      </div>
+
+    </section>
   );
 };
 
 export default ClubsSection;
+
