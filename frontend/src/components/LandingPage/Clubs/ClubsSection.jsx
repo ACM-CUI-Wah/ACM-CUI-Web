@@ -30,13 +30,8 @@ const ClubsSection = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true }}
       >
-        <h2>CLUBS</h2>
-        <motion.span
-          className="heading-line"
-          initial={{ width: 0 }}
-          whileInView={{ width: "80px" }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        />
+        <h1>CLUBS</h1>
+        
         <p>
           A community of innovators, designers, and problem-solvers
           building impactful technology together.
