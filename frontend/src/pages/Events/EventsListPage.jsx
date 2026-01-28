@@ -11,8 +11,11 @@ const EventListPage = () => {
   const [editingEvent, setEditingEvent] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
+  const [editAbout, setEditAbout] = useState("");
+  const [editSpeakers, setEditSpeakers] = useState("");
   const [editDate, setEditDate] = useState("");
-  const [editTime, setEditTime] = useState("");
+  const [editStartTime, setEditStartTime] = useState("");
+  const [editEndTime, setEditEndTime] = useState("");
   const [editVenue, setEditVenue] = useState("");
   const [editCapacity, setEditCapacity] = useState("");
   const [editCategory, setEditCategory] = useState("");
@@ -72,8 +75,11 @@ const EventListPage = () => {
     setEditingEvent(event.id);
     setEditTitle(event.title);
     setEditContent(event.content);
+    setEditAbout(event.about || "");
+    setEditSpeakers(event.speakers || "");
     setEditDate(event.date || "");
-    setEditTime(event.time || "");
+    setEditStartTime(event.startTime || event.start_time || "");
+    setEditEndTime(event.endTime || event.end_time || "");
     setEditVenue(event.venue || "");
     setEditCapacity(event.capacity || "");
     setEditCategory(event.category || "");
@@ -196,25 +202,59 @@ const EventListPage = () => {
                   />
                 </div>
 
-                {/* Date and Time Row */}
+                {/* About */}
+                <div className="form-field full-width">
+                  <label>About</label>
+                  <textarea
+                    placeholder="Provide detailed information about the event, agenda, what to expect..."
+                    value={editAbout}
+                    onChange={(e) => setEditAbout(e.target.value)}
+                    rows="4"
+                  />
+                </div>
+
+                {/* Speakers */}
+                <div className="form-field full-width">
+                  <label>Speakers</label>
+                  <textarea
+                    placeholder="List the speakers/presenters for this event (e.g., John Doe - Software Engineer at Google, Jane Smith - Data Scientist)"
+                    value={editSpeakers}
+                    onChange={(e) => setEditSpeakers(e.target.value)}
+                    rows="3"
+                  />
+                </div>
+
+                {/* Date Row */}
+                <div className="form-field full-width">
+                  <label>Date<span className="required">*</span></label>
+                  <input
+                    type="date"
+                    placeholder="mm/dd/yyyy"
+                    value={editDate}
+                    onChange={(e) => setEditDate(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* Time Interval Row */}
                 <div className="form-row">
                   <div className="form-field">
-                    <label>Date<span className="required">*</span></label>
+                    <label>Start Time <span className="required">*</span></label>
                     <input
-                      type="date"
-                      placeholder="mm/dd/yyyy"
-                      value={editDate}
-                      onChange={(e) => setEditDate(e.target.value)}
+                      type="time"
+                      placeholder="--:-- ---"
+                      value={editStartTime}
+                      onChange={(e) => setEditStartTime(e.target.value)}
                       required
                     />
                   </div>
                   <div className="form-field">
-                    <label>Time <span className="required">*</span></label>
+                    <label>End Time <span className="required">*</span></label>
                     <input
                       type="time"
                       placeholder="--:-- ---"
-                      value={editTime}
-                      onChange={(e) => setEditTime(e.target.value)}
+                      value={editEndTime}
+                      onChange={(e) => setEditEndTime(e.target.value)}
                       required
                     />
                   </div>

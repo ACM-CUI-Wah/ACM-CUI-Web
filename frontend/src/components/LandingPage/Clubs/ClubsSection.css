@@ -1,279 +1,144 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Permanent+Marker&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Marker+Hatch&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 .clubs-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  background: #ffffff;
+  background: #f8fafc;
+  padding: 80px 40px;
   font-family: 'Inter', sans-serif;
-  overflow: visible;
-  background-image: url('../assets/half.png');
-  background-repeat: no-repeat;
-  background-size: 37%;
-  background-position: 0% 0% ;
-  
 }
 
-/* Center circle */
-.center-circle {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #0c4182;
-  color: white;
-  font-family: 'Rubik Marker Hatch', cursive;
-  font-size: 5rem;
+/* ===== HEADING ===== */
+.clubs-heading {
+  max-width: 700px;
+  margin: 0 auto 60px;
+  text-align: center;
+}
+
+.clubs-heading h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #0c4182;
+  margin-bottom: 10px;
+}
+
+.heading-line {
+  display: block;
+  height: 4px;
+  background: #0c4182;
+  margin: 0 auto 18px;
+  border-radius: 10px;
+}
+
+.clubs-heading p {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ===== GRID ===== */
+.clubs-grid {
+  max-width: 1300px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* ===== CARD ===== */
+.club-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 36px 30px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s ease;
+}
+
+/* ===== ICON CIRCLE (PRO SOLUTION) ===== */
+.icon-circle {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  width: 400px;
-  height: 400px;
+  background: #e6effa;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  z-index: 2;
-  box-shadow: 0px 0px 100px rgba(0, 0, 0, 1);
+  margin-bottom: 18px;
 }
 
-
-.club-box {
-  position: absolute;
-  width: 250px;
-  padding: 15px 20px;
-  background: linear-gradient(360deg, rgba(12, 65, 130, 0.8) 0%, #9BA0A4 100%);
-  color: white;
-  border-radius: 40px;
-  text-align: center;
-  z-index: 1;
+.icon-circle img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
-.club-box h4 {
-  font-family: 'Montserrat', sans-serif;
+/* ===== TEXT ===== */
+.club-card h4 {
+  font-size: 1.25rem;
   font-weight: 700;
-}
-p{
-  font-family: 'Roboto', sans-serif;
-}
-
-.code-hub {
-  top: 10%;
-  left: 20%;
+  margin-bottom: 8px;
+  color: #111827;
 }
 
-.events-logistics {
-  top: 10%;
-  right: 20%;
-}
-
-.media-marketing {
-  bottom: 20%;
-  left: 10%;
-}
-
-.decor {
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.graphics {
-  bottom: 20%;
-  right: 10%;
-}
-
-/* Connectors */
-.connector {
-  position: absolute;
-  border-right: 4px solid black;
-  border-bottom: 4px solid black;
-  border-bottom-right-radius: 60px;
-  z-index: -1;
-}
-
-.connector-top-left {
-  width: 150px;
-  height: 300px;
-  transform: translateX(90%) translateY(20%) rotate(90deg);
-}
-
-.connector-top-right {
-  width: 300px;
-  height: 130px;
-  transform: translateX(-60%) translateY(130%);
-}
-
-.connector-bottom-left {
-  width: 450px;
-  height: 150px;
-  transform: translateX(30%) translateY(-110%) rotate(180deg);
-}
-
-.connector-bottom-right {
-  width: 170px;
-  height: 450px;
-  transform: translateX(-130%) translateY(-72%) rotate(270deg);
-}
-
-.connector-bottom {
-  position: absolute;
-  border-right: 4px solid black;
-  z-index: -1;
-  height: 150px;
-  transform: translateX(-50%) translateY(-118%);
-  left: 50%;
-  bottom: -20px;
-}
-
-.bg-shape {
-  position: absolute;
-  z-index: 0;
-}
-
-.bottom-left-triangle {
-  bottom: 50px;
-  left: 150px;
-  width: 0;
-  height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-top: 80px solid #9db8da;
-}
-
-.top-right-triangle {
-  position: absolute;
-  width: 360px;
-  height: 159px;
-  background: #0C4182;
-  opacity: 0.8;
-  border-radius: 50px 50px 0px 0px;
-  transform: rotate(26.87deg);
-  top: 250px;
-  right: -200px;
-}
-
-/* Learn More Button */
-.learn-more-btn {
-  font-family: 'Montserrat', sans-serif;
-  position: absolute;
-  bottom: 20px;
-  right: 40px;
-  background-color: #0c4182;
-  color: white;
-  border-radius: 6px;
-  padding: 10px 25px;
+.club-card p {
   font-size: 0.9rem;
+  line-height: 1.5;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.club-card span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0c4182;
+}
+
+/* EMPTY */
+.empty-card {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* BUTTON */
+.clubs-btn-wrapper {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.learn-more-btn {
+  background: #0c4182;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-size: 0.95rem;
 }
 
 .learn-more-btn:hover {
-  background-color: #092f60;
-  color: #f9f9f9;
-  transform: translateY(-2px);
-  cursor: pointer;
+  background: #092f60;
 }
 
-/* Wrapper for club boxes - added for responsiveness */
-.club-boxes-wrapper {
-  display: contents;
-}
-
-/* Medium screens: tablets */
-@media (max-width: 1200px) {
-  .center-circle {
-    width: 300px;
-    height: 300px;
-    font-size: 4rem;
+/* TABLET */
+@media (max-width: 992px) {
+  .clubs-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .decor {
-    left: 50%;
-    transform: translateX(-20%) translateY(100%);
-    bottom: 20%;
-  }
-  .club-box {
-    width: 250px;
-    font-size: 1rem;
-    margin-right: -50px;
-    margin-left: -50px;
-    margin-bottom: 100px;
-    padding: 10px 14px;
-  }
-  .club-box h4 {
-    font-size: 1.5rem;
-  }
-
-  /* Hide connectors and background shapes */
-  .connector-top-left,
-  .connector-top-right,
-  .connector-bottom-left,
-  .connector-bottom-right,
-  .connector-bottom {
+  .empty-card {
     display: none;
   }
 }
-@media (max-width: 768px) {
+
+/* MOBILE */
+@media (max-width: 576px) {
   .clubs-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    height: auto;
-    background-image:none;
-
+    padding: 60px 20px;
   }
 
-  .center-circle {
-    position: static;
-    transform: none;
-    width: 180px;
-    height: 180px;
+  .clubs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clubs-heading h2 {
     font-size: 2.2rem;
-    margin-bottom: 20px;
-    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.6);
-  }
-
-  .club-boxes-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
-  }
-
-  .club-box {
-    position: static;
-     width: 90%;             /* Use relative width for flexibility */
-    max-width: 320px; 
-    font-size: 0.7rem;
-    border-radius: 30px;
-    padding: 6px 8px;
-    margin: 0;
-    transform: none !important;  /* <--- This line fixes leftover transforms */
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    top: auto !important;
-  }
-
-  .club-box h4 {
-    font-size: 0.9rem;
-  }
-
-  /* Hide connectors and background shapes */
-  .connector-top-left,
-  .connector-top-right,
-  .connector-bottom-left,
-  .connector-bottom-right,
-  .connector-bottom,
-  .bg-shape {
-    display: none;
-  }
-
-  .learn-more-btn {
-    position: static;
-    font-size: 0.75rem;
-    padding: 6px 16px;
-    margin-top: 20px;
   }
 }

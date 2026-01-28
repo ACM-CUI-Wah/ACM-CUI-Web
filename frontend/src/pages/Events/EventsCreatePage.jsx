@@ -7,8 +7,11 @@ import "./EventsCreatePage.css";
 const EventCreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [about, setAbout] = useState("");
+  const [speakers, setSpeakers] = useState("");
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [venue, setVenue] = useState("");
   const [capacity, setCapacity] = useState("");
   const [category, setCategory] = useState("");
@@ -89,25 +92,59 @@ const EventCreatePage = () => {
               />
             </div>
 
-            {/* Date and Time Row */}
+            {/* About */}
+            <div className="form-field full-width">
+              <label>About</label>
+              <textarea
+                placeholder="Provide detailed information about the event, agenda, what to expect..."
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+                rows="4"
+              />
+            </div>
+
+            {/* Speakers */}
+            <div className="form-field full-width">
+              <label>Speakers</label>
+              <textarea
+                placeholder="List the speakers/presenters for this event (e.g., John Doe - Software Engineer at Google, Jane Smith - Data Scientist)"
+                value={speakers}
+                onChange={(e) => setSpeakers(e.target.value)}
+                rows="3"
+              />
+            </div>
+
+            {/* Date Row */}
+            <div className="form-field full-width">
+              <label>Date<span className="required">*</span></label>
+              <input
+                type="date"
+                placeholder="mm/dd/yyyy"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Time Interval Row */}
             <div className="form-row">
               <div className="form-field">
-                <label>Date<span className="required">*</span></label>
+                <label>Start Time <span className="required">*</span></label>
                 <input
-                  type="date"
-                  placeholder="mm/dd/yyyy"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  type="time"
+                  placeholder="--:-- ---"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
                   required
                 />
               </div>
               <div className="form-field">
-                <label>Time <span className="required">*</span></label>
+                <label>End Time <span className="required">*</span></label>
                 <input
                   type="time"
                   placeholder="--:-- ---"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
                   required
                 />
               </div>

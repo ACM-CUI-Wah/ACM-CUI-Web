@@ -98,7 +98,7 @@ class AcademicInfoSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = AcademicInfo
-        fields = ['application_id', 'program', 'current_semester', 'skills', 'relevant_coursework']
+        fields = ['application_id', 'program', 'current_semester', 'skills', 'relevant_coursework', 'reg_no']
         extra_kwargs = {
             'skills': {'required': False},
             'relevant_coursework': {'required': False}
