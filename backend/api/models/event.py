@@ -46,6 +46,15 @@ class Event(models.Model):
         null=True,
         blank=True,
     )
+    hosts = ArrayField(
+        models.CharField(
+            max_length=30,
+            blank=True,
+            default=list,
+        ),
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         ordering = ['-date']

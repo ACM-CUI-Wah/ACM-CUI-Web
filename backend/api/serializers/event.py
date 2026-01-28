@@ -40,5 +40,6 @@ class EventWriteSerializer(serializers.ModelSerializer):
             'image',
             'total_seats',
             'tags',
+            'hosts',
         ]
         read_only_fields = ['id']
