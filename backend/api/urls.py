@@ -1,13 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from api.views import (
-    SignupView, OTPView, LoginView, PasswordChangeView, LogoutView, 
-    BlogUploadView, BlogListAPIView, BlogEditView, BlogDeleteView, 
-    MeetingRUDView, MeetingCreateView, MeetingListView, MeetingAttendanceListView, 
-    MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView, 
+    SignupView, OTPView, LoginView, PasswordChangeView, LogoutView,
+    BlogUploadView, BlogListAPIView, BlogEditView, BlogDeleteView,
+    MeetingRUDView, MeetingCreateView, MeetingListView, MeetingAttendanceListView,
+    MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView,
     api_root, AdminRUDView,
     PublicStudentsListView, BillListCreateView, BillRUDView, InlineImageUploadView,
-    
+
     # Recruitment Views
     ActiveRecruitmentSessionView,
     ApplicationSubmitView,
@@ -19,7 +19,13 @@ from api.views import (
     EventDetailView,
     EventTypeListCreateView,
     EventListCreateView,
+    EventRegistrationListCreateView,
+    RegistrationStatusUpdateView,
+    EventRegistrationDeleteView,
+    EventRegistrationDetailView,
 )
+
+# NOTE: 'RUD' stands for Read, Update, Delete ops
 
 # -------------------
 # Recruitment Router 
@@ -44,10 +50,10 @@ urlpatterns = [
     path('students/', StudentsListView.as_view(), name='students-list'),
     path("students/public/", PublicStudentsListView.as_view(), name="public-students"),
     path('students/<int:pk>', StudentRUView.as_view(), name='student-RU'),
-    
+
     # Admins
     path('admin/<int:pk>', AdminRUDView.as_view(), name='admin-RUD'),
-    
+
     # Blogs
     path('blogs/', BlogListAPIView.as_view(), name='blog-list'),
     path('blogs/upload/', BlogUploadView.as_view(), name='blog-upload'),
@@ -62,7 +68,7 @@ urlpatterns = [
     path('meetings/<int:pk>/attendance/', MeetingAttendanceListView.as_view(), name='attendance-list'),
     path('meetings/<int:pk>/attendance/<int:att_pk>', MeetingAttendanceRUDView.as_view(), name='attendance-RUD'),
     path("meetings/<int:pk>/pdf/", MeetingPDFView.as_view(), name="meeting.py-pdf"),
-        
+
     # Bills
     path('bills/', BillListCreateView.as_view(), name='bill-list-create'),
     path('bills/<int:pk>/', BillRUDView.as_view(), name='bill-RUD'),
@@ -71,14 +77,19 @@ urlpatterns = [
     # Recruitment URLs
     # -----------------------------
     # Public Recruitment Views
-    path('recruitment/active-session/', ActiveRecruitmentSessionView.as_view({'get': 'list'}), name='active-session'),  
-    path('recruitment/submit-application/', ApplicationSubmitView.as_view({'post': 'create'}), name='submit-application'),  
+    path('recruitment/active-session/', ActiveRecruitmentSessionView.as_view({'get': 'list'}), name='active-session'),
+    path('recruitment/submit-application/', ApplicationSubmitView.as_view({'post': 'create'}),
+         name='submit-application'),
 
     # Admin Recruitment Views (via router)
     path('recruitment/', include(recruitment_router.urls)),
 
     # Events
-    path('events/', EventListCreateView.as_view()),
-    path('events/<int:pk>/', EventDetailView.as_view()),
+    path('events/', EventListCreateView.as_view(), name='events-list-create'),
+    path('events/<int:pk>/', EventDetailView.as_view(), name='events-RUD'),
     path('events/types/', EventTypeListCreateView.as_view()),
+    path('events/registrations/', EventRegistrationListCreateView.as_view(), name='registration-create'),
+    path('events/registrations/<int:pk>/', EventRegistrationDetailView.as_view(), name='registration-detail'),
+    path('events/registrations/<int:pk>/delete/', EventRegistrationDeleteView.as_view(), name='registration-delete'),
+    path('events/registrations/<int:pk>/status/', RegistrationStatusUpdateView.as_view(), name='registration-status-update'),
 ]
