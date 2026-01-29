@@ -8,7 +8,7 @@ import {
   BsX,
 } from "react-icons/bs";
 import "./Recruitment.css";
-import axiosInstance from "../../axios"; // adjust path if needed
+import axiosInstance from "../../axios";
 
 const RecruitmentManagement = () => {
   // session
@@ -40,9 +40,13 @@ const RecruitmentManagement = () => {
   // -----------------------------
   // Helpers
   // -----------------------------
+  // ✅ handle "Under Review", "UNDER_REVIEW", "Under_Review", "under-review"
   const normalizeStatus = (s) => {
     if (!s) return "";
-    return String(s).trim().toUpperCase().replaceAll(" ", "_");
+    return String(s)
+      .trim()
+      .toUpperCase()
+      .replace(/[\s-]+/g, "_"); // spaces or hyphen -> underscore
   };
 
   const uiStatus = (apiStatus) => {
@@ -112,8 +116,9 @@ const RecruitmentManagement = () => {
   }, []);
 
   // -----------------------------
-  // 2) Fetch applications (NO server search)
+  // 2) Fetch applications
   // -----------------------------
+  // ❌ DO NOT use server status filter because backend inconsistent
   const fetchApplications = async () => {
     if (!sessionId) return;
 
@@ -124,11 +129,10 @@ const RecruitmentManagement = () => {
       const res = await axiosInstance.get("/recruitment/application-review/", {
         params: {
           recruitment_session: sessionId,
-          ...(statusFilter ? { status: statusFilter } : {}),
         },
       });
 
-      let data = Array.isArray(res.data) ? res.data : [];
+      const data = Array.isArray(res.data) ? res.data : [];
       setApplications(data);
     } catch (err) {
       const data = err.response?.data;
@@ -147,7 +151,7 @@ const RecruitmentManagement = () => {
   useEffect(() => {
     fetchApplications();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId, statusFilter]);
+  }, [sessionId]);
 
   // -----------------------------
   // 3) Fetch stats (status endpoint)
@@ -161,6 +165,7 @@ const RecruitmentManagement = () => {
     try {
       const res = await axiosInstance.get("/recruitment/application-status/");
       const all = Array.isArray(res.data) ? res.data : [];
+
       const filtered = all.filter((x) => x.recruitment_session === sessionId);
       setStatusList(filtered);
     } catch (err) {
@@ -182,6 +187,9 @@ const RecruitmentManagement = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
+  // -----------------------------
+  // Stats calculation
+  // -----------------------------
   const stats = useMemo(() => {
     const total = statusList.length;
 
@@ -201,7 +209,7 @@ const RecruitmentManagement = () => {
   }, [statusList]);
 
   // -----------------------------
-  // Role options dropdown (from all fetched apps)
+  // Role options dropdown
   // -----------------------------
   const roleOptions = useMemo(() => {
     const set = new Set();
@@ -213,10 +221,15 @@ const RecruitmentManagement = () => {
   }, [applications]);
 
   // -----------------------------
-  // CLIENT SIDE FILTERING (SEARCH + ROLE)
+  // CLIENT SIDE FILTERING
   // -----------------------------
   const filteredApplications = useMemo(() => {
     let list = [...applications];
+
+    // ✅ status filter (client-side)
+    if (statusFilter) {
+      list = list.filter((a) => normalizeStatus(a?.status) === statusFilter);
+    }
 
     // role filter
     if (roleFilter) {
@@ -230,18 +243,24 @@ const RecruitmentManagement = () => {
     if (!q) return list;
 
     return list.filter((app) => {
-      const name = `${app?.personal_info?.first_name || ""} ${app?.personal_info?.last_name || ""}`
+      const name = `${app?.personal_info?.first_name || ""} ${
+        app?.personal_info?.last_name || ""
+      }`
         .toLowerCase()
         .trim();
+
       const email = (app?.personal_info?.email || "").toLowerCase();
       const reg = (app?.academic_info?.reg_no || "").toLowerCase();
       const role = (app?.role_preferences?.preferred_role || "").toLowerCase();
 
       return (
-        name.includes(q) || email.includes(q) || reg.includes(q) || role.includes(q)
+        name.includes(q) ||
+        email.includes(q) ||
+        reg.includes(q) ||
+        role.includes(q)
       );
     });
-  }, [applications, roleFilter, search]);
+  }, [applications, roleFilter, statusFilter, search]);
 
   // -----------------------------
   // Modal open/close
@@ -254,7 +273,9 @@ const RecruitmentManagement = () => {
     setDetailLoading(true);
 
     try {
-      const res = await axiosInstance.get(`/recruitment/application-review/${id}/`);
+      const res = await axiosInstance.get(
+        `/recruitment/application-review/${id}/`
+      );
       setSelectedApp(res.data);
     } catch (err) {
       const data = err.response?.data;
@@ -298,9 +319,10 @@ const RecruitmentManagement = () => {
     setDetailError(null);
 
     try {
-      await axiosInstance.patch(`/recruitment/application-status/${selectedId}/`, {
-        status: newStatus,
-      });
+      await axiosInstance.patch(
+        `/recruitment/application-status/${selectedId}/`,
+        { status: newStatus }
+      );
 
       // refresh modal details
       const res = await axiosInstance.get(
@@ -329,10 +351,14 @@ const RecruitmentManagement = () => {
       <div className="dashboard-header">
         <h1>RECRUITMENT MANAGEMENT</h1>
         <p>Track applications and manage the hiring pipeline</p>
-        {loadingSession && <p style={{ marginTop: 8 }}>Loading active session...</p>}
+        {loadingSession && (
+          <p style={{ marginTop: 8 }}>Loading active session...</p>
+        )}
       </div>
 
-      {error && <div style={{ margin: "10px 0", color: "crimson" }}>{error}</div>}
+      {error && (
+        <div style={{ margin: "10px 0", color: "crimson" }}>{error}</div>
+      )}
 
       {/* Stats */}
       <div className="stats-grid">
@@ -350,7 +376,9 @@ const RecruitmentManagement = () => {
         <div className="stat-card">
           <div className="stat-info">
             <h3>Under Review</h3>
-            <div className="stat-value">{statsLoading ? "..." : stats.underReview}</div>
+            <div className="stat-value">
+              {statsLoading ? "..." : stats.underReview}
+            </div>
             <div className="stat-sub">Awaiting review</div>
           </div>
           <div className="stat-icon">
@@ -361,7 +389,9 @@ const RecruitmentManagement = () => {
         <div className="stat-card">
           <div className="stat-info">
             <h3>Interviews</h3>
-            <div className="stat-value">{statsLoading ? "..." : stats.interviews}</div>
+            <div className="stat-value">
+              {statsLoading ? "..." : stats.interviews}
+            </div>
             <div className="stat-sub">Scheduled</div>
           </div>
           <div className="stat-icon">
@@ -372,7 +402,9 @@ const RecruitmentManagement = () => {
         <div className="stat-card">
           <div className="stat-info">
             <h3>Accepted</h3>
-            <div className="stat-value">{statsLoading ? "..." : stats.accepted}</div>
+            <div className="stat-value">
+              {statsLoading ? "..." : stats.accepted}
+            </div>
             <div className="stat-sub">New members</div>
           </div>
           <div className="stat-icon">
@@ -458,7 +490,9 @@ const RecruitmentManagement = () => {
                       <td>{email}</td>
                       <td>{role}</td>
                       <td>
-                        <span className={`status-badge ${getStatusClass(statusText)}`}>
+                        <span
+                          className={`status-badge ${getStatusClass(statusText)}`}
+                        >
                           {statusText}
                         </span>
                       </td>
@@ -480,185 +514,6 @@ const RecruitmentManagement = () => {
         )}
       </div>
 
-      {/* ---------- Better Modal ---------- */}
-      {isModalOpen && (
-        <div
-          className="rm-modal-overlay"
-          onMouseDown={(e) => {
-            if (e.target.classList.contains("rm-modal-overlay")) closeModal();
-          }}
-        >
-          <div className="rm-modal" role="dialog" aria-modal="true">
-            <div className="rm-modal-header">
-              <div>
-                <h3 className="rm-modal-title">Application Details</h3>
-                {selectedApp?.personal_info?.email && (
-                  <p className="rm-modal-subtitle">{selectedApp.personal_info.email}</p>
-                )}
-              </div>
-
-              <button className="rm-modal-close" onClick={closeModal} aria-label="Close">
-                <BsX size={22} />
-              </button>
-            </div>
-
-            <div className="rm-modal-body">
-              {detailLoading ? (
-                <div className="rm-modal-loading">Loading details...</div>
-              ) : detailError ? (
-                <div className="rm-modal-error">{detailError}</div>
-              ) : selectedApp ? (
-                <>
-                  <div className="rm-grid">
-                    <div className="rm-card">
-                      <div className="rm-card-title">Personal</div>
-                      <div className="rm-kv">
-                        <span>Name</span>
-                        <b>
-                          {selectedApp.personal_info?.first_name}{" "}
-                          {selectedApp.personal_info?.last_name}
-                        </b>
-                      </div>
-                      <div className="rm-kv">
-                        <span>Phone</span>
-                        <b>{selectedApp.personal_info?.phone_number || "-"}</b>
-                      </div>
-                    </div>
-
-                    <div className="rm-card">
-                      <div className="rm-card-title">Academic</div>
-                      <div className="rm-kv">
-                        <span>Reg No</span>
-                        <b>{selectedApp.academic_info?.reg_no || "-"}</b>
-                      </div>
-                      <div className="rm-kv">
-                        <span>Program</span>
-                        <b>{selectedApp.academic_info?.program || "-"}</b>
-                      </div>
-                      <div className="rm-kv">
-                        <span>Semester</span>
-                        <b>{selectedApp.academic_info?.current_semester ?? "-"}</b>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rm-card rm-card-full">
-                    <div className="rm-card-title">Skills & Coursework</div>
-
-                    <div className="rm-tags-block">
-                      <div className="rm-tags-title">Skills</div>
-                      <div className="rm-tags">
-                        {(selectedApp.academic_info?.skills || []).length ? (
-                          selectedApp.academic_info.skills.map((s, idx) => (
-                            <span key={idx} className="rm-tag">
-                              {s}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="rm-muted">-</span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="rm-tags-block">
-                      <div className="rm-tags-title">Coursework</div>
-                      <div className="rm-tags">
-                        {(selectedApp.academic_info?.relevant_coursework || []).length ? (
-                          selectedApp.academic_info.relevant_coursework.map((c, idx) => (
-                            <span key={idx} className="rm-tag">
-                              {c}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="rm-muted">-</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rm-card rm-card-full">
-                    <div className="rm-card-title">Preferences</div>
-
-                    <div className="rm-grid-2">
-                      <div className="rm-kv">
-                        <span>Preferred</span>
-                        <b>{selectedApp.role_preferences?.preferred_role || "-"}</b>
-                      </div>
-                      <div className="rm-kv">
-                        <span>Secondary</span>
-                        <b>{selectedApp.role_preferences?.secondary_role || "-"}</b>
-                      </div>
-                    </div>
-
-                    <div className="rm-divider" />
-
-                    <div className="rm-kv rm-kv-stack">
-                      <span>Join Purpose</span>
-                      <div className="rm-longtext">
-                        {selectedApp.role_preferences?.join_purpose || "-"}
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="rm-modal-loading">No data</div>
-              )}
-            </div>
-
-            <div className="rm-modal-footer">
-              <div className="rm-status-line">
-                <span className="rm-status-label">Current status</span>
-                <span
-                  className={`rm-status-pill ${getStatusClass(uiStatus(selectedApp?.status))}`}
-                >
-                  {uiStatus(selectedApp?.status)}
-                </span>
-              </div>
-
-              <div className="rm-actions">
-                <button
-                  type="button"
-                  className="rm-btn rm-btn-ghost"
-                  disabled={updatingStatus}
-                  onClick={() => updateStatus("UNDER_REVIEW")}
-                >
-                  Under Review
-                </button>
-
-                <button
-                  type="button"
-                  className="rm-btn rm-btn-warn"
-                  disabled={updatingStatus}
-                  onClick={() => updateStatus("INTERVIEWS")}
-                >
-                  Interviews
-                </button>
-
-                <button
-                  type="button"
-                  className="rm-btn rm-btn-success"
-                  disabled={updatingStatus}
-                  onClick={() => updateStatus("ACCEPTED")}
-                >
-                  Accept
-                </button>
-
-                <button
-                  type="button"
-                  className="rm-btn rm-btn-danger"
-                  disabled={updatingStatus}
-                  onClick={() => updateStatus("REJECTED")}
-                >
-                  Reject
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* ---------- /Modal ---------- */}
-      
-      {/* MODAL */}
       {isModalOpen && (
   <div
     className="rm-modal-overlay"
@@ -667,19 +522,39 @@ const RecruitmentManagement = () => {
     }}
   >
     <div className="rm-modal" role="dialog" aria-modal="true">
+      {/* HEADER */}
       <div className="rm-modal-header">
-        <div>
-          <h3 className="rm-modal-title">Application Details</h3>
+        <div className="rm-modal-head-left">
+          <h3 className="rm-modal-title">
+            {selectedApp?.personal_info?.first_name || "Applicant"}{" "}
+            {selectedApp?.personal_info?.last_name || ""}
+          </h3>
+
+          <div className="rm-modal-meta">
+            <span className="rm-meta-chip">
+              Reg: {selectedApp?.academic_info?.reg_no || "-"}
+            </span>
+
+            <span className={`rm-status-pill ${getStatusClass(uiStatus(selectedApp?.status))}`}>
+              {uiStatus(selectedApp?.status)}
+            </span>
+          </div>
+
           {selectedApp?.personal_info?.email && (
             <p className="rm-modal-subtitle">{selectedApp.personal_info.email}</p>
           )}
         </div>
 
-        <button className="rm-modal-close" onClick={closeModal} aria-label="Close">
+        <button
+          className="rm-modal-close"
+          onClick={closeModal}
+          aria-label="Close"
+        >
           <BsX size={22} />
         </button>
       </div>
 
+      {/* BODY */}
       <div className="rm-modal-body">
         {detailLoading ? (
           <div className="rm-modal-loading">Loading details...</div>
@@ -687,10 +562,12 @@ const RecruitmentManagement = () => {
           <div className="rm-modal-error">{detailError}</div>
         ) : selectedApp ? (
           <>
+            {/* TOP GRID */}
             <div className="rm-grid">
               {/* Personal */}
               <div className="rm-card">
-                <div className="rm-card-title">Personal</div>
+                <div className="rm-card-title">👤 Personal</div>
+
                 <div className="rm-kv">
                   <span>Name</span>
                   <b>
@@ -698,6 +575,12 @@ const RecruitmentManagement = () => {
                     {selectedApp.personal_info?.last_name}
                   </b>
                 </div>
+
+                <div className="rm-kv">
+                  <span>Email</span>
+                  <b>{selectedApp.personal_info?.email || "-"}</b>
+                </div>
+
                 <div className="rm-kv">
                   <span>Phone</span>
                   <b>{selectedApp.personal_info?.phone_number || "-"}</b>
@@ -706,15 +589,18 @@ const RecruitmentManagement = () => {
 
               {/* Academic */}
               <div className="rm-card">
-                <div className="rm-card-title">Academic</div>
+                <div className="rm-card-title">🎓 Academic</div>
+
                 <div className="rm-kv">
                   <span>Reg No</span>
                   <b>{selectedApp.academic_info?.reg_no || "-"}</b>
                 </div>
+
                 <div className="rm-kv">
                   <span>Program</span>
                   <b>{selectedApp.academic_info?.program || "-"}</b>
                 </div>
+
                 <div className="rm-kv">
                   <span>Semester</span>
                   <b>{selectedApp.academic_info?.current_semester ?? "-"}</b>
@@ -722,9 +608,9 @@ const RecruitmentManagement = () => {
               </div>
             </div>
 
-            {/* Skills / Coursework */}
+            {/* Skills + Coursework */}
             <div className="rm-card rm-card-full">
-              <div className="rm-card-title">Skills & Coursework</div>
+              <div className="rm-card-title"> Skills & Coursework</div>
 
               <div className="rm-tags-block">
                 <div className="rm-tags-title">Skills</div>
@@ -756,24 +642,101 @@ const RecruitmentManagement = () => {
             {/* Preferences */}
             <div className="rm-card rm-card-full">
               <div className="rm-card-title">Preferences</div>
+
               <div className="rm-grid-2">
                 <div className="rm-kv">
-                  <span>Preferred</span>
+                  <span>Preferred Role</span>
                   <b>{selectedApp.role_preferences?.preferred_role || "-"}</b>
                 </div>
+
                 <div className="rm-kv">
-                  <span>Secondary</span>
+                  <span>Secondary Role</span>
                   <b>{selectedApp.role_preferences?.secondary_role || "-"}</b>
                 </div>
               </div>
 
               <div className="rm-divider" />
 
-              <div className="rm-kv rm-kv-stack">
-                <span>Join Purpose</span>
+              {/* Join Purpose */}
+              <div className="rm-long-section">
+                <div className="rm-long-title">Join Purpose</div>
                 <div className="rm-longtext">
                   {selectedApp.role_preferences?.join_purpose || "-"}
                 </div>
+              </div>
+
+              {/* Experience */}
+              <div className="rm-long-section">
+                <div className="rm-long-title">Previous Experience</div>
+                <div className="rm-longtext">
+                  {selectedApp.role_preferences?.previous_experience || "-"}
+                </div>
+              </div>
+
+              {/* Availability */}
+              <div className="rm-long-section">
+                <div className="rm-long-title">Weekly Availability</div>
+                <div className="rm-longtext">
+                  {selectedApp.role_preferences?.weekly_availability || "-"}
+                </div>
+              </div>
+
+              {/* LinkedIn */}
+              <div className="rm-divider" />
+              <div className="rm-kv rm-kv-stack">
+                <span>LinkedIn</span>
+
+                {selectedApp.role_preferences?.linkedin_profile ? (
+                  (() => {
+                    const raw = selectedApp.role_preferences.linkedin_profile.trim();
+                    const href =
+                      raw.startsWith("http://") || raw.startsWith("https://")
+                        ? raw
+                        : `https://${raw}`;
+
+                    const copyLink = async () => {
+                      try {
+                        await navigator.clipboard.writeText(href);
+                        alert("LinkedIn link copied!");
+                      } catch {
+                        alert("Copy failed");
+                      }
+                    };
+
+                    return (
+                      <div className="rm-link-row">
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rm-link"
+                        >
+                          {raw}
+                        </a>
+
+                        <div className="rm-link-actions">
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="rm-mini-btn"
+                          >
+                            Open
+                          </a>
+                          <button
+                            type="button"
+                            onClick={copyLink}
+                            className="rm-mini-btn rm-mini-btn-copy"
+                          >
+                            Copy
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <b>-</b>
+                )}
               </div>
             </div>
           </>
@@ -782,15 +745,8 @@ const RecruitmentManagement = () => {
         )}
       </div>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <div className="rm-modal-footer">
-        <div className="rm-status-line">
-          <span className="rm-status-label">Current status</span>
-          <span className={`rm-status-pill ${getStatusClass(uiStatus(selectedApp?.status))}`}>
-            {uiStatus(selectedApp?.status)}
-          </span>
-        </div>
-
         <div className="rm-actions">
           <button
             type="button"

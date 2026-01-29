@@ -16,12 +16,33 @@ const RecruitmentForm = () => {
   const [sessionLoading, setSessionLoading] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
-
-  // alert message (string or array of strings)
   const [apiAlert, setApiAlert] = useState(null);
 
-  // registration number error (inline)
   const [regError, setRegError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [skillsError, setSkillsError] = useState("");
+  const [courseworkError, setCourseworkError] = useState("");
+  const [availabilityError, setAvailabilityError] = useState("");
+
+  // -------------------------
+  // Backend limits (mirror model)
+  // -------------------------
+  const LIMITS = {
+    firstName: 50,
+    lastName: 50,
+    email: 254, // safe default for EmailField
+    phoneNumber: 13, // +92 + 10 digits
+    regNumber: 20,
+    availability: 100, // weekly_availability CharField(max_length=100)
+    // ArrayField items max 50 each
+    skillItem: 50,
+    courseworkItem: 50,
+    // URLField safe cap
+    linkedin: 2000,
+    // TextField - no model max, but set UI caps to avoid huge payloads
+    whyJoin: 1000,
+    experience: 1000,
+  };
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -42,44 +63,38 @@ const RecruitmentForm = () => {
   });
 
   // -------------------------
+  // Regex validations
+  // -------------------------
+  const regNoRegex = /^(SP|FA)\d{2}-[A-Z]{2,5}-\d{3}$/;
+  const pkPhoneRegex = /^\+92\d{10}$/;
+
+  // -------------------------
   // Helpers
   // -------------------------
-  // Example required: SP23-BSE-090 (also allow FA23-..., and program codes 2-5 letters)
-  const regNoRegex = /^(SP|FA)\d{2}-[A-Z]{2,5}-\d{3}$/;
-
   const setAlertAndScroll = (msg) => {
     setApiAlert(msg);
-    // scroll to alert
     setTimeout(() => {
       alertRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
   };
 
-  // Flatten nested DRF error objects into readable lines
   const flattenErrors = (errObj, prefix = "") => {
     const lines = [];
-
     if (!errObj) return lines;
 
-    // if string
     if (typeof errObj === "string") {
       lines.push(prefix ? `${prefix}: ${errObj}` : errObj);
       return lines;
     }
 
-    // if array
     if (Array.isArray(errObj)) {
       errObj.forEach((item) => {
-        if (typeof item === "string") {
-          lines.push(prefix ? `${prefix}: ${item}` : item);
-        } else {
-          lines.push(...flattenErrors(item, prefix));
-        }
+        if (typeof item === "string") lines.push(prefix ? `${prefix}: ${item}` : item);
+        else lines.push(...flattenErrors(item, prefix));
       });
       return lines;
     }
 
-    // if object
     if (typeof errObj === "object") {
       Object.entries(errObj).forEach(([key, value]) => {
         const newPrefix = prefix ? `${prefix}.${key}` : key;
@@ -88,30 +103,33 @@ const RecruitmentForm = () => {
       return lines;
     }
 
-    // fallback
     lines.push(prefix ? `${prefix}: ${String(errObj)}` : String(errObj));
     return lines;
   };
 
   const formatKey = (path) => {
-    // personal_info.phone_number -> Phone Number
     const last = path.split(".").pop() || path;
     const map = {
       first_name: "First Name",
       last_name: "Last Name",
+      email: "Email",
       phone_number: "Phone Number",
       reg_no: "Registration Number",
       current_semester: "Current Semester",
+      program: "Program",
       preferred_role: "Preferred Role",
       secondary_role: "Secondary Role",
-      join_purpose: "Join Purpose",
+      join_purpose: "Why Join",
+      weekly_availability: "Weekly Availability",
       relevant_coursework: "Coursework",
+      skills: "Skills",
+      linkedin_profile: "LinkedIn",
+      previous_experience: "Experience",
     };
     return map[last] || last.replaceAll("_", " ");
   };
 
   const normalizeFlattenedErrors = (lines) => {
-    // Convert "personal_info.phone_number: msg" -> "Phone Number: msg"
     return lines.map((line) => {
       const parts = line.split(":");
       if (parts.length < 2) return line;
@@ -119,6 +137,21 @@ const RecruitmentForm = () => {
       const msg = parts.join(":").trim();
       return `${formatKey(key)}: ${msg}`;
     });
+  };
+
+  const parseCommaList = (text) =>
+    text
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+  const validateCommaItems = (items, itemMax, label) => {
+    // return error string or ""
+    const tooLong = items.find((x) => x.length > itemMax);
+    if (tooLong) {
+      return `${label} item too long (max ${itemMax} chars): "${tooLong.slice(0, 30)}..."`;
+    }
+    return "";
   };
 
   // -------------------------
@@ -157,26 +190,102 @@ const RecruitmentForm = () => {
   }, []);
 
   // -------------------------
-  // Handle form changes
+  // Handle changes (with constraints)
   // -------------------------
   const handleChange = (e) => {
     if (apiAlert) setApiAlert(null);
 
     const { name, value } = e.target;
 
-    // ✅ Registration format validation + auto uppercase
+    // First name / Last name: trim left spaces, cap length, optional allow letters only if you want
+    if (name === "firstName" || name === "lastName") {
+      const capped = value.slice(0, LIMITS[name]);
+      setFormData((prev) => ({ ...prev, [name]: capped }));
+      return;
+    }
+
+    // Email cap
+    if (name === "email") {
+      setFormData((prev) => ({ ...prev, email: value.slice(0, LIMITS.email) }));
+      return;
+    }
+
+    // Registration validation + auto uppercase + cap max_length=20
     if (name === "regNumber") {
-  const cleaned = value.toUpperCase().replace(/\s+/g, "");
-  setFormData((prev) => ({ ...prev, regNumber: cleaned }));
+      const cleaned = value.toUpperCase().replace(/\s+/g, "").slice(0, LIMITS.regNumber);
+      setFormData((prev) => ({ ...prev, regNumber: cleaned }));
 
-  if (cleaned && !regNoRegex.test(cleaned)) {
-    setRegError("Format must be SP or FA like: SP23-BSE-090");
-  } else {
-    setRegError("");
-  }
-  return;
-}
+      if (cleaned && !regNoRegex.test(cleaned)) setRegError("Format must be like SP23-BSE-090");
+      else setRegError("");
 
+      return;
+    }
+
+    // Phone validation + cap 13
+    if (name === "phoneNumber") {
+      const cleaned = value.replace(/\s+/g, "").slice(0, LIMITS.phoneNumber);
+      setFormData((prev) => ({ ...prev, phoneNumber: cleaned }));
+
+      if (cleaned && !pkPhoneRegex.test(cleaned)) {
+        setPhoneError("Phone must be like +92XXXXXXXXXX (10 digits after +92)");
+      } else setPhoneError("");
+
+      return;
+    }
+
+    // Skills textarea: cap total length (UI) + validate each item max 50
+    if (name === "skills") {
+      const capped = value.slice(0, 1000); // UI cap so payload isn't huge
+      setFormData((prev) => ({ ...prev, skills: capped }));
+
+      const items = parseCommaList(capped);
+      const errMsg = validateCommaItems(items, LIMITS.skillItem, "Skills");
+      setSkillsError(errMsg);
+
+      return;
+    }
+
+    // Coursework textarea: validate each item max 50
+    if (name === "coursework") {
+      const capped = value.slice(0, 1000);
+      setFormData((prev) => ({ ...prev, coursework: capped }));
+
+      const items = parseCommaList(capped);
+      const errMsg = validateCommaItems(items, LIMITS.courseworkItem, "Coursework");
+      setCourseworkError(errMsg);
+
+      return;
+    }
+
+    // Weekly availability is CharField(max_length=100) in backend
+    if (name === "availability") {
+      const capped = value.slice(0, LIMITS.availability);
+      setFormData((prev) => ({ ...prev, availability: capped }));
+
+      if (capped && capped.length > LIMITS.availability) {
+        setAvailabilityError(`Max ${LIMITS.availability} characters allowed.`);
+      } else {
+        setAvailabilityError("");
+      }
+      return;
+    }
+
+    // WhyJoin + Experience are TextFields => backend accepts long, but cap for UX
+    if (name === "whyJoin") {
+      setFormData((prev) => ({ ...prev, whyJoin: value.slice(0, LIMITS.whyJoin) }));
+      return;
+    }
+
+    if (name === "experience") {
+      setFormData((prev) => ({ ...prev, experience: value.slice(0, LIMITS.experience) }));
+      return;
+    }
+
+    // LinkedIn URL cap
+    if (name === "linkedin") {
+      setFormData((prev) => ({ ...prev, linkedin: value.slice(0, LIMITS.linkedin) }));
+      return;
+    }
 
     // Prevent same preferred & secondary role
     if (name === "preferredRole" && value === formData.secondaryRole) {
@@ -197,7 +306,7 @@ const RecruitmentForm = () => {
   };
 
   // -------------------------
-  // Progress calculation
+  // Progress calculation (match backend-required)
   // -------------------------
   useEffect(() => {
     const requiredFields = [
@@ -210,6 +319,7 @@ const RecruitmentForm = () => {
       "program",
       "skills",
       "preferredRole",
+      "secondaryRole",
       "whyJoin",
       "availability",
     ];
@@ -222,7 +332,7 @@ const RecruitmentForm = () => {
   }, [formData]);
 
   // -------------------------
-  // Submit application
+  // Submit
   // -------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -237,49 +347,78 @@ const RecruitmentForm = () => {
       return;
     }
 
-    // ✅ reg validation before submit
+    // frontend validations
     if (!regNoRegex.test(formData.regNumber)) {
       setRegError("Format must be like SP23-BSE-090");
       setAlertAndScroll("Please fix Registration Number format before submitting.");
       return;
     }
 
-    if (formData.secondaryRole && formData.secondaryRole === formData.preferredRole) {
+    if (!pkPhoneRegex.test(formData.phoneNumber)) {
+      setPhoneError("Phone must be like +92XXXXXXXXXX (10 digits after +92)");
+      setAlertAndScroll("Please fix Phone Number format before submitting.");
+      return;
+    }
+
+    if (!formData.secondaryRole) {
+      setAlertAndScroll("Secondary role is required.");
+      return;
+    }
+
+    if (formData.secondaryRole === formData.preferredRole) {
       setAlertAndScroll("Secondary role must be different from preferred role");
+      return;
+    }
+
+    // ArrayField item validations
+    const skillsArray = parseCommaList(formData.skills);
+    const courseworkArray = parseCommaList(formData.coursework);
+
+    const skillsItemErr = validateCommaItems(skillsArray, LIMITS.skillItem, "Skills");
+    if (skillsItemErr) {
+      setSkillsError(skillsItemErr);
+      setAlertAndScroll(skillsItemErr);
+      return;
+    }
+
+    const courseItemErr = validateCommaItems(courseworkArray, LIMITS.courseworkItem, "Coursework");
+    if (courseItemErr) {
+      setCourseworkError(courseItemErr);
+      setAlertAndScroll(courseItemErr);
+      return;
+    }
+
+    if (formData.availability.trim().length > LIMITS.availability) {
+      setAvailabilityError(`Max ${LIMITS.availability} characters allowed.`);
+      setAlertAndScroll(`Weekly Availability max length is ${LIMITS.availability}.`);
       return;
     }
 
     setSubmitting(true);
     setApiAlert(null);
 
-    const skillsArray = formData.skills
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    const courseworkArray = formData.coursework
-      ? formData.coursework.split(",").map((c) => c.trim()).filter(Boolean)
-      : [];
-
     const payload = {
       recruitment_session: sessionId,
       personal_info: {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        phone_number: formData.phoneNumber,
+        first_name: formData.firstName.trim(),
+        last_name: formData.lastName.trim(),
+        email: formData.email.trim(),
+        phone_number: formData.phoneNumber.trim(),
       },
       academic_info: {
         program: formData.program,
         current_semester: Number(formData.semester),
-        skills: skillsArray,
-        relevant_coursework: courseworkArray,
-        reg_no: formData.regNumber,
+        skills: skillsArray, // each item max 50 validated
+        relevant_coursework: courseworkArray, // each item max 50 validated
+        reg_no: formData.regNumber.trim(),
       },
       role_preferences: {
         preferred_role: formData.preferredRole,
-        secondary_role: formData.secondaryRole || null,
-        join_purpose: formData.whyJoin,
+        secondary_role: formData.secondaryRole,
+        join_purpose: formData.whyJoin.trim(),
+        weekly_availability: formData.availability.trim(),
+        previous_experience: formData.experience?.trim() || "",
+        linkedin_profile: formData.linkedin?.trim() || null,
       },
     };
 
@@ -289,7 +428,6 @@ const RecruitmentForm = () => {
     } catch (err) {
       const data = err.response?.data;
 
-      // ✅ Convert nested errors to readable list
       if (data && typeof data === "object") {
         const flat = flattenErrors(data);
         const pretty = normalizeFlattenedErrors(flat);
@@ -302,6 +440,16 @@ const RecruitmentForm = () => {
     }
   };
 
+  const disableSubmit =
+    submitting ||
+    sessionLoading ||
+    !sessionId ||
+    !!regError ||
+    !!phoneError ||
+    !!skillsError ||
+    !!courseworkError ||
+    !!availabilityError;
+
   return (
     <div className="recruitment-page">
       <NavbarComponent />
@@ -310,14 +458,13 @@ const RecruitmentForm = () => {
         <div className="form-header">
           <h1>RECRUITMENT APPLICATION</h1>
           <p>Fill out the application form to join the ACM team</p>
-
           {sessionLoading && (
             <p style={{ marginTop: 8, fontSize: 14 }}>Loading active session...</p>
           )}
         </div>
       </div>
 
-      {/* ✅ Alert Box */}
+      {/* Alert Box */}
       <div ref={alertRef}>
         {apiAlert && (
           <div
@@ -333,10 +480,14 @@ const RecruitmentForm = () => {
           >
             {Array.isArray(apiAlert) ? (
               <>
-                <b style={{ display: "block", marginBottom: 6 }}>Please fix these errors:</b>
+                <b style={{ display: "block", marginBottom: 6 }}>
+                  Please fix these errors:
+                </b>
                 <ul style={{ margin: 0, paddingLeft: 18 }}>
                   {apiAlert.map((m, idx) => (
-                    <li key={idx} style={{ marginBottom: 4 }}>{m}</li>
+                    <li key={idx} style={{ marginBottom: 4 }}>
+                      {m}
+                    </li>
                   ))}
                 </ul>
               </>
@@ -373,7 +524,11 @@ const RecruitmentForm = () => {
                 value={formData.firstName}
                 onChange={handleChange}
                 required
+                maxLength={LIMITS.firstName}
               />
+              <small style={{ opacity: 0.6 }}>
+                {formData.firstName.length}/{LIMITS.firstName}
+              </small>
             </div>
 
             <div className="input-group">
@@ -384,7 +539,11 @@ const RecruitmentForm = () => {
                 value={formData.lastName}
                 onChange={handleChange}
                 required
+                maxLength={LIMITS.lastName}
               />
+              <small style={{ opacity: 0.6 }}>
+                {formData.lastName.length}/{LIMITS.lastName}
+              </small>
             </div>
           </div>
 
@@ -396,11 +555,12 @@ const RecruitmentForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              maxLength={LIMITS.email}
             />
           </div>
 
           <div className="input-group">
-            <label>Phone Number *</label>
+            <label>Phone Number * (Pakistan)</label>
             <input
               type="tel"
               name="phoneNumber"
@@ -408,7 +568,14 @@ const RecruitmentForm = () => {
               onChange={handleChange}
               placeholder="+92XXXXXXXXXX"
               required
+              maxLength={LIMITS.phoneNumber}
+              style={{ borderColor: phoneError ? "crimson" : undefined }}
             />
+            {phoneError && (
+              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+                {phoneError}
+              </small>
+            )}
           </div>
         </div>
 
@@ -426,6 +593,7 @@ const RecruitmentForm = () => {
                 onChange={handleChange}
                 placeholder="SP23-BSE-090"
                 required
+                maxLength={LIMITS.regNumber}
                 style={{ borderColor: regError ? "crimson" : undefined }}
               />
               {regError && (
@@ -445,9 +613,7 @@ const RecruitmentForm = () => {
               >
                 <option value="">Select</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
+                  <option key={n} value={n}>{n}</option>
                 ))}
               </select>
             </div>
@@ -476,7 +642,18 @@ const RecruitmentForm = () => {
               onChange={handleChange}
               rows="4"
               required
+              maxLength={1000}
+              placeholder="e.g. React, Node, Python"
+              style={{ borderColor: skillsError ? "crimson" : undefined }}
             />
+            {skillsError && (
+              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+                {skillsError}
+              </small>
+            )}
+            <small style={{ opacity: 0.6 }}>
+              Each item max {LIMITS.skillItem} chars
+            </small>
           </div>
 
           <div className="input-group">
@@ -486,7 +663,18 @@ const RecruitmentForm = () => {
               value={formData.coursework}
               onChange={handleChange}
               rows="4"
+              maxLength={1000}
+              placeholder="e.g. DSA, OOP, DBMS"
+              style={{ borderColor: courseworkError ? "crimson" : undefined }}
             />
+            {courseworkError && (
+              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+                {courseworkError}
+              </small>
+            )}
+            <small style={{ opacity: 0.6 }}>
+              Each item max {LIMITS.courseworkItem} chars
+            </small>
           </div>
         </div>
 
@@ -514,11 +702,12 @@ const RecruitmentForm = () => {
             </div>
 
             <div className="input-group">
-              <label>Secondary Role</label>
+              <label>Secondary Role *</label>
               <select
                 name="secondaryRole"
                 value={formData.secondaryRole}
                 onChange={handleChange}
+                required
               >
                 <option value="">Select role</option>
                 <option value="CODEHUB">CodeHub (Development)</option>
@@ -539,7 +728,11 @@ const RecruitmentForm = () => {
               onChange={handleChange}
               rows="4"
               required
+              maxLength={LIMITS.whyJoin}
             />
+            <small style={{ opacity: 0.6 }}>
+              {formData.whyJoin.length}/{LIMITS.whyJoin}
+            </small>
           </div>
 
           <div className="input-group">
@@ -549,18 +742,32 @@ const RecruitmentForm = () => {
               value={formData.experience}
               onChange={handleChange}
               rows="4"
+              maxLength={LIMITS.experience}
             />
+            <small style={{ opacity: 0.6 }}>
+              {formData.experience.length}/{LIMITS.experience}
+            </small>
           </div>
 
           <div className="input-group">
-            <label>Weekly Availability *</label>
+            <label>Weekly Availability * (max 100 chars)</label>
             <textarea
               name="availability"
               value={formData.availability}
               onChange={handleChange}
               rows="3"
               required
+              maxLength={LIMITS.availability}
+              style={{ borderColor: availabilityError ? "crimson" : undefined }}
             />
+            <small style={{ opacity: 0.6 }}>
+              {formData.availability.length}/{LIMITS.availability}
+            </small>
+            {availabilityError && (
+              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+                {availabilityError}
+              </small>
+            )}
           </div>
 
           <div className="input-group">
@@ -570,6 +777,8 @@ const RecruitmentForm = () => {
               name="linkedin"
               value={formData.linkedin}
               onChange={handleChange}
+              maxLength={LIMITS.linkedin}
+              placeholder="https://linkedin.com/in/..."
             />
           </div>
 
@@ -586,11 +795,7 @@ const RecruitmentForm = () => {
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="submit-btn"
-          disabled={submitting || sessionLoading || !sessionId || !!regError}
-        >
+        <button type="submit" className="submit-btn" disabled={disableSubmit}>
           {submitting ? "Submitting..." : "Submit Application"}
         </button>
       </form>

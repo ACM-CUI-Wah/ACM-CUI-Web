@@ -598,3 +598,87 @@ body:not(.dark-mode) .r-table td {
   background: rgba(239, 68, 68, 0.14);
   color: #991b1b;
 }
+.rm-modal-head-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rm-modal-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.rm-meta-chip {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  color: rgba(15, 23, 42, 0.85);
+}
+
+.rm-long-section {
+  margin-top: 14px;
+}
+
+.rm-long-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(15, 23, 42, 0.70);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.rm-link-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rm-link {
+  font-weight: 700;
+  text-decoration: underline;
+  word-break: break-all;
+  color: #0f172a;
+}
+
+.rm-link-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rm-mini-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(15, 23, 42, 0.06);
+  color: #0f172a;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.rm-mini-btn:hover {
+  background: rgba(15, 23, 42, 0.10);
+}
+
+.rm-mini-btn-copy {
+  background: rgba(2, 132, 199, 0.12);
+  border: 1px solid rgba(2, 132, 199, 0.18);
+  color: #075985;
+}
+
+.rm-mini-btn-copy:hover {
+  background: rgba(2, 132, 199, 0.18);
+}
