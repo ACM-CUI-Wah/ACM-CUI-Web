@@ -288,7 +288,7 @@ const EventTeamForm = () => {
                     className="team-form__input"
                     type="tel"
                     value={member.phone}
-                    placeholder="+90 321 569877"
+                    placeholder="+92 321 569877"
                     onChange={(e) =>
                       handleMemberChange(index, "phone", e.target.value)
                     }

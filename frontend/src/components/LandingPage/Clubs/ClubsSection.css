@@ -1,5 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=M+PLUS+Rounded+1c:wght@700&display=swap');
 
+h1 {
+    font-family:  'Montserrat', sans-serif !important;
+    color: #0C4182;
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 5rem); 
+    line-height: 1.2;
+    text-shadow: -4px 0 6px #0c418280;
+    letter-spacing: 1px;
+    text-align: center;
+    margin: 20px 0;
+    text-transform: capitalize;
+    animation: h1Glow 2s ease-in-out infinite;
+}
+
+@keyframes h1Glow {
+    0%, 100% {
+        text-shadow: -4px 0 4px #0c418280;
+        transform: scale(1);
+    }
+    50% {
+        text-shadow: -4px 0 15px #2563eb;
+        transform: scale(1.01);
+    }
+}
 .clubs-container {
   background: #f8fafc;
   padding: 80px 40px;
