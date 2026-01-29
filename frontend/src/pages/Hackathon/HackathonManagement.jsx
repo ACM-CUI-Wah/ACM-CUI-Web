@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom";
 import "./HackathonManagement.css";
 
 // Assets
@@ -48,38 +48,33 @@ const HackathonManagement = () => {
         {hackathons.map((item) => (
           <div key={item.id} className="hackathon-card">
             <div className="hackathon-icon-badge">
-              <span className="icon-placeholder">
-                <img src={item.icon} alt={item.title} className="card-logo-img" />
-              </span>
+              <img src={item.icon} alt={item.title} className="card-logo-img" />
             </div>
+
             <div className="card-content">
               <h3>{item.title}</h3>
               <p className="description">{item.description}</p>
-              
+
               <div className="meta-info">
                 <div className="meta-item">
-                   <img src={calendarIcon} alt="calendar" className="small-meta-icon" />
-                   <span>{item.date}</span>
+                  <img src={calendarIcon} alt="calendar" className="small-meta-icon" />
+                  <span>{item.date}</span>
                 </div>
                 <div className="meta-item">
-                   <img src={timeIcon} alt="time" className="small-meta-icon" />
-                   <span>{item.time}</span>
+                  <img src={timeIcon} alt="time" className="small-meta-icon" />
+                  <span>{item.time}</span>
                 </div>
               </div>
-              {/* Individual Register button removed from here */}
+
+              <div className="card-action">
+                <Link to={`/events/${item.id}`} className="learn-more-link">
+                  Learn More
+                </Link>
+              </div>
             </div>
           </div>
         ))}
       </div>
-      
-      {/* New Centered Learn More Button */}
-      <div className="learn-more-container">
-        <Link to="/events" className="learn-more-btn">
-          Learn More
-        </Link>
-      </div>
-
-     
     </section>
   );
 };
