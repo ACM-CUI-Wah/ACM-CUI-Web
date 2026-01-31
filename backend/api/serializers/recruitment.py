@@ -116,7 +116,7 @@ class RolePreferencesSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = RolePreferences
-        fields = ['application_id', 'preferred_role', 'secondary_role', 'join_purpose']
+        fields = ['application_id', 'preferred_role', 'secondary_role', 'join_purpose', 'previous_experience', 'weekly_availability', 'linkedin_profile']
         extra_kwargs = {
             'secondary_role': {'required': False},
             'join_purpose': {'required': False}

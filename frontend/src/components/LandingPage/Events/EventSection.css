@@ -12,6 +12,9 @@
 .events-section3 a {
   font-family: 'Montserrat', sans-serif;
 }
+h1{
+  font-family: "Montserrat",sans-serif !important;
+}
 
 .events-section3 p {
   font-family: 'Roboto', sans-serif;

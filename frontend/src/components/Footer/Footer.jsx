@@ -66,7 +66,7 @@ const Footer = () => {
             <p>Status</p>
           </div>
           <div className="ms-auto">
-            <p className="font mb-0">© 2025 ACM CUI Wah</p>
+            <p className="font mb-0">© 2026 ACM CUI Wah</p>
           </div>
         </div>
       </div>

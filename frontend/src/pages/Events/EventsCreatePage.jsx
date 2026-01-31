@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../axios";
 import "./EventsCreatePage.css";
@@ -16,43 +16,97 @@ const EventCreatePage = () => {
   const [capacity, setCapacity] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
-  const [images, setImages] = useState([]);
-  const [previewUrls, setPreviewUrls] = useState([]);
+  const [image, setImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [eventTypes, setEventTypes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleImageChange = (e) => {
-    const newFiles = Array.from(e.target.files);
-    setImages((prev) => [...prev, ...newFiles]);
-    const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prev) => [...prev, ...newPreviews]);
+  // Fetch event types on component mount
+  useEffect(() => {
+    fetchEventTypes();
+  }, []);
+
+  const fetchEventTypes = async () => {
+    try {
+      const res = await axiosInstance.get("/events/types/");
+      setEventTypes(res.data);
+    } catch (error) {
+      console.error("Error fetching event types:", error);
+      // Fallback to default categories if API fails
+      setEventTypes([
+        { id: 1, type: "WORKSHOP" },
+        { id: 2, type: "SEMINAR" },
+        { id: 3, type: "COMPETITION" },
+        { id: 4, type: "NETWORKING" },
+      ]);
+    }
   };
 
-  const removeImage = (index) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const removeImage = () => {
+    setImage(null);
+    setPreviewUrl("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (images.length === 0) {
-      alert("You must upload at least one image for the event.");
+
+    if (!image) {
+      alert("You must upload an image for the event.");
       return;
     }
+
+    if (!category) {
+      alert("Please select an event category.");
+      return;
+    }
+
+    setLoading(true);
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
+    formData.append("description", about); // Map 'about' to 'description'
     formData.append("date", date);
-    images.forEach((img) => {
-      formData.append("images", img);
-    });
+    formData.append("time_from", startTime); // Map 'startTime' to 'time_from'
+    formData.append("time_to", endTime); // Map 'endTime' to 'time_to'
+    formData.append("location", venue); // Map 'venue' to 'location'
+    formData.append("total_seats", capacity); // Map 'capacity' to 'total_seats'
+    formData.append("event_type", category); // Event type ID
+    formData.append("image", image);
+
+    // Convert comma-separated speakers to hosts array
+    if (speakers.trim()) {
+      const hostsArray = speakers.split(",").map(s => s.trim()).filter(s => s);
+      formData.append("hosts", JSON.stringify(hostsArray));
+    }
+
+    // Convert comma-separated tags to array
+    if (tags.trim()) {
+      const tagsArray = tags.split(",").map(t => t.trim()).filter(t => t);
+      formData.append("tags", JSON.stringify(tagsArray));
+    }
 
     try {
       await axiosInstance.post("/events/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      navigate("/dashboard/events");
+      alert("Event created successfully!");
+      navigate("/dashboard/events-list");
     } catch (error) {
-      console.error(error.response?.data || error.message);
+      console.error("Error creating event:", error.response?.data || error.message);
+      alert("Failed to create event. Please check all fields and try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -182,11 +236,11 @@ const EventCreatePage = () => {
                   required
                 >
                   <option value="">Select a category</option>
-                  <option value="Workshop">Workshop</option>
-                  <option value="Seminar">Seminar</option>
-                  <option value="Competition">Competition</option>
-                  <option value="Networking">Networking</option>
-                  <option value="Other">Other</option>
+                  {eventTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.type}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -199,32 +253,29 @@ const EventCreatePage = () => {
                   type="file"
                   id="event-image"
                   accept="image/*"
-                  multiple
                   onChange={handleImageChange}
                   className="file-input-hidden"
                 />
                 <label htmlFor="event-image" className="file-upload-label">
                   <span className="file-upload-btn">Choose file</span>
                   <span className="file-upload-text">
-                    {images.length > 0 ? `${images.length} file(s) selected` : 'no file choose'}
+                    {image ? image.name : 'no file chosen'}
                   </span>
                 </label>
               </div>
 
-              {previewUrls.length > 0 && (
+              {previewUrl && (
                 <div className="image-preview-container-new">
-                  {previewUrls.map((url, index) => (
-                    <div key={index} className="image-preview-box-new">
-                      <img src={url} alt={`preview-${index}`} className="image-preview-new" />
-                      <button
-                        type="button"
-                        className="remove-image-btn-new"
-                        onClick={() => removeImage(index)}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
+                  <div className="image-preview-box-new">
+                    <img src={previewUrl} alt="preview" className="image-preview-new" />
+                    <button
+                      type="button"
+                      className="remove-image-btn-new"
+                      onClick={removeImage}
+                    >
+                      ✕
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -242,8 +293,8 @@ const EventCreatePage = () => {
 
             {/* Submit Button */}
             <div className="form-submit-wrapper">
-              <button type="submit" className="create-event-btn">
-                Create Event
+              <button type="submit" className="create-event-btn" disabled={loading}>
+                {loading ? "Creating Event..." : "Create Event"}
               </button>
             </div>
           </form>

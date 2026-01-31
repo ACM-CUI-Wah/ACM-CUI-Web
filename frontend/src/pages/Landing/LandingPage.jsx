@@ -8,6 +8,7 @@ import Hero from "../../components/LandingPage/Hero/Hero.jsx";
 import ClubsSection from "../../components/LandingPage/Clubs/ClubsSection.jsx";
 import MissionSection from "../../components/LandingPage/Mission/MissionSection.jsx";
 import SplashScreen from "../../components/SplashScreen/SplashScreen.jsx";
+import HackathonManagement from "../Hackathon/HackathonManagement.jsx";
 import "./LandingPage.css";
 
 const LandingPage = () => {
@@ -50,6 +51,7 @@ const LandingPage = () => {
         <div id="clubs"><ClubsSection /></div>
         <div id="blogs"><Blog /></div>
         <div id="events"><EventsSection /></div>
+        <div id="hackathon"><HackathonManagement/></div>
         <div id="mission"><MissionSection /></div>
       </main>
       <Footer/>
