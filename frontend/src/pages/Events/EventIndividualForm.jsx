@@ -80,7 +80,7 @@ const EventIndividualForm = () => {
   };
 
   return (
-    <div className="event-individual-page">
+    <div className="eif-event-individual-page">
       <NavbarComponent />
 
       <div className="event-registration-container">
@@ -92,14 +92,14 @@ const EventIndividualForm = () => {
           <p>Fill out the form below to register for this event</p>
         </div>
 
-        <form className="registration-form" onSubmit={handleSubmit}>
+        <form className="eif-registration-form" onSubmit={handleSubmit}>
           {/* Personal Information Card */}
-          <div className="form-card">
+          <div className="eif-form-card">
             <h3>Personal Information</h3>
-            <p className="subtitle">Tell us about yourself</p>
+            <p className="eif-subtitle">Tell us about yourself</p>
 
-            <div className="input-row">
-              <div className="input-group">
+            <div className="eif-input-row">
+              <div className="eif-input-group">
                 <label>Name*</label>
                 <input
                   type="text"
@@ -110,7 +110,7 @@ const EventIndividualForm = () => {
                   required
                 />
               </div>
-              <div className="input-group">
+              <div className="eif-input-group">
                 <label>Registration*</label>
                 <input
                   type="text"
@@ -123,8 +123,8 @@ const EventIndividualForm = () => {
               </div>
             </div>
 
-            <div className="input-row">
-              <div className="input-group">
+            <div className="eif-input-row">
+              <div className="eif-input-group">
                 <label>Semester*</label>
                 <select
                   name="semester"
@@ -143,7 +143,7 @@ const EventIndividualForm = () => {
                   <option value="8">8th Semester</option>
                 </select>
               </div>
-              <div className="input-group">
+              <div className="eif-input-group">
                 <label>Department*</label>
                 <select
                   name="department"
@@ -159,7 +159,7 @@ const EventIndividualForm = () => {
               </div>
             </div>
 
-            <div className="input-group">
+            <div className="eif-input-group">
               <label>Email Address *</label>
               <input
                 type="email"
@@ -171,7 +171,7 @@ const EventIndividualForm = () => {
               />
             </div>
 
-            <div className="input-group">
+            <div className="eif-input-group">
               <label>Phone Number *</label>
               <input
                 type="tel"
@@ -185,8 +185,8 @@ const EventIndividualForm = () => {
           </div>
 
           {/* Terms and Conditions */}
-          <div className="terms-card">
-            <div className="checkbox-group">
+          <div className="eif-terms-card">
+            <div className="eif-checkbox-group">
               <input
                 type="checkbox"
                 id="confirm"
