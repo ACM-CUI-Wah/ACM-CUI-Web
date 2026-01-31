@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import NavbarComponent from '../../components/LandingPage/Navbar/NavbarComponent';
 import Footer from '../../components/Footer/Footer';
+import axiosInstance from '../../axios';
 import './EventIndividualForm.css';
 
 const EventIndividualForm = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get('eventId');
+
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     registration: '',
@@ -16,28 +21,72 @@ const EventIndividualForm = () => {
     phoneNumber: ''
   });
 
+  useEffect(() => {
+    if (!eventId) {
+      alert('No event selected. Redirecting to events page.');
+      navigate('/events');
+    }
+  }, [eventId, navigate]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isConfirmed) {
       alert('Please confirm the terms and conditions before submitting');
       return;
     }
-    console.log('Form submitted:', formData);
-    // navigate('');
+
+    setLoading(true);
+
+    try {
+      // Prepare registration data according to backend API format
+      const registrationData = {
+        event: parseInt(eventId),
+        registration_type: 'SINGLE',
+        team_name: '', // Empty for individual registration
+        participants: [
+          {
+            name: formData.name,
+            email: formData.email,
+            reg_no: formData.registration,
+            current_semester: parseInt(formData.semester),
+            department: formData.department,
+            phone_no: formData.phoneNumber
+          }
+        ]
+      };
+
+      await axiosInstance.post('/events/registrations/', registrationData);
+
+      alert('Registration successful! You have been registered for this event.');
+      navigate('/events');
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message);
+
+      if (error.response?.data) {
+        const errorMsg = typeof error.response.data === 'string'
+          ? error.response.data
+          : JSON.stringify(error.response.data);
+        alert(`Registration failed: ${errorMsg}`);
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="event-individual-page">
       <NavbarComponent />
-      
+
       <div className="event-registration-container">
         <div className="form-header">
           <h1>
-            EVENT REGISTRATION 
+            EVENT REGISTRATION
             <span className="badge">SINGLE</span>
           </h1>
           <p>Fill out the form below to register for this event</p>
@@ -153,8 +202,8 @@ const EventIndividualForm = () => {
 
           {/* Submit Button */}
           <div className="submit-container">
-            <button type="submit" className="submit-btn">
-              Submit Application
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit Application'}
             </button>
           </div>
         </form>

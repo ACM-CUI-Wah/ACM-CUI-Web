@@ -1,8 +1,9 @@
 // EventTeamForm.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent";
 import Footer from "../../components/Footer/Footer";
+import axiosInstance from "../../axios";
 import "./EventTeamForm.css";
 
 const blankMember = () => ({
@@ -26,7 +27,12 @@ const ordinalLabel = (n) => {
 
 const EventTeamForm = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get('eventId');
+
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [teamName, setTeamName] = useState("");
 
   const [memberCount, setMemberCount] = useState(2);
   const [memberCountInput, setMemberCountInput] = useState("2");
@@ -37,6 +43,13 @@ const EventTeamForm = () => {
   const [formData, setFormData] = useState({
     members: Array.from({ length: 2 }, blankMember),
   });
+
+  useEffect(() => {
+    if (!eventId) {
+      alert('No event selected. Redirecting to events page.');
+      navigate('/events');
+    }
+  }, [eventId, navigate]);
 
   const resizeMembers = (nextCount) => {
     setFormData((prev) => {
@@ -125,7 +138,7 @@ const EventTeamForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isConfirmed) {
@@ -133,10 +146,47 @@ const EventTeamForm = () => {
       return;
     }
 
-    console.log("Form submitted:", {
-      memberCount,
-      members: formData.members,
-    });
+    if (!teamName.trim()) {
+      alert("Please enter a team name");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Prepare team registration data
+      const registrationData = {
+        event: parseInt(eventId),
+        registration_type: 'TEAM',
+        team_name: teamName,
+        participants: formData.members.map(member => ({
+          name: member.name,
+          email: member.email,
+          reg_no: member.registration,
+          current_semester: parseInt(member.semester),
+          department: member.department,
+          phone_no: member.phone
+        }))
+      };
+
+      await axiosInstance.post('/events/registrations/', registrationData);
+
+      alert('Team registration successful! Your team has been registered for this event.');
+      navigate('/events');
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message);
+
+      if (error.response?.data) {
+        const errorMsg = typeof error.response.data === 'string'
+          ? error.response.data
+          : JSON.stringify(error.response.data);
+        alert(`Registration failed: ${errorMsg}`);
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -156,10 +206,22 @@ const EventTeamForm = () => {
         <form className="team-form__form" onSubmit={handleSubmit}>
           <div className="team-form__card">
             <div className="team-form__section">
-              <h3 className="team-form__section-title">Team Size</h3>
+              <h3 className="team-form__section-title">Team Information</h3>
               <p className="team-form__subtitle">
-                How many members do you want to register?
+                Enter your team details
               </p>
+
+              <div className="team-form__field">
+                <label className="team-form__label">Team Name*</label>
+                <input
+                  className="team-form__input"
+                  type="text"
+                  value={teamName}
+                  onChange={(e) => setTeamName(e.target.value)}
+                  placeholder="Enter your team name"
+                  required
+                />
+              </div>
 
               <div className="team-form__field">
                 <label className="team-form__label">Number of Members*</label>
@@ -288,7 +350,7 @@ const EventTeamForm = () => {
                     className="team-form__input"
                     type="tel"
                     value={member.phone}
-                    placeholder="+90 321 569877"
+                    placeholder="+92 321 569877"
                     onChange={(e) =>
                       handleMemberChange(index, "phone", e.target.value)
                     }
@@ -319,8 +381,8 @@ const EventTeamForm = () => {
           </div>
 
           <div className="team-form__submit-wrap">
-            <button type="submit" className="team-form__submit-btn">
-              Submit Application
+            <button type="submit" className="team-form__submit-btn" disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit Application'}
             </button>
           </div>
         </form>

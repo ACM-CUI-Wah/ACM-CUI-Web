@@ -22,11 +22,13 @@ const EventListPage = () => {
   const [editTags, setEditTags] = useState("");
   const [editImages, setEditImages] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [eventTypes, setEventTypes] = useState([]);
   const userRole = localStorage.getItem("role");
   const isAdminOrLead = userRole === "ADMIN" || userRole === "LEAD";
 
   useEffect(() => {
     fetchEvents();
+    fetchEventTypes();
   }, []);
 
   const fetchEvents = async () => {
@@ -35,6 +37,15 @@ const EventListPage = () => {
       setEvents(res.data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const fetchEventTypes = async () => {
+    try {
+      const res = await axiosInstance.get("/events/types/");
+      setEventTypes(res.data);
+    } catch (error) {
+      console.error("Error fetching event types:", error);
     }
   };
 
@@ -71,19 +82,75 @@ const EventListPage = () => {
     }
   };
 
+  // Helper function to parse hosts/tags (handles double-encoded JSON)
+  const parseArrayField = (field) => {
+    if (!field || !Array.isArray(field)) return [];
+
+    return field.map(item => {
+      try {
+        // If item is a JSON string, parse it
+        if (typeof item === 'string' && item.startsWith('[')) {
+          const parsed = JSON.parse(item);
+          return Array.isArray(parsed) ? parsed[0] : parsed;
+        }
+        return item;
+      } catch (e) {
+        return item;
+      }
+    }).filter(item => item && String(item).trim());
+  };
+
+  // Helper function to convert 12-hour time to 24-hour format
+  const convertTo24Hour = (time12h) => {
+    if (!time12h) return "";
+
+    // If already in 24-hour format (HH:mm or HH:mm:ss), return as is
+    if (/^\d{2}:\d{2}(:\d{2})?$/.test(time12h)) {
+      return time12h.substring(0, 5); // Return HH:mm
+    }
+
+    // Parse 12-hour format
+    const [time, modifier] = time12h.split(' ');
+    let [hours, minutes] = time.split(':');
+
+    if (hours === '12') {
+      hours = '00';
+    }
+
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
+  };
+
   const startEdit = (event) => {
     setEditingEvent(event.id);
-    setEditTitle(event.title);
-    setEditContent(event.content);
-    setEditAbout(event.about || "");
-    setEditSpeakers(event.speakers || "");
+    setEditTitle(event.title || "");
+    setEditContent(event.content || "");
+    setEditAbout(event.description || ""); // API uses 'description'
+
+    // Parse and convert hosts array to comma-separated string
+    const parsedHosts = parseArrayField(event.hosts);
+    setEditSpeakers(parsedHosts.join(", "));
+
     setEditDate(event.date || "");
-    setEditStartTime(event.startTime || event.start_time || "");
-    setEditEndTime(event.endTime || event.end_time || "");
-    setEditVenue(event.venue || "");
-    setEditCapacity(event.capacity || "");
-    setEditCategory(event.category || "");
-    setEditTags(event.tags || "");
+
+    // Convert times from 12-hour to 24-hour format for HTML time inputs
+    setEditStartTime(convertTo24Hour(event.time_from) || "");
+    setEditEndTime(convertTo24Hour(event.time_to) || "");
+
+    setEditVenue(event.location || ""); // API uses 'location'
+    setEditCapacity(event.total_seats || ""); // API uses 'total_seats'
+
+    // Extract event_type ID from the event_type object
+    const eventTypeId = event.event_type?.id || event.event_type || "";
+    setEditCategory(eventTypeId);
+
+    // Parse and convert tags array to comma-separated string
+    const parsedTags = parseArrayField(event.tags);
+    setEditTags(parsedTags.join(", "));
+
     setEditImages([]);
     setShowEditModal(true);
   };
@@ -97,9 +164,34 @@ const EventListPage = () => {
     const formData = new FormData();
     formData.append("title", editTitle);
     formData.append("content", editContent);
+    formData.append("description", editAbout);
+    formData.append("date", editDate);
+    formData.append("time_from", editStartTime);
+    formData.append("time_to", editEndTime);
+    formData.append("location", editVenue);
+    formData.append("total_seats", editCapacity);
+    formData.append("event_type", editCategory); // Should be event type ID
+
+    // Convert comma-separated speakers to hosts array
+    if (editSpeakers) {
+      const speakersStr = Array.isArray(editSpeakers) ? editSpeakers.join(", ") : String(editSpeakers);
+      if (speakersStr.trim()) {
+        const hostsArray = speakersStr.split(",").map(s => s.trim()).filter(s => s);
+        formData.append("hosts", JSON.stringify(hostsArray));
+      }
+    }
+
+    // Convert comma-separated tags to array
+    if (editTags) {
+      const tagsStr = Array.isArray(editTags) ? editTags.join(", ") : String(editTags);
+      if (tagsStr.trim()) {
+        const tagsArray = tagsStr.split(",").map(t => t.trim()).filter(t => t);
+        formData.append("tags", JSON.stringify(tagsArray));
+      }
+    }
 
     editImages.forEach((img) => {
-      formData.append("images", img);
+      formData.append("image", img);
     });
 
     try {
@@ -112,6 +204,7 @@ const EventListPage = () => {
       fetchEvents();
     } catch (error) {
       console.error(error.response?.data || error.message);
+      alert("Failed to update event. Please check all fields.");
     }
   };
 
@@ -123,9 +216,9 @@ const EventListPage = () => {
         {events.map((event) => (
           <div key={event.id} className="event-card">
             <div className="event-image-container">
-              {event.images.length > 0 ? (
+              {event.image ? (
                 <img
-                  src={`http://localhost:8000${event.images[0].image}`}
+                  src={event.image}
                   alt="event"
                   className="event-main-image"
                 />
@@ -292,11 +385,11 @@ const EventListPage = () => {
                       required
                     >
                       <option value="">Select a category</option>
-                      <option value="Workshop">Workshop</option>
-                      <option value="Seminar">Seminar</option>
-                      <option value="Competition">Competition</option>
-                      <option value="Networking">Networking</option>
-                      <option value="Other">Other</option>
+                      {eventTypes.map((type) => (
+                        <option key={type.id} value={type.id}>
+                          {type.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

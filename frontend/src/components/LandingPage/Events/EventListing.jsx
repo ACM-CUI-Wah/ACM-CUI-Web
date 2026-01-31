@@ -1,43 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
+import axiosInstance from "../../../axios";
 import "./EventListing.css";
-
-
-import speakShine from "../../../assets/Speakandshine.png";
-import escapeRoom from "../../../assets/EscapeRoom.png";
-import hackathon from "../../../assets/Hackathon.png";
-import squidGame from "../../../assets/SquidGame.png";
-import puzzleFuzzle from "../../../assets/PuzzelFuzzel.png";
-import webDeveloper from "../../../assets/webdeveloper.jpg";
-
 
 import dateIcon from "../../../assets/Date.png";
 import timeIcon from "../../../assets/Time.png";
 
-const events = [
-  { id: 1, title: "Speak and Shine", category: "Seminar", description: "Build confidence and express ideas through powerful speaking.", date: "Jan 18, 2026", time: "12:00 AM - 3:00 PM", image: speakShine },
-  { id: 2, title: "Escape Room", category: "Workshop", description: "Play the game, solve clues, beat the clock, and escape as a team.", date: "Jan 18, 2026", time: "12:00 AM - 3:00 PM", image: escapeRoom },
-  { id: 3, title: "Hackathon", category: "Hackathons", description: "Code, collaborate, and create innovative solutions.", date: "Jan 18, 2026", time: "12:00 AM - 3:00 PM", image: hackathon },
-  { id: 4, title: "Squid Game", category: "Student Week", description: "Compete in fun, high-energy challenge rounds with exciting tasks.", date: "Jan 18, 2026", time: "12:00 AM - 3:00 PM", image: squidGame },
-  { id: 5, title: "Puzzle Fuzzle", category: "Workshop", description: "Test your brain with tricky puzzles and riddles in a fun environment.", date: "Jan 18, 2026", time: "12:00 AM - 3:00 PM", image: puzzleFuzzle },
-  { id: 6, title: "Web Developer", category: "Workshop", description: "Learn and build modern web experiences with hands-on practice.", date: "Jan 18, 2026", time: "12:00 AM - 3:00 PM", image: webDeveloper },
-];
-
 const EventListing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All Events");
+  const [events, setEvents] = useState([]);
+  const [eventTypes, setEventTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const categories = ["All Events", "Workshop", "Seminar", "Hackathons", "Student Week"];
+  useEffect(() => {
+    fetchEvents();
+    fetchEventTypes();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosInstance.get("/events/");
+      setEvents(res.data);
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      setError("Failed to load events. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchEventTypes = async () => {
+    try {
+      const res = await axiosInstance.get("/event-types/");
+      setEventTypes(res.data);
+    } catch (error) {
+      console.error("Error fetching event types:", error);
+    }
+  };
+
+  const categories = ["All Events", ...eventTypes.map(type => type.type)];
 
   const filteredEvents = events.filter((event) => {
-    const matchesCategory = activeCategory === "All Events" || event.category === activeCategory;
+    const matchesCategory = activeCategory === "All Events" || event.event_type?.type === activeCategory;
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   return (
     <section className="event-listing-container">
-   
+
       <div className="search-header">
         <div className="search-bar-wrapper">
           <FiSearch className="inner-search-icon" />
@@ -66,34 +83,58 @@ const EventListing = () => {
         </div>
       </div>
 
-  
+
+      {/* Event Grid */}
       <div className="event-grid">
-        {filteredEvents.map((event) => (
-          <div className="event-card" key={event.id}>
-            <div className="event-image-wrapper">
-              <img src={event.image} alt={event.title} />
-              <div className="card-category-tag">{event.category}</div>
-            </div>
-
-            <div className="event-details">
-              <h3 className="event-name">{event.title}</h3>
-              <p className="event-desc">{event.description}</p>
-
-              <div className="info-row">
-                <div className="info-item">
-                  <img src={dateIcon} alt="Date" className="meta-icon" />
-                  <span>{event.date}</span>
-                </div>
-                <div className="info-item">
-                  <img src={timeIcon} alt="Time" className="meta-icon" />
-                  <span>{event.time}</span>
-                </div>
+        {loading ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem' }}>
+            <p>Loading events...</p>
+          </div>
+        ) : error ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#e74c3c' }}>
+            <p>{error}</p>
+          </div>
+        ) : filteredEvents.length === 0 ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem' }}>
+            <p>No events found matching your criteria.</p>
+          </div>
+        ) : (
+          filteredEvents.map((event) => (
+            <div className="event-card" key={event.id}>
+              <div className="event-image-wrapper">
+                <img
+                  src={event.image || '/placeholder-event.jpg'}
+                  alt={event.title}
+                  onError={(e) => { e.target.src = '/placeholder-event.jpg'; }}
+                />
+                <div className="card-category-tag">{event.event_type?.type || 'Event'}</div>
               </div>
 
-              <button className="register-btn">Register Now</button>
+              <div className="event-details">
+                <h3 className="event-name">{event.title}</h3>
+                <p className="event-desc">{event.description || event.content}</p>
+
+                <div className="info-row">
+                  <div className="info-item">
+                    <img src={dateIcon} alt="Date" className="meta-icon" />
+                    <span>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  </div>
+                  <div className="info-item">
+                    <img src={timeIcon} alt="Time" className="meta-icon" />
+                    <span>{event.time_from} – {event.time_to}</span>
+                  </div>
+                </div>
+
+                <button
+                  className="register-btn"
+                  onClick={() => navigate(`/events/${event.id}`)}
+                >
+                  View Details
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </section>
   );

@@ -136,9 +136,9 @@ const Sidebar = ({ onNavigate }) => {
         <DropdownGroup
           name="events"
           label="Events"
-          paths={["/dashboard/events"]}
+          paths={["/dashboard/events-list", "/dashboard/events/create"]}
         >
-          <SubLink to="/dashboard/events">All Events</SubLink>
+          <SubLink to="/dashboard/events-list">All Events</SubLink>
           <SubLink to="/dashboard/events/create">Create Event</SubLink>
         </DropdownGroup>
 
@@ -183,7 +183,7 @@ const Sidebar = ({ onNavigate }) => {
       <NavLink to="/dashboard/article">Post Blog</NavLink>
       <NavLink to="/dashboard/myblog">My BlogPosts</NavLink>
       <NavLink to="/dashboard/blogs">All Blogs</NavLink>
-      <NavLink to="/dashboard/events">Upcoming Events</NavLink>
+      <NavLink to="/dashboard/events-list">Upcoming Events</NavLink>
     </>
   );
 
@@ -195,7 +195,7 @@ const Sidebar = ({ onNavigate }) => {
         return renderLeadNav();
       case "STUDENT":
         return renderStudentNav();
-     
+
     }
   };
 
