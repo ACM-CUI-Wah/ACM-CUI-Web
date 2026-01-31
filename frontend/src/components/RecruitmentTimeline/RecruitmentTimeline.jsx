@@ -1,34 +1,84 @@
-import React from 'react';
-import './RecruitmentTimeline.css';
+import React, { useEffect, useState } from "react";
+import "./RecruitmentTimeline.css";
 
-import timelineIcon1 from '../../assets/Timeline1.png'; 
-import timelineIcon2 from '../../assets/Timeline2.png';
-import timelineIcon3 from '../../assets/Timeline3.png';
-import timelineIcon4 from '../../assets/Timeline4.png';
+import axiosInstance from "../../axios"// adjust path if needed
+
+import timelineIcon1 from "../../assets/Timeline1.png";
+import timelineIcon2 from "../../assets/Timeline2.png";
+import timelineIcon3 from "../../assets/Timeline3.png";
+import timelineIcon4 from "../../assets/Timeline4.png";
 
 const RecruitmentTimeline = () => {
-  const timelineData = [
-    {
-      title: "Application Period",
-      date: "Jan 06 - Jan 26",
-      image: timelineIcon1
-    },
-    {
-      title: "Application Deadline",
-      date: "Jan 26 - Jan 30",
-      image: timelineIcon2
-    },
-    {
-      title: "Interview Period",
-      date: "Jan 26 - Jan 30",
-      image: timelineIcon3
-    },
-    {
-      title: "Results Announced",
-      date: "Jan 26 - Jan 30",
-      image: timelineIcon4
-    }
-  ];
+  const [timelineData, setTimelineData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState(null);
+
+  // helper: format "2026-01-28" => "Jan 28"
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+  };
+
+  const formatRange = (start, end) => {
+    if (!start || !end) return "TBA";
+    return `${formatDate(start)} - ${formatDate(end)}`;
+  };
+
+  useEffect(() => {
+    const fetchTimeline = async () => {
+      setLoading(true);
+      setApiError(null);
+
+      try {
+        const res = await axiosInstance.get("/recruitment/active-session/");
+        const active = Array.isArray(res.data) ? res.data[0] : res.data;
+
+        if (!active) {
+          setApiError("No active recruitment session found.");
+          return;
+        }
+
+        const data = [
+          {
+            title: "Application Period",
+            date: formatRange(active.application_start, active.application_end),
+            image: timelineIcon1,
+          },
+          {
+            title: "Application Deadline",
+            date: formatDate(active.application_end),
+            image: timelineIcon2,
+          },
+          {
+            title: "Interview Period",
+            date: formatRange(active.interview_start, active.interview_end),
+            image: timelineIcon3,
+          },
+          {
+            title: "Results Announced",
+            date: formatDate(active.result_date),
+            image: timelineIcon4,
+          },
+        ];
+
+        setTimelineData(data);
+      } catch (err) {
+        const data = err.response?.data;
+        const message =
+          data?.detail ||
+          data?.message ||
+          (typeof data === "string" ? data : JSON.stringify(data)) ||
+          "Failed to load recruitment timeline.";
+
+        setApiError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTimeline();
+  }, []);
 
   return (
     <section className="timeline-section">
@@ -37,15 +87,19 @@ const RecruitmentTimeline = () => {
         <p className="timeline-subtitle">Important dates for the recruitment process</p>
       </div>
 
+      {loading && <p style={{ textAlign: "center" }}>Loading timeline...</p>}
+      {apiError && (
+        <p style={{ textAlign: "center", color: "crimson" }}>{apiError}</p>
+      )}
+
       <div className="timeline-container">
         {timelineData.map((item, index) => (
           <div key={index} className="timeline-row">
             <div className="timeline-icon-box">
-              {/* Changed from span to img tag */}
-              <img 
-                src={item.image} 
-                alt={item.title} 
-                className="timeline-custom-img" 
+              <img
+                src={item.image}
+                alt={item.title}
+                className="timeline-custom-img"
               />
             </div>
             <div className="timeline-info">
