@@ -82,6 +82,24 @@ const EventListPage = () => {
     }
   };
 
+  // Helper function to parse hosts/tags (handles double-encoded JSON)
+  const parseArrayField = (field) => {
+    if (!field || !Array.isArray(field)) return [];
+
+    return field.map(item => {
+      try {
+        // If item is a JSON string, parse it
+        if (typeof item === 'string' && item.startsWith('[')) {
+          const parsed = JSON.parse(item);
+          return Array.isArray(parsed) ? parsed[0] : parsed;
+        }
+        return item;
+      } catch (e) {
+        return item;
+      }
+    }).filter(item => item && String(item).trim());
+  };
+
   // Helper function to convert 12-hour time to 24-hour format
   const convertTo24Hour = (time12h) => {
     if (!time12h) return "";
@@ -112,9 +130,9 @@ const EventListPage = () => {
     setEditContent(event.content || "");
     setEditAbout(event.description || ""); // API uses 'description'
 
-    // Convert hosts array to comma-separated string
-    const hostsStr = Array.isArray(event.hosts) ? event.hosts.join(", ") : (event.hosts || "");
-    setEditSpeakers(hostsStr);
+    // Parse and convert hosts array to comma-separated string
+    const parsedHosts = parseArrayField(event.hosts);
+    setEditSpeakers(parsedHosts.join(", "));
 
     setEditDate(event.date || "");
 
@@ -129,9 +147,9 @@ const EventListPage = () => {
     const eventTypeId = event.event_type?.id || event.event_type || "";
     setEditCategory(eventTypeId);
 
-    // Convert tags array to comma-separated string
-    const tagsStr = Array.isArray(event.tags) ? event.tags.join(", ") : (event.tags || "");
-    setEditTags(tagsStr);
+    // Parse and convert tags array to comma-separated string
+    const parsedTags = parseArrayField(event.tags);
+    setEditTags(parsedTags.join(", "));
 
     setEditImages([]);
     setShowEditModal(true);
@@ -200,7 +218,7 @@ const EventListPage = () => {
             <div className="event-image-container">
               {event.image ? (
                 <img
-                  src={`http://localhost:8000${event.image}`}
+                  src={event.image}
                   alt="event"
                   className="event-main-image"
                 />

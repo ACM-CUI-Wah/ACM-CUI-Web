@@ -103,7 +103,7 @@ const EventListing = () => {
             <div className="event-card" key={event.id}>
               <div className="event-image-wrapper">
                 <img
-                  src={event.image ? `http://localhost:8000${event.image}` : '/placeholder-event.jpg'}
+                  src={event.image || '/placeholder-event.jpg'}
                   alt={event.title}
                   onError={(e) => { e.target.src = '/placeholder-event.jpg'; }}
                 />

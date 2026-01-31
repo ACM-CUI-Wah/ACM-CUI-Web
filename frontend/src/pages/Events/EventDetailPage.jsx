@@ -32,6 +32,24 @@ const EventDetailPage = () => {
     }
   };
 
+  // Helper function to parse hosts (handles double-encoded JSON)
+  const parseHosts = (hosts) => {
+    if (!hosts || !Array.isArray(hosts)) return [];
+
+    return hosts.map(host => {
+      try {
+        // If host is a JSON string, parse it
+        if (typeof host === 'string' && host.startsWith('[')) {
+          const parsed = JSON.parse(host);
+          return Array.isArray(parsed) ? parsed[0] : parsed;
+        }
+        return host;
+      } catch (e) {
+        return host;
+      }
+    }).filter(host => host && host.trim());
+  };
+
   if (loading) {
     return (
       <div className="event-detail-page">
@@ -69,7 +87,7 @@ const EventDetailPage = () => {
       {/* Hero Section with fade */}
       <section className="event-hero">
         <img
-          src={event.image ? `http://localhost:8000${event.image}` : '/placeholder-event.jpg'}
+          src={event.image || '/placeholder-event.jpg'}
           alt={event.title}
           className="event-hero-img"
           onError={(e) => { e.target.src = '/placeholder-event.jpg'; }}
@@ -122,17 +140,26 @@ const EventDetailPage = () => {
           </div>
 
           {/* Speaker/Hosts */}
-          {event.hosts && event.hosts.length > 0 && (
-            <div className="speaker-box">
-              <div className="meta-item speaker-meta">
-                <i className="fa-solid fa-user-tie meta-icon"></i>
-                <div className="meta-text">
-                  <span className="meta-label">{event.hosts.length > 1 ? 'Hosts' : 'Host'}</span>
-                  <span className="meta-value speaker-name">{event.hosts.join(', ')}</span>
+          {event.hosts && event.hosts.length > 0 && (() => {
+            const parsedHosts = parseHosts(event.hosts);
+            return parsedHosts.length > 0 && (
+              <div className="speaker-box">
+                <div className="meta-item speaker-meta">
+                  <i className="fa-solid fa-user-tie meta-icon"></i>
+                  <div className="meta-text">
+                    <span className="meta-label">{parsedHosts.length > 1 ? 'Hosts' : 'Host'}</span>
+                    <div className="meta-value speaker-name">
+                      {parsedHosts.map((host, index) => (
+                        <div key={index} style={{ marginBottom: index < parsedHosts.length - 1 ? '0.5rem' : '0' }}>
+                          • {host}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
         </div>
 
@@ -142,18 +169,18 @@ const EventDetailPage = () => {
             {/* Header Section */}
             <div className="registration-header">
               <span className="registration-label">Registration:</span>
-              <span className="registration-count">0/{event.total_seats} registered</span>
+              <span className="registration-count">{event.registration_count || 0}/{event.total_seats} registered</span>
             </div>
 
             {/* Progress Bar */}
             <div className="progress-bar-container">
               <div
                 className="progress-bar-fill"
-                style={{ width: '0%' }}
+                style={{ width: `${((event.registration_count || 0) / event.total_seats) * 100}%` }}
               ></div>
             </div>
 
-            <p className="remaining-text">{event.total_seats} spots available!</p>
+            <p className="remaining-text">{event.total_seats - (event.registration_count || 0)} spots available!</p>
 
             {/* CTA Button */}
             <button

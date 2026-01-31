@@ -1,6 +1,6 @@
 // EventDashboard.jsx
 import React, { useState, useEffect } from 'react';
-import { BsPeople, BsClock, BsCalendarCheck, BsCheckCircle, BsEye } from "react-icons/bs";
+import { BsPeople, BsClock, BsCalendarCheck, BsCheckCircle, BsEye, BsCheck, BsX, BsTrash } from "react-icons/bs";
 import axiosInstance from '../../axios';
 import './EventDashboard.css';
 
@@ -12,6 +12,8 @@ const EventDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEvent, setSelectedEvent] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [viewModal, setViewModal] = useState(false);
+  const [selectedRegistration, setSelectedRegistration] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -40,7 +42,7 @@ const EventDashboard = () => {
     totalParticipants: registrations.reduce((sum, reg) => sum + (reg.participants?.length || 0), 0),
     totalEvents: events.length,
     pending: registrations.filter(r => r.status === 'PENDING').length,
-    confirmed: registrations.filter(r => r.status === 'CONFIRMED').length,
+    confirmed: registrations.filter(r => r.status === 'COMPLETED').length,
   };
 
   // Filter registrations
@@ -59,9 +61,9 @@ const EventDashboard = () => {
     switch (status) {
       case 'PENDING':
         return 'status-pending';
-      case 'CONFIRMED':
+      case 'COMPLETED':
         return 'status-confirmed';
-      case 'REJECTED':
+      case 'CANCELLED':
         return 'status-rejected';
       default:
         return '';
@@ -71,6 +73,39 @@ const EventDashboard = () => {
   const getEventName = (eventId) => {
     const event = events.find(e => e.id === eventId);
     return event ? event.title : 'Unknown Event';
+  };
+
+  const handleViewDetails = (registration) => {
+    setSelectedRegistration(registration);
+    setViewModal(true);
+  };
+
+  const handleUpdateStatus = async (registrationId, newStatus) => {
+    try {
+      await axiosInstance.patch(`/events/registrations/${registrationId}/status/`, {
+        status: newStatus
+      });
+      alert(`Registration ${newStatus.toLowerCase()} successfully!`);
+      fetchData(); // Refresh data
+      setViewModal(false);
+    } catch (error) {
+      console.error('Error updating status:', error);
+      alert('Failed to update registration status');
+    }
+  };
+
+  const handleDeleteRegistration = async (registrationId) => {
+    if (!window.confirm('Are you sure you want to delete this registration?')) return;
+
+    try {
+      await axiosInstance.delete(`/events/registrations/${registrationId}/delete/`);
+      alert('Registration deleted successfully!');
+      fetchData(); // Refresh data
+      setViewModal(false);
+    } catch (error) {
+      console.error('Error deleting registration:', error);
+      alert('Failed to delete registration');
+    }
   };
 
   if (loading) {
@@ -97,7 +132,7 @@ const EventDashboard = () => {
     <div className="event-dashboard">
       {/* Header */}
       <div className="dashboard-header">
-        <h1>STUDENT WEEK EVENTS</h1>
+        <h1>EVENT REGISTRATIONS MANAGEMENT</h1>
         <p>Manage and track event registrations and participant data</p>
       </div>
 
@@ -175,8 +210,8 @@ const EventDashboard = () => {
           >
             <option value="">All Status</option>
             <option value="PENDING">Pending</option>
-            <option value="CONFIRMED">Confirmed</option>
-            <option value="REJECTED">Rejected</option>
+            <option value="COMPLETED">Confirmed</option>
+            <option value="CANCELLED">Cancelled</option>
           </select>
         </div>
 
@@ -212,7 +247,11 @@ const EventDashboard = () => {
                       </span>
                     </td>
                     <td>
-                      <button className="action-btn" title="View Details">
+                      <button
+                        className="action-btn"
+                        title="View Details"
+                        onClick={() => handleViewDetails(reg)}
+                      >
                         <BsEye />
                       </button>
                     </td>
@@ -223,6 +262,69 @@ const EventDashboard = () => {
           </tbody>
         </table>
       </div>
+
+      {/* View Details Modal */}
+      {viewModal && selectedRegistration && (
+        <div className="modal-overlay" onClick={() => setViewModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Registration Details</h2>
+              <button className="modal-close-btn" onClick={() => setViewModal(false)}>✕</button>
+            </div>
+
+            <div className="modal-body">
+              <div className="detail-section">
+                <h3>Event Information</h3>
+                <p><strong>Event:</strong> {getEventName(selectedRegistration.event)}</p>
+                <p><strong>Registration Type:</strong> {selectedRegistration.registration_type}</p>
+                {selectedRegistration.team_name && (
+                  <p><strong>Team Name:</strong> {selectedRegistration.team_name}</p>
+                )}
+                <p><strong>Status:</strong> <span className={`status-badge ${getStatusClass(selectedRegistration.status)}`}>{selectedRegistration.status}</span></p>
+              </div>
+
+              <div className="detail-section">
+                <h3>Participants ({selectedRegistration.participants?.length || 0})</h3>
+                {selectedRegistration.participants?.map((participant, idx) => (
+                  <div key={idx} className="participant-card">
+                    <p><strong>Name:</strong> {participant.name}</p>
+                    <p><strong>Email:</strong> {participant.email}</p>
+                    <p><strong>Registration No:</strong> {participant.reg_no}</p>
+                    <p><strong>Department:</strong> {participant.department}</p>
+                    <p><strong>Semester:</strong> {participant.current_semester}</p>
+                    <p><strong>Phone:</strong> {participant.phone_no}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="modal-actions">
+                {selectedRegistration.status === 'PENDING' && (
+                  <>
+                    <button
+                      className="btn-approve"
+                      onClick={() => handleUpdateStatus(selectedRegistration.id, 'COMPLETED')}
+                    >
+                      <BsCheck /> Approve
+                    </button>
+                    <button
+                      className="btn-reject"
+                      onClick={() => handleUpdateStatus(selectedRegistration.id, 'CANCELLED')}
+                    >
+                      <BsX /> Reject
+                    </button>
+                  </>
+                )}
+                <button
+                  className="btn-delete"
+                  onClick={() => handleDeleteRegistration(selectedRegistration.id)}
+                >
+                  <BsTrash /> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

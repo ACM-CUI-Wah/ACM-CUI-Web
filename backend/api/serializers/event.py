@@ -13,10 +13,30 @@ class EventSerializer(serializers.ModelSerializer):
     event_type = EventTypeSerializer(read_only=True)
     time_from = serializers.TimeField(format='%I:%M %p')
     time_to = serializers.TimeField(format='%I:%M %p')
+    registration_count = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
         fields = '__all__'
+    
+    def get_registration_count(self, obj):
+        # Count all registrations except cancelled ones
+        return obj.registrations.exclude(status=RegistrationStatus.CANCELLED).count()
+    
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image and hasattr(obj.image, 'url'):
+            try:
+                # Check if file exists
+                if obj.image.storage.exists(obj.image.name):
+                    if request:
+                        return request.build_absolute_uri(obj.image.url)
+                    return obj.image.url
+            except:
+                pass
+        # Return default image or None
+        return None
 
 
 class EventWriteSerializer(serializers.ModelSerializer):
