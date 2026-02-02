@@ -72,7 +72,7 @@ const BlogBanner = () => {
       style={{
         backgroundImage: `url(${getBackgroundImage()})`,
         opacity: 0.9,
-        borderRadius: '12px', // Slightly more rounded like the design
+        borderRadius: '12px', 
       }}
     >
       <div className="blog-banner-overlay w-100 h-100 position-absolute top-0 start-0"></div>
