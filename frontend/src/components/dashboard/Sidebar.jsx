@@ -106,8 +106,7 @@ const Sidebar = ({ onNavigate }) => {
   const renderAdminNav = () => (
     <>
       <NavLink to="/dashboard/recruitment">Recruitment</NavLink>
-      <NavLink to="/dashboard/hackathon">Hackathon</NavLink>
-      <NavLink to="/dashboard/events/management">Student Week</NavLink>
+      <NavLink to="/dashboard/events/management">Event Registrations</NavLink>
       <NavLink to="/dashboard/members">Member Management</NavLink>
       <NavLink to="/dashboard/blogs">Handle Blogs</NavLink>
       <NavLink to="/dashboard/events-list">Events</NavLink>
@@ -118,7 +117,6 @@ const Sidebar = ({ onNavigate }) => {
   );
 
   const renderLeadNav = () => {
-    const isTreasurer = student?.title?.toUpperCase() === "TREASURER";
 
     return (
       <>
@@ -163,7 +161,20 @@ const Sidebar = ({ onNavigate }) => {
           <SubLink to="/dashboard/signup">Signup New Member</SubLink>
         </DropdownGroup>
 
-        {/* Finance Group - Treasurer Only */}
+       
+      </>
+    );
+  };
+
+  const renderStudentNav = () => {
+        const isTreasurer = student?.title?.toUpperCase() === "TREASURER";
+
+    return (
+    <>
+      <NavLink to="/dashboard/article">Post Blog</NavLink>
+      <NavLink to="/dashboard/myblog">My BlogPosts</NavLink>
+      <NavLink to="/dashboard/events-list">Upcoming Events</NavLink>
+       {/* Finance Group - Treasurer Only */}
         {isTreasurer && (
           <DropdownGroup
             name="finance"
@@ -174,18 +185,9 @@ const Sidebar = ({ onNavigate }) => {
             <SubLink to="/dashboard/bills/create">Add Bill</SubLink>
           </DropdownGroup>
         )}
-      </>
-    );
-  };
-
-  const renderStudentNav = () => (
-    <>
-      <NavLink to="/dashboard/article">Post Blog</NavLink>
-      <NavLink to="/dashboard/myblog">My BlogPosts</NavLink>
-      <NavLink to="/dashboard/blogs">All Blogs</NavLink>
-      <NavLink to="/dashboard/events-list">Upcoming Events</NavLink>
     </>
   );
+};
 
   const renderNavigation = () => {
     switch (role) {

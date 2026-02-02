@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=M+PLUS+Rounded+1c:wght@700&display=swap');
 
-h1 {
+.csl-clubs-title-text {
     font-family:  'Montserrat', sans-serif !important;
     color: #0C4182;
     font-weight: 800;

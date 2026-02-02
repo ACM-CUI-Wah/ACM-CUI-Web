@@ -30,7 +30,7 @@ const ClubsSection = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true }}
       >
-        <h1>CLUBS</h1>
+        <h1 className="csl-clubs-title-text">CLUBS</h1>
         
         <p>
           A community of innovators, designers, and problem-solvers

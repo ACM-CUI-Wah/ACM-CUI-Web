@@ -1,12 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Marker+Hatch&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
-.blogCard-container {
-  border-radius: 2%;
-  overflow: hidden;
-  max-height: 100%;
-
-  
-}
 
 .blog-img-container {
   border-radius: 13%;
@@ -67,7 +60,7 @@
 }
 @media(max-width:576px) {
     .blogCard-container{
-        height:100%;
+        min-height: 400px; 
     }
     
     
@@ -90,7 +83,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 410px; 
   padding: 0.5rem;
   position: relative;
 }
@@ -104,9 +97,10 @@
 
 .blog-image {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
   transition: transform 0.3s;
+  border-radius: 12px;
 }
 
 .blogCard-wrapper:hover .blog-image {
