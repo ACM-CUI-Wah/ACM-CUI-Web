@@ -83,7 +83,7 @@ const HackathonManagement = () => {
       <div className="ev-section-footer" style={{ marginTop: '40px', textAlign: 'right' }}>
         <button 
           className="ev-more-btn-solid" 
-          onClick={() => navigate('/events?category=HACKATHON')}
+          onClick={() => navigate('/events?category=Hackathon')}
         >
           More Hackathons
         </button>

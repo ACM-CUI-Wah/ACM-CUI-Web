@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import axiosInstance from "../../../axios";
 import "./EventListing.css";
@@ -9,18 +9,36 @@ import timeIcon from "../../../assets/Time.png";
 
 const EventListing = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All Events");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // Manually defined categories for the filter buttons
   const categories = ["All Events", "Hackathon", "Seminar", "Workshop", "Networking"];
 
+  // Get category from URL query param, default to "All Events"
+  const categoryFromUrl = searchParams.get("category");
+  const initialCategory = categoryFromUrl
+    ? categories.find(c => c.toLowerCase() === categoryFromUrl.toLowerCase()) || "All Events"
+    : "All Events";
+
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
+
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  // Update active category when URL changes
+  useEffect(() => {
+    if (categoryFromUrl) {
+      const matchedCategory = categories.find(c => c.toLowerCase() === categoryFromUrl.toLowerCase());
+      if (matchedCategory) {
+        setActiveCategory(matchedCategory);
+      }
+    }
+  }, [categoryFromUrl]);
 
   const fetchEvents = async () => {
     try {

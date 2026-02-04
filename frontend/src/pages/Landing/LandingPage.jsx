@@ -12,15 +12,20 @@ import HackathonManagement from "../Hackathon/HackathonManagement.jsx";
 import "./LandingPage.css";
 
 const LandingPage = () => {
-  const [showSplash, setShowSplash] = useState(true);
-  const [contentReady, setContentReady] = useState(false);
+  // Check if splash was already shown in this session
+  const splashAlreadyShown = sessionStorage.getItem("splashShown") === "true";
+  const [showSplash, setShowSplash] = useState(!splashAlreadyShown);
+  const [contentReady, setContentReady] = useState(splashAlreadyShown);
 
   useEffect(() => {
+    if (!showSplash) return;
+
     const timer = setTimeout(() => {
       setShowSplash(false);
+      sessionStorage.setItem("splashShown", "true");
     }, 5000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [showSplash]);
 
   useEffect(() => {
     if (!showSplash) {
@@ -35,7 +40,10 @@ const LandingPage = () => {
   if (showSplash) {
     return (
       <div style={{ overflow: "hidden", height: "100vh" }}>
-        <SplashScreen onFinish={() => setShowSplash(false)} />
+        <SplashScreen onFinish={() => {
+          setShowSplash(false);
+          sessionStorage.setItem("splashShown", "true");
+        }} />
       </div>
     );
   }
