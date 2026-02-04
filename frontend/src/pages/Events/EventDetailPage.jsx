@@ -3,15 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent";
 import Footer from "../../components/Footer/Footer";
 import axiosInstance from "../../axios";
-import "@fortawesome/fontawesome-free/css/all.min.css"; // Font Awesome
+import "@fortawesome/fontawesome-free/css/all.min.css"; 
 import "./EventDetailPage.css";
 
 const EventDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false); // Modal State
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,13 +34,11 @@ const EventDetailPage = () => {
     }
   };
 
-  // Helper function to parse hosts (handles double-encoded JSON)
+  // Helper function for hosts
   const parseHosts = (hosts) => {
     if (!hosts || !Array.isArray(hosts)) return [];
-
     return hosts.map(host => {
       try {
-        // If host is a JSON string, parse it
         if (typeof host === 'string' && host.startsWith('[')) {
           const parsed = JSON.parse(host);
           return Array.isArray(parsed) ? parsed[0] : parsed;
@@ -54,7 +54,7 @@ const EventDetailPage = () => {
     return (
       <div className="event-detail-page">
         <NavbarComponent />
-        <div style={{ textAlign: 'center', padding: '5rem' }}>
+        <div style={{ textAlign: 'center', padding: '10rem 0' }}>
           <p>Loading event details...</p>
         </div>
         <Footer />
@@ -66,12 +66,9 @@ const EventDetailPage = () => {
     return (
       <div className="event-detail-page">
         <NavbarComponent />
-        <div style={{ textAlign: 'center', padding: '5rem' }}>
+        <div style={{ textAlign: 'center', padding: '10rem 0' }}>
           <p style={{ color: '#e74c3c' }}>{error || "Event not found"}</p>
-          <button
-            onClick={() => navigate('/events')}
-            style={{ marginTop: '1rem', padding: '0.5rem 1rem', cursor: 'pointer' }}
-          >
+          <button className="register-btn" style={{ width: 'auto', padding: '10px 20px' }} onClick={() => navigate('/events')}>
             Back to Events
           </button>
         </div>
@@ -80,11 +77,13 @@ const EventDetailPage = () => {
     );
   }
 
+  const registrationProgress = ((event.registration_count || 0) / event.total_seats) * 100;
+
   return (
     <div className="event-detail-page">
       <NavbarComponent />
 
-      {/* Hero Section with fade */}
+      {/* Hero Section */}
       <section className="event-hero">
         <img
           src={event.image || '/placeholder-event.jpg'}
@@ -97,23 +96,19 @@ const EventDetailPage = () => {
 
       <main className="event-content">
         {/* LEFT SIDE */}
-
         <div className="event-left">
-          {/* Title + Intro */}
           <h2 className="event-title">{event.title}</h2>
+          <p className="event-intro">{event.description || event.content?.substring(0, 150)}</p>
 
-          <p className="event-intro">
-            {event.description || event.content}
-          </p>
-
-          {/* Date / Time / Venue */}
           <div className="event-meta-box">
             <div className="event-meta-row">
               <div className="meta-item">
                 <i className="fa-solid fa-calendar-days meta-icon"></i>
                 <div className="meta-text">
                   <span className="meta-label">Date</span>
-                  <span className="meta-value">{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  <span className="meta-value">
+                    {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </span>
                 </div>
               </div>
               <div className="meta-item">
@@ -133,26 +128,22 @@ const EventDetailPage = () => {
             </div>
           </div>
 
-          {/* Main Info Box */}
           <div className="event-info-box">
             <h3>About this event</h3>
             <p>{event.content}</p>
           </div>
 
-          {/* Speaker/Hosts */}
           {event.hosts && event.hosts.length > 0 && (() => {
             const parsedHosts = parseHosts(event.hosts);
             return parsedHosts.length > 0 && (
               <div className="speaker-box">
-                <div className="meta-item speaker-meta">
+                <div className="speaker-meta">
                   <i className="fa-solid fa-user-tie meta-icon"></i>
                   <div className="meta-text">
                     <span className="meta-label">{parsedHosts.length > 1 ? 'Hosts' : 'Host'}</span>
-                    <div className="meta-value speaker-name">
+                    <div className="speaker-name">
                       {parsedHosts.map((host, index) => (
-                        <div key={index} style={{ marginBottom: index < parsedHosts.length - 1 ? '0.5rem' : '0' }}>
-                          • {host}
-                        </div>
+                        <div key={index}>• {host}</div>
                       ))}
                     </div>
                   </div>
@@ -160,53 +151,43 @@ const EventDetailPage = () => {
               </div>
             );
           })()}
-
         </div>
 
-        {/* Right Side */}
+        {/* RIGHT SIDE */}
         <aside className="event-right">
           <div className="event-register-card">
-            {/* Header Section */}
             <div className="registration-header">
               <span className="registration-label">Registration:</span>
-              <span className="registration-count">{event.registration_count || 0}/{event.total_seats} registered</span>
+              <span className="registration-count">{event.registration_count || 0}/{event.total_seats}</span>
             </div>
 
-            {/* Progress Bar */}
             <div className="progress-bar-container">
-              <div
-                className="progress-bar-fill"
-                style={{ width: `${((event.registration_count || 0) / event.total_seats) * 100}%` }}
-              ></div>
+              <div className="progress-bar-fill" style={{ width: `${registrationProgress}%` }}></div>
             </div>
 
-            <p className="remaining-text">{event.total_seats - (event.registration_count || 0)} spots available!</p>
+            <p className="remaining-text">
+              {Math.max(0, event.total_seats - (event.registration_count || 0))} spots available!
+            </p>
 
-            {/* CTA Button */}
-            <button
-              className="register-btn"
-              onClick={() => navigate(`/events/individualform?eventId=${event.id}`)}
-            >
+            <button className="register-btn" onClick={() => setShowModal(true)}>
               Register Now
             </button>
 
-            <hr />
+            <hr style={{ border: '0', borderTop: '1px solid #eee', margin: '20px 0' }} />
 
-            {/* Organization Section */}
             <p className="org-label">Organized by:</p>
             <div className="org-row">
               <div className="org-logo-wrapper">
                 <img src="/acm-comsats-wah-chapter.png" alt="ACM Logo" className="org-logo-img" />
               </div>
               <div className="org-details">
-                <h4 className="org-name">ACM CUI Wah Chapter</h4>
+                <h4 className="org-name">ACM CUI Wah</h4>
                 <p className="org-members">100+ members</p>
               </div>
             </div>
 
-            <hr />
+            <hr style={{ border: '0', borderTop: '1px solid #eee', margin: '20px 0' }} />
 
-            {/* Perks Section */}
             <div className="event-perks">
               <div className="perk-item">
                 <span className="check-mark">✔</span>
@@ -216,14 +197,41 @@ const EventDetailPage = () => {
                 <span className="check-mark">✔</span>
                 <span>Certificate provided</span>
               </div>
-              <div className="perk-item">
-                <span className="check-mark">✔</span>
-                <span>Refreshments included</span>
-              </div>
             </div>
           </div>
         </aside>
       </main>
+
+      {/* REGISTRATION MODAL */}
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="registration-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="close-modal" onClick={() => setShowModal(false)}>&times;</button>
+            <h3>Join Event</h3>
+            <p>Select your registration preference</p>
+            
+            <div className="modal-options">
+              <div 
+                className="modal-option-card"
+                onClick={() => navigate(`/events/individualform?eventId=${event.id}`)}
+              >
+                <i className="fa-solid fa-user"></i>
+                <h4>Individual</h4>
+                <span>Register solo</span>
+              </div>
+
+              <div 
+                className="modal-option-card"
+                onClick={() => navigate(`/events/teamform?eventId=${event.id}`)}
+              >
+                <i className="fa-solid fa-users"></i>
+                <h4>Team</h4>
+                <span>Register as group</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

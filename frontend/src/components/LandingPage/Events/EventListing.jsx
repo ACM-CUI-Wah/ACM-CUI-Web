@@ -11,14 +11,15 @@ const EventListing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All Events");
   const [events, setEvents] = useState([]);
-  const [eventTypes, setEventTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Manually defined categories for the filter buttons
+  const categories = ["All Events", "Hackathon", "Seminar", "Workshop", "Networking"];
+
   useEffect(() => {
     fetchEvents();
-    fetchEventTypes();
   }, []);
 
   const fetchEvents = async () => {
@@ -27,108 +28,114 @@ const EventListing = () => {
       const res = await axiosInstance.get("/events/");
       setEvents(res.data);
       setError(null);
-    } catch (error) {
-      console.error("Error fetching events:", error);
+    } catch (err) {
+      console.error("Error fetching events:", err);
       setError("Failed to load events. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchEventTypes = async () => {
-    try {
-      const res = await axiosInstance.get("/event-types/");
-      setEventTypes(res.data);
-    } catch (error) {
-      console.error("Error fetching event types:", error);
-    }
-  };
-
-  const categories = ["All Events", ...eventTypes.map(type => type.type)];
-
+  // Filter logic for category and search term
   const filteredEvents = events.filter((event) => {
-    const matchesCategory = activeCategory === "All Events" || event.event_type?.type === activeCategory;
+    const eventTypeLabel = event.event_type?.type || event.event_type?.name || "";
+    
+    const matchesCategory = 
+      activeCategory === "All Events" || 
+      eventTypeLabel.toLowerCase() === activeCategory.toLowerCase();
+
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase());
+    
     return matchesCategory && matchesSearch;
   });
 
   return (
-    <section className="event-listing-container">
-
-      <div className="search-header">
-        <div className="search-bar-wrapper">
-          <FiSearch className="inner-search-icon" />
+    <section className="ev-list-wrapper">
+      <div className="ev-list-header">
+        {/* Search Input Section */}
+        <div className="ev-list-search-box">
+          <FiSearch className="ev-list-search-icon" />
           <input
             type="text"
-            placeholder="Search for upcoming ACM events, workshops, or seminars..."
+            placeholder="Search for events..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="premium-search-input"
+            className="ev-list-input"
           />
         </div>
 
-        <div className="filter-controls">
-          <div className="category-list">
+        {/* Filter Controls Section */}
+        <div className="ev-list-filters">
+          <div className="ev-list-categories">
             {categories.map((cat) => (
               <button
                 key={cat}
-                className={`cat-pill ${activeCategory === cat ? "active-pill" : ""}`}
+                // Applies active class strictly when selected
+                className={`ev-list-pill ${
+                  activeCategory === cat ? "ev-list-pill--active" : ""
+                }`}
                 onClick={() => setActiveCategory(cat)}
               >
                 {cat}
               </button>
             ))}
           </div>
-          <p className="results-text">{filteredEvents.length} events found</p>
+          <p className="ev-list-results-count">
+            {filteredEvents.length} events found
+          </p>
         </div>
       </div>
 
-
-      {/* Event Grid */}
-      <div className="event-grid">
+      {/* Event Grid Section */}
+      <div className="ev-list-grid">
         {loading ? (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem' }}>
+          <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "3rem" }}>
             <p>Loading events...</p>
           </div>
         ) : error ? (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#e74c3c' }}>
+          <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "3rem", color: "#e74c3c" }}>
             <p>{error}</p>
           </div>
         ) : filteredEvents.length === 0 ? (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem' }}>
-            <p>No events found matching your criteria.</p>
+          <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "3rem" }}>
+            <p>No events found for "{activeCategory}".</p>
           </div>
         ) : (
           filteredEvents.map((event) => (
-            <div className="event-card" key={event.id}>
-              <div className="event-image-wrapper">
+            <div 
+              className="ev-list-card" 
+              key={event.id}
+              onClick={() => navigate(`/events/${event.id}`)}
+            >
+              <div className="ev-list-img-box">
                 <img
                   src={event.image || '/placeholder-event.jpg'}
                   alt={event.title}
                   onError={(e) => { e.target.src = '/placeholder-event.jpg'; }}
                 />
-                <div className="card-category-tag">{event.event_type?.type || 'Event'}</div>
+                <div className="ev-list-tag">
+                  {event.event_type?.type || event.event_type?.name || 'Event'}
+                </div>
               </div>
 
-              <div className="event-details">
-                <h3 className="event-name">{event.title}</h3>
-                <p className="event-desc">{event.description || event.content}</p>
+              <div className="ev-list-body">
+                <h3 className="ev-list-title">{event.title}</h3>
+                <p className="ev-list-description">
+                  {event.description || (event.content ? event.content.substring(0, 120) + "..." : "")}
+                </p>
 
-                <div className="info-row">
-                  <div className="info-item">
-                    <img src={dateIcon} alt="Date" className="meta-icon" />
-                    <span>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                <div className="ev-list-meta">
+                  <div className="ev-list-meta-item">
+                    <img src={dateIcon} alt="Date" className="ev-list-icon" />
+                    <span>{event.date}</span>
                   </div>
-                  <div className="info-item">
-                    <img src={timeIcon} alt="Time" className="meta-icon" />
-                    <span>{event.time_from} – {event.time_to}</span>
+                  <div className="ev-list-meta-item">
+                    <img src={timeIcon} alt="Time" className="ev-list-icon" />
+                    <span>{event.time_from}</span>
                   </div>
                 </div>
 
-                <button
-                  className="register-btn"
-                  onClick={() => navigate(`/events/${event.id}`)}
-                >
+                <button className="ev-list-btn">
                   View Details
                 </button>
               </div>

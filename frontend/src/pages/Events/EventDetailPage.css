@@ -335,7 +335,133 @@
   justify-content: center;
   flex-shrink: 0;
 }
+/* 1. The Full-Screen Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Dims the background */
+  backdrop-filter: blur(4px);    /* Soft blur for focus */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;                /* Sits on top of everything */
+}
 
+/* 2. The Main White Modal Box */
+.registration-modal {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 550px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.registration-modal h3 {
+  color: #0B4184;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.registration-modal p {
+  color: #64748b;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+/* 3. The "X" Close Button */
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: #ef4444;
+}
+
+/* 4. The Option Cards Container (Side-by-Side) */
+.modal-options {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* 5. The Individual Individual/Team Cards */
+.modal-option-card {
+  flex: 1;
+  /* Reduced padding for a slimmer profile */
+  padding: 20px 15px; 
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0; /* Thinner, lighter border */
+  border-radius: 12px;        /* Slightly sharper corners for professionalism */
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  /* Added a max-width so they don't get too wide on large modals */
+  max-width: 180px; 
+  margin: 0 auto;
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Make the icon slightly smaller to match the new card size */
+.modal-option-card i {
+  font-size: 32px; 
+  color: #0B4184;
+  margin-bottom: 12px;
+}
+
+/* Smaller, tighter typography */
+.modal-option-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #1e293b;
+}
+
+.modal-option-card span {
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* Subtle hover state */
+.modal-option-card:hover {
+  border-color: #0B4184;
+  background-color: #f8fafc;
+  transform: translateY(-3px); /* Smaller lift */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-option-card:hover i {
+  transform: scale(1.1);
+}
+
+/* 7. Responsive: Stack cards vertically on mobile */
+@media (max-width: 550px) {
+  .modal-options {
+    flex-direction: column;
+  }
+  
+  .registration-modal {
+    padding: 30px 15px;
+  }
+}
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .event-content {

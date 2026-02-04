@@ -1,31 +1,33 @@
-.event-listing-container {
+/* Container & Layout */
+.ev-list-wrapper {
   max-width: 1200px;
   margin: 50px auto;
   padding: 0 20px;
   font-family: 'Poppins', sans-serif;
 }
 
-
-.search-header {
+.ev-list-header {
   margin-bottom: 50px;
 }
 
-.search-bar-wrapper {
+/* Search Bar */
+.ev-list-search-box {
   position: relative;
   width: 100%;
   margin-bottom: 25px;
 }
 
-.inner-search-icon {
+.ev-list-search-icon {
   position: absolute;
   left: 25px;
   top: 50%;
   transform: translateY(-50%);
   color: #94a3b8;
   font-size: 22px;
+  pointer-events: none;
 }
 
-.premium-search-input {
+.ev-list-input {
   width: 100%;
   padding: 20px 25px 20px 65px;
   font-size: 17px;
@@ -38,13 +40,13 @@
   box-sizing: border-box;
 }
 
-.premium-search-input:focus {
+.ev-list-input:focus {
   border-color: #0b3c7d;
   box-shadow: 0 20px 25px -5px rgba(11, 60, 125, 0.1);
 }
 
-
-.filter-controls {
+/* Filter Controls */
+.ev-list-filters {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -52,13 +54,14 @@
   gap: 20px;
 }
 
-.category-list {
+.ev-list-categories {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.cat-pill {
+/* Category Pills */
+.ev-list-pill {
   padding: 10px 22px;
   border-radius: 12px;
   border: 1px solid #f1f5f9;
@@ -70,56 +73,63 @@
   transition: all 0.2s ease;
 }
 
-.cat-pill:hover {
+/* Hover logic: only hover if NOT active */
+.ev-list-pill:not(.ev-list-pill--active):hover {
   background: #f1f5f9;
   color: #0b3c7d;
 }
 
-.active-pill {
-  background: #0b3c7d;
-  color: #fff !important;
+/* Active Pill State */
+.ev-list-pill--active {
+  background: #0b3c7d !important;
+  color: #ffffff !important;
+  font-weight: 600;
   box-shadow: 0 4px 12px rgba(11, 60, 125, 0.25);
+  border-color: #0b3c7d;
 }
 
-.results-text {
+.ev-list-results-count {
   font-size: 14px;
   color: #94a3b8;
   font-weight: 500;
 }
 
-.event-grid {
+/* Grid System */
+.ev-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 35px;
 }
 
-.event-card {
-  background: #fff;
+/* Card Styling */
+.ev-list-card {
+  background: #ffffff;
   border-radius: 20px;
   border: 1px solid #f1f5f9;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
-.event-card:hover {
+.ev-list-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
 }
 
-.event-image-wrapper {
+.ev-list-img-box {
   position: relative;
   height: 220px;
 }
 
-.event-image-wrapper img {
+.ev-list-img-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.card-category-tag {
+.ev-list-tag {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -130,37 +140,39 @@
   font-weight: 700;
   color: #0b3c7d;
   backdrop-filter: blur(4px);
+  z-index: 2;
 }
 
-.event-details {
+/* Content Details */
+.ev-list-body {
   padding: 25px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
-.event-name {
+.ev-list-title {
   font-size: 22px;
   color: #0f172a;
-  margin-bottom: 12px;
+  margin: 0 0 12px 0;
+  font-weight: 600;
 }
 
-.event-desc {
+.ev-list-description {
   font-size: 14px;
   color: #475569;
   line-height: 1.6;
   margin-bottom: 25px;
 }
 
-
-.info-row {
+.ev-list-meta {
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
   margin-top: auto;
 }
 
-.info-item {
+.ev-list-meta-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -169,17 +181,17 @@
   font-weight: 500;
 }
 
-.meta-icon {
+.ev-list-icon {
   width: 18px; 
   height: 18px;
-  object-fit: contain;
 }
 
-.register-btn {
+/* Button Styling */
+.ev-list-btn {
   width: 100%;
   padding: 14px;
   background: #0b3c7d;
-  color: #fff;
+  color: #ffffff;
   border: none;
   border-radius: 12px;
   font-weight: 600;
@@ -187,12 +199,17 @@
   transition: background 0.2s;
 }
 
-.register-btn:hover {
+.ev-list-btn:hover {
   background: #082d5e;
 }
 
-
+/* Responsive */
 @media (max-width: 768px) {
-  .filter-controls { flex-direction: column; align-items: flex-start; }
-  .event-grid { grid-template-columns: 1fr; }
+  .ev-list-filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ev-list-grid {
+    grid-template-columns: 1fr;
+  }
 }
