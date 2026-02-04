@@ -38,7 +38,7 @@ class MeetingCreateView(APIView):
         if meeting_serializer.is_valid():
             meeting = meeting_serializer.save()
             for att in attendance_data:
-                att['meeting.py'] = meeting.id
+                att['meeting'] = meeting.id
             attendance_serializer = MeetingAttendanceSerializer(many=True, data=attendance_data)
             if attendance_serializer.is_valid():
                 attendance_serializer.save()
@@ -47,6 +47,12 @@ class MeetingCreateView(APIView):
                     'message': 'Data created',
                     'data': None
                 }, status.HTTP_201_CREATED)
+            else:
+                return Response({
+                'status': 'error',
+                'message': attendance_serializer.errors,  
+                'data': None
+            }, status.HTTP_400_BAD_REQUEST)
         return Response({
             'status': 'error',
             'message': meeting_serializer.errors,
