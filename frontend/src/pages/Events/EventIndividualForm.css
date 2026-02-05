@@ -187,7 +187,7 @@
 }
 
 /* Submit Button */
-.submit-btn {
+.submit-btn1 {
   min-width: 280px;
   height: 50px;
   background-color: #0B4184;
@@ -201,17 +201,17 @@
   padding: 0 48px;
 }
 
-.submit-btn:hover {
+.submit-btn1:hover {
   background-color: #083366;
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(11, 65, 132, 0.3);
 }
 
-.submit-btn:active {
+.submit-btn1:active {
   transform: translateY(0);
 }
 
-.submit-btn:disabled {
+.submit-btn1:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
   transform: none;
@@ -271,7 +271,7 @@
     padding: 20px;
   }
 
-  .submit-btn {
+  .submit-btn1 {
     width: 100%;
     min-width: auto;
   }
@@ -330,7 +330,7 @@
     font-size: 13px;
   }
 
-  .submit-btn {
+  .submit-btn1 {
     height: 46px;
     font-size: 15px;
   }
@@ -377,7 +377,7 @@
 .input-group input:focus-visible,
 .input-group select:focus-visible,
 .checkbox-group input:focus-visible,
-.submit-btn:focus-visible {
+.submit-btn1:focus-visible {
   outline: 2px solid #0B4184;
   outline-offset: 2px;
 }

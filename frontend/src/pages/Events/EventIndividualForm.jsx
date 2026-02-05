@@ -202,7 +202,7 @@ const EventIndividualForm = () => {
 
           {/* Submit Button */}
           <div className="submit-container">
-            <button type="submit" className="submit-btn" disabled={loading}>
+            <button type="submit" className="submit-btn1" disabled={loading}>
               {loading ? 'Submitting...' : 'Submit Application'}
             </button>
           </div>
