@@ -138,6 +138,7 @@ const Sidebar = ({ onNavigate }) => {
         >
           <SubLink to="/dashboard/events-list">All Events</SubLink>
           <SubLink to="/dashboard/events/create">Create Event</SubLink>
+           <SubLink to="/dashboard/events/management">Event Registration</SubLink>
         </DropdownGroup>
 
         {/* Blogs Group */}
