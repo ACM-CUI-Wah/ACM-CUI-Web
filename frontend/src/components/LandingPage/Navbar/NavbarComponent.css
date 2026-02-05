@@ -22,6 +22,7 @@
   display: flex;
   align-items: center;
   transition: transform 0.3s ease;
+  margin-left: -20px;
    
 }
 .custom-navbar-brand:hover {
