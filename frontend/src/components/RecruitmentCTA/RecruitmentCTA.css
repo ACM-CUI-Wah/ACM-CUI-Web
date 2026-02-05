@@ -53,6 +53,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
 }
 
 .cta-button:hover {

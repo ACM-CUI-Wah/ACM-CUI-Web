@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import BlogBanner from '../../components/Blogs/BlogBanner'
 import BlogGrid from '../../components/Blogs/BlogGrid'
-import NavbarComponent from '../../components/LandingPage/Navbar/NavbarComponent';
+import Navbar from '../../components/DashboardNavbar/Navbar'
 
 import useAuthStore from '../../store/authStore'
 
@@ -13,7 +13,7 @@ const BlogListingPage = () => {
 
   return (
     <div className="blog-listing-page-wrapper">
-      <NavbarComponent/>
+      <Navbar/>
       
       {/* Wrap everything in a standard container for centered layout */}
       <div className="container mt-5">

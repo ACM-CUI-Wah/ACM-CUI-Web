@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent";
-import Footer from "../../components/Footer/Footer";
+import Navbar from "../../components/DashboardNavbar/Navbar";
 import "./RecruitmentForm.css";
 import axiosInstance from "../../axios";
 
@@ -361,12 +360,12 @@ const RecruitmentForm = () => {
     }
 
     if (!formData.secondaryRole) {
-      setAlertAndScroll("Secondary role is required.");
+      setAlertAndScroll("Secondary club is required.");
       return;
     }
 
     if (formData.secondaryRole === formData.preferredRole) {
-      setAlertAndScroll("Secondary role must be different from preferred role");
+      setAlertAndScroll("Secondary club must be different from preferred club");
       return;
     }
 
@@ -452,7 +451,7 @@ const RecruitmentForm = () => {
 
   return (
     <div className="recruitment-page">
-      <NavbarComponent />
+      <Navbar/>
 
       <div className="box-header">
         <div className="form-header">
@@ -680,18 +679,18 @@ const RecruitmentForm = () => {
 
         {/* SECTION 3 */}
         <div className="form-card">
-          <h3>Role Preferences</h3>
+          <h3>Club Preferences</h3>
 
           <div className="input-row">
             <div className="input-group">
-              <label>Preferred Role *</label>
+              <label>Preferred Club *</label>
               <select
                 name="preferredRole"
                 value={formData.preferredRole}
                 onChange={handleChange}
                 required
               >
-                <option value="">Select role</option>
+                <option value="">Select Club</option>
                 <option value="CODEHUB">CodeHub (Development)</option>
                 <option value="GRAPHICS">Graphics / UI Design</option>
                 <option value="SOCIAL_MEDIA_MARKETING">Social Media Marketing</option>
@@ -702,14 +701,14 @@ const RecruitmentForm = () => {
             </div>
 
             <div className="input-group">
-              <label>Secondary Role *</label>
+              <label>Secondary Club *</label>
               <select
                 name="secondaryRole"
                 value={formData.secondaryRole}
                 onChange={handleChange}
                 required
               >
-                <option value="">Select role</option>
+                <option value="">Select Club</option>
                 <option value="CODEHUB">CodeHub (Development)</option>
                 <option value="GRAPHICS">Graphics / UI Design</option>
                 <option value="SOCIAL_MEDIA_MARKETING">Social Media Marketing</option>
@@ -800,7 +799,7 @@ const RecruitmentForm = () => {
         </button>
       </form>
 
-      <Footer />
+      
     </div>
   );
 };

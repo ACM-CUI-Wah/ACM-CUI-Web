@@ -5,12 +5,20 @@ import { Link } from "react-router-dom";
 const NavLinks = () => {
   return (
     <>
-      <Nav.Link
+      {/* <Nav.Link
         as={Link}
         to="/blogs"
         className="fw-semibold mx-2 text-white custom-nav-link"
       >
         Blog
+      </Nav.Link> */}
+
+       <Nav.Link
+        as={Link}
+        to="/recruitment"
+        className="fw-semibold mx-2 text-white custom-nav-link"
+      >
+        Recruitment
       </Nav.Link>
 
       <Nav.Link
@@ -44,7 +52,7 @@ const NavLinks = () => {
         to="/mission"
         className="fw-semibold mx-2 text-white custom-nav-link"
       >
-        Our Mission
+        Mission
       </Nav.Link>
 
       <Nav.Link
@@ -52,7 +60,7 @@ const NavLinks = () => {
         to="/contact"
         className="fw-semibold mx-2 text-white custom-nav-link"
       >
-        Contact Us
+        Contact
       </Nav.Link>
     </>
   )

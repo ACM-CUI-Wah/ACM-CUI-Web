@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent";
 import Footer from "../../components/Footer/Footer";
 import axiosInstance from "../../axios";
 import "@fortawesome/fontawesome-free/css/all.min.css"; 
 import "./EventDetailPage.css";
+import Navbar from "../../components/DashboardNavbar/Navbar";
 
 const EventDetailPage = () => {
   const { id } = useParams();
@@ -53,7 +53,7 @@ const EventDetailPage = () => {
   if (loading) {
     return (
       <div className="event-detail-page">
-        <NavbarComponent />
+        <Navbar />
         <div style={{ textAlign: 'center', padding: '10rem 0' }}>
           <p>Loading event details...</p>
         </div>
@@ -65,7 +65,7 @@ const EventDetailPage = () => {
   if (error || !event) {
     return (
       <div className="event-detail-page">
-        <NavbarComponent />
+        <Navbar />
         <div style={{ textAlign: 'center', padding: '10rem 0' }}>
           <p style={{ color: '#e74c3c' }}>{error || "Event not found"}</p>
           <button className="register-btn" style={{ width: 'auto', padding: '10px 20px' }} onClick={() => navigate('/events')}>
@@ -81,7 +81,7 @@ const EventDetailPage = () => {
 
   return (
     <div className="event-detail-page">
-      <NavbarComponent />
+      <Navbar />
 
       {/* Hero Section */}
       <section className="event-hero">

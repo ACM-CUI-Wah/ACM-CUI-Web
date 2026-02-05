@@ -1,7 +1,7 @@
 // EventTeamForm.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent";
+import Navbar from "../../components/DashboardNavbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import axiosInstance from "../../axios";
 import "./EventTeamForm.css";
@@ -191,7 +191,7 @@ const EventTeamForm = () => {
 
   return (
     <div className="team-form">
-      <NavbarComponent />
+      <Navbar />
 
       <div className="team-form__container">
         <div className="team-form__header">

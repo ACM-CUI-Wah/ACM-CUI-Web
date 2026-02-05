@@ -11,12 +11,12 @@ const NavbarComponent = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login"); 
+    navigate("/login");
   };
 
   return (
     <Navbar expand="lg" className="py-3 shadow-sm custom-navbar-animate custom-navbar">
-      <Container>
+      <Container fluid className="custom-navbar-container">
         {/* Brand */}
         <Navbar.Brand
           as={Link}
@@ -27,24 +27,24 @@ const NavbarComponent = () => {
             src="/acm-comsats-wah-chapter.png"
             alt="ACM Logo"
             height="40"
-            className="me-2"
+            className="me-2 custom-navbar-logo"
           />
           <span className="custom-navbar-title text-white">
             ACM CUI WAH CHAPTER
           </span>
         </Navbar.Brand>
 
-
         <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav" className="justify-content-end custom-navbar-collapse">
-          <Nav className="align-items-center">
-            <NavLinks /> 
-         
+
+        <Navbar.Collapse id="navbar-nav" className="custom-navbar-collapse">
+          <Nav className="align-items-center ms-auto custom-nav">
+            <NavLinks />
+
             {token && (
               <Nav.Link
                 as={Link}
                 to="/dashboard"
-                className="custom-dashboard-link1 px-4 py-2 ms-lg-3 fw-semibold"
+                className="custom-dashboard-link1 fw-semibold custom-pill"
               >
                 Dashboard
               </Nav.Link>
@@ -53,7 +53,7 @@ const NavbarComponent = () => {
             {token ? (
               <Nav.Link
                 onClick={handleLogout}
-                className="custom-login-link1 px-4 py-2 ms-lg-3 fw-semibold"
+                className="custom-login-link1 fw-semibold custom-pill"
               >
                 Log Out
               </Nav.Link>
@@ -61,7 +61,7 @@ const NavbarComponent = () => {
               <Nav.Link
                 as={Link}
                 to="/login"
-                className="custom-login-link1 px-4 py-2 ms-lg-3 fw-semibold"
+                className="custom-login-link1 fw-semibold custom-pill"
               >
                 Log In
               </Nav.Link>
