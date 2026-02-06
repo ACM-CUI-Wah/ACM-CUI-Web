@@ -140,7 +140,7 @@ const TeamSection = () => {
     const offsetForActiveCard = activeIndex * totalCardWidth;
 
     return {
-      transform: `translateX(${viewportCenter - cardCenter - offsetForActiveCard - 30 - (windowWidth > 1024 ? 300 : 0)}px) translateY(-50%)`
+      transform: `translateX(${viewportCenter - cardCenter - offsetForActiveCard + 80 - (windowWidth > 1024 ? 300 : 0)}px) translateY(-50%)`
     };
   };
 

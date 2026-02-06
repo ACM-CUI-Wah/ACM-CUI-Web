@@ -6,6 +6,8 @@ import {
   BsCheckCircle,
   BsEye,
   BsX,
+  BsDownload
+
 } from "react-icons/bs";
 import "./Recruitment.css";
 import axiosInstance from "../../axios";
@@ -18,6 +20,9 @@ const RecruitmentManagement = () => {
   // data
   const [applications, setApplications] = useState([]);
   const [statusList, setStatusList] = useState([]);
+
+
+  const [exporting, setExporting] = useState(false);
 
   // loading + errors
   const [appsLoading, setAppsLoading] = useState(false);
@@ -48,6 +53,68 @@ const RecruitmentManagement = () => {
       .toUpperCase()
       .replace(/[\s-]+/g, "_"); // spaces or hyphen -> underscore
   };
+
+
+  const exportExcel = async () => {
+  if (!sessionId) {
+    setError("No active session found. Can't export.");
+    return;
+  }
+
+  setExporting(true);
+  setError(null);
+
+  try {
+    // Build query params based on your current filters
+    const params = {
+      session_id: sessionId,
+    };
+
+    if (roleFilter) params.preferred_role = roleFilter;     // CODEHUB, GRAPHICS, etc
+    if (statusFilter) params.status = statusFilter;         // UNDER_REVIEW, ACCEPTED, ...
+
+    // NOTE:
+    // If axiosInstance baseURL already includes "/api", then use "/recruitment/export/excel/"
+    // If NOT, then use "/api/recruitment/export/excel/"
+    const res = await axiosInstance.get("/recruitment/export/excel/", {
+      params,
+      responseType: "blob",
+    });
+
+    // Try to get filename from headers (Content-Disposition)
+    let filename = `recruitment_export_session_${sessionId}.xlsx`;
+    const cd = res.headers?.["content-disposition"];
+    if (cd && cd.includes("filename")) {
+      const match = cd.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
+      if (match?.[1]) filename = decodeURIComponent(match[1]);
+    }
+
+    const contentType =
+      res.headers?.["content-type"] ||
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+    const blob = new Blob([res.data], { type: contentType });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    const data = err.response?.data;
+    const message =
+      data?.detail ||
+      data?.message ||
+      (typeof data === "string" ? data : "Export failed.");
+    setError(message);
+  } finally {
+    setExporting(false);
+  }
+};
 
   const uiStatus = (apiStatus) => {
     const normalized = normalizeStatus(apiStatus);
@@ -789,9 +856,21 @@ const RecruitmentManagement = () => {
   </div>
 )}
 
+<button
+  type="button"
+  className="export-fab"
+  onClick={exportExcel}
+  disabled={exporting || !sessionId}
+  title="Export current filtered applications to Excel"
+>
+  <BsDownload size={18} />
+  {exporting ? "Exporting..." : "Export Excel"}
+</button>
+
 
 
     </div>
+
   );
 };
 
