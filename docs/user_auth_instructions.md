@@ -26,7 +26,7 @@ Because only a LEAD user can register new users, the LEAD sets an initial passwo
 The typical flow:
 
 1. The user clicks "Forgot password?" and enters their email.
-2. A request is sent to `auth/otp`, which responds with a short-lived JWT (expires in 5 minutes).
+2. A request is sent to `auth/otp`, which responds with a short-lived JSON Web Token (JWT) (expires in 5 minutes).
 3. The user sends this JWT along with their new password to `auth/password/reset`.
 4. The password is updated if the token is valid and unexpired.
 
@@ -46,3 +46,4 @@ sequenceDiagram
     Frontend->>Backend: POST /api/auth/password/reset (JWT + new password)
     Backend-->>Frontend: Success (password updated)
 ```
+
