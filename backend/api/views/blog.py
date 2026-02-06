@@ -125,7 +125,7 @@ class BlogUploadView(APIView):
             Response: DRF Response object with status, message, and data keys.
         """
         # 1) Normalize "images" to a list for both single/multi uploads
-        data = request.data.copy()
+        data = request.data
         files = request.FILES.getlist('images')
         if not files and 'images' in request.FILES:
             files = [request.FILES['images']]  # single -> list
@@ -305,7 +305,7 @@ class BlogEditView(APIView):
                 "data": None
             }, status=status.HTTP_404_NOT_FOUND)
 
-        data = request.data.copy()
+        data = request.data
         files = request.FILES.getlist('images')
         if files:
             data.setlist('images', files)
