@@ -1,4 +1,4 @@
-from api.models import RecruitmentSession, RecruitmentApplication, ApplicationStatus
+from api.models import RecruitmentSession, RecruitmentApplication, ApplicationStatus, Role
 from api.serializers.recruitment import (
     RecruitmentSessionSerializer,
     RecruitmentApplicationSubmissionSerializer,
@@ -21,6 +21,10 @@ from drf_spectacular.utils import (
     OpenApiParameter,
     OpenApiTypes,
 )
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 
 
 # -------------
@@ -77,6 +81,7 @@ class ApplicationStatusUpdateViewSet(ModelViewSet):
         application.save()
         return Response({"status": "updated"})
 
+
 # -----------------------------
 # Public Views
 # -----------------------------
@@ -92,6 +97,7 @@ class ActiveRecruitmentSessionView(ReadOnlyModelViewSet):
             application_start__lte=today,
             application_end__gte=today
         )
+
 
 class ApplicationSubmitView(ModelViewSet):
     queryset = RecruitmentApplication.objects.all()
@@ -125,6 +131,14 @@ class ApplicationSubmitView(ModelViewSet):
             required=False,
             enum=[status for status, _ in ApplicationStatus.choices],
         ),
+        OpenApiParameter(
+            name="preferred_role",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Filter by preferred role (e.g. CODEHUB, GRAPHICS, EVENTS_LOGISTICS)",
+            required=False,
+            enum=[r for r, _ in Role.choices],
+        ),
     ],
     responses={
         200: OpenApiTypes.BINARY,
@@ -138,6 +152,7 @@ class RecruitmentApplicationsExcelView(APIView):
         session_code = request.query_params.get("session")
         status_param = request.query_params.get("status")
         session_id = request.query_params.get("session_id")
+        preferred_role = request.query_params.get("preferred_role")
 
         applications = (
             RecruitmentApplication.objects
@@ -166,6 +181,14 @@ class RecruitmentApplicationsExcelView(APIView):
                     status=400
                 )
             applications = applications.filter(status=status_param)
+
+        if preferred_role:
+            if preferred_role not in Role.values:
+                return HttpResponse("Invalid preferred role", status=400)
+
+            applications = applications.filter(
+                role_preferences__preferred_role=preferred_role
+            )
 
         wb = Workbook()
         ws = wb.active
@@ -227,3 +250,118 @@ class RecruitmentApplicationsExcelView(APIView):
         wb.save(response)
         return response
 
+
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="session_id",
+            type=OpenApiTypes.INT,
+            location=OpenApiParameter.QUERY,
+            description="Primary key of the recruitment session (takes precedence)",
+            required=False,
+        ),
+        OpenApiParameter(
+            name="session",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Recruitment session code (e.g. FA24)",
+            required=False,
+        ),
+        OpenApiParameter(
+            name="status",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Application status",
+            enum=[s for s, _ in ApplicationStatus.choices],
+            required=False,
+        ),
+    ],
+    responses={200: OpenApiTypes.BINARY},
+    description="Export recruitment applications as a PDF",
+)
+class RecruitmentApplicationsPDFView(APIView):
+    def get(self, request):
+        session_id = request.query_params.get("session_id")
+        session_code = request.query_params.get("session")
+        status_param = request.query_params.get("status")
+
+        applications = RecruitmentApplication.objects.select_related(
+            "recruitment_session",
+            "personal_info",
+            "academic_info",
+            "role_preferences",
+        )
+
+        if session_id:
+            applications = applications.filter(
+                recruitment_session_id=session_id
+            )
+        elif session_code:
+            applications = applications.filter(
+                recruitment_session__uni_session=session_code
+            )
+
+        if status_param:
+            if status_param not in ApplicationStatus.values:
+                return HttpResponse("Invalid status", status=400)
+            applications = applications.filter(status=status_param)
+
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = (
+            'attachment; filename="recruitment_applications.pdf"'
+        )
+
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=A4,
+            rightMargin=30,
+            leftMargin=30,
+            topMargin=30,
+            bottomMargin=30,
+        )
+
+        styles = getSampleStyleSheet()
+        elements = []
+
+        elements.append(
+            Paragraph("Recruitment Applications Report", styles["Title"])
+        )
+
+        # Table header
+        data = [[
+            "ID", "Status", "Session",
+            "Name", "Email",
+            "Reg No", "Program",
+            "Preferred Role"
+        ]]
+
+        for app in applications:
+            personal = getattr(app, "personal_info", None)
+            academic = getattr(app, "academic_info", None)
+            role = getattr(app, "role_preferences", None)
+
+            data.append([
+                app.id,
+                app.status,
+                app.recruitment_session.uni_session,
+                f"{personal.first_name} {personal.last_name}" if personal else "",
+                personal.email if personal else "",
+                academic.reg_no if academic else "",
+                academic.program if academic else "",
+                role.preferred_role if role else "",
+            ])
+
+        table = Table(data, repeatRows=1)
+        table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("FONT", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
+        ]))
+
+        elements.append(table)
+        doc.build(elements)
+
+        return response
