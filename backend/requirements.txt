@@ -9,7 +9,6 @@ djangorestframework==3.16.0
 djangorestframework_simplejwt==5.5.1
 docker==7.1.0
 drf-spectacular==0.28.0
-gunicorn==23.0.0
 et_xmlfile==2.0.0
 idna==3.10
 inflection==0.5.1
@@ -28,4 +27,3 @@ rpds-py==0.27.0
 sqlparse==0.5.3
 uritemplate==4.2.0
 urllib3==2.5.0
-whitenoise==6.8.2

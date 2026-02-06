@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent";
 import Footer from "../../components/Footer/Footer";
 import axiosInstance from "../../axios";
-import "@fortawesome/fontawesome-free/css/all.min.css"; // Font Awesome
-import Footer from "../../components/Footer/Footer";
 import "@fortawesome/fontawesome-free/css/all.min.css"; 
 import "./EventDetailPage.css";
 import Navbar from "../../components/DashboardNavbar/Navbar";
