@@ -1,0 +1,97 @@
+/* Page Background */
+.create-bill-wrapper {
+ 
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+
+.form-card {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Input Group Spacing */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Labels */
+.custom-label1 {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 3px;
+}
+
+/* Inputs & Textareas */
+.custom-input,
+.custom-textarea {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.custom-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.custom-input:focus,
+.custom-textarea:focus {
+  border-color: #4182E6;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgba(65, 130, 230, 0.1);
+}
+
+/* File Input specific styling */
+.file-input-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+/* Form Buttons */
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn-design {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  padding: 5px 12px;
+  border-radius: 25px;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(to right, #4182E6, #1A54A6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  cursor: pointer;
+}
+
+.btn-design:hover {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+}
+/* Styling for the new image preview area */

@@ -1,0 +1,132 @@
+/* AttendanceForm.css - IMPROVED for time fields */
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next line */
+  justify-content: center;
+  gap: 10px; /* Increased gap slightly for better separation */
+  position: relative;
+  margin-bottom: 15px;
+  /* Add max-width to the container itself if you want to control overall form width */
+  /* max-width: 900px; */ 
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+}
+
+
+.calendar-popup {
+  position: absolute;
+  top: 100%;
+  z-index: 1000;
+  margin-top: 5px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== Time Group Styles (FIXED) ===== */
+
+.time-input-group {
+    display: flex;
+    /* Use a fixed width for the group so flex-wrap works consistently */
+    width: 170px; /* Keep this as the target width for the group */
+    align-items: center;
+    /* This gap is between the input and select inside the group */
+    gap: 4px; 
+    /* Prevent the group from shrinking less than its content needs */
+    flex-shrink: 0; 
+}
+
+.time-value-input {
+    flex-grow: 1; /* Allows this input to take available space */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    height: 32px;
+    /* Calculate width to ensure it fits with the select and gap */
+    width: calc(100% - 55px - 4px); /* 100% of parent minus select width and gap */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+.time-modifier-select {
+    width: 55px; /* Fixed width for AM/PM dropdown */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 5px 2px;
+    font-size: 13px;
+    height: 32px;
+    text-align: center;
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+/* General Meeting Input (Venue) */
+.meeting-input {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    height: 32px;
+    width: 170px; /* Matched width of time-input-group for consistency */
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+.meeting-input:focus, .time-value-input:focus, .time-modifier-select:focus {
+  outline: none;
+  border-color: #2D66AD;
+  box-shadow: 0 0 0 2px rgba(45,102,173,0.2);
+}
+
+/* ===== Notes Section (Highlights/Agenda) Styles ===== */
+
+.notes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.highlight-section, .agenda-section {
+  background: #fff;
+  padding: 15px; 
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+.highlight-section h5, .agenda-section h5 {
+  margin-bottom: 8px; 
+  color: #333;
+  font-weight: bold;
+  font-size: 1rem; 
+}
+
+.highlight-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px; 
+  min-height: 70px; 
+  resize: none;
+  font-size: 13px;
+  box-sizing: border-box; /* Crucial for full width without overflow */
+}
+
+.highlight-input:focus {
+  border-color: #2D66AD;
+  box-shadow: 0 0 0 2px rgba(45,102,173,0.2);
+}
+
+/* Media Queries for Responsiveness (from previous request) */
+
+@media (max-width: 768px) {
+  /* Allow items to take full width and stack on smaller screens */
+  .time-input-group, .meeting-input, .btn-design {
+    width: 100%; 
+    margin-bottom: 5px;
+  }
+  .filter-container {
+    padding: 0 10px; /* Add some horizontal padding to filter container */
+  }
+}

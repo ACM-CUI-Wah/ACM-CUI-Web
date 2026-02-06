@@ -1,0 +1,248 @@
+/* EventTeamForm.css */
+
+.team-form {
+  min-height: 100vh;
+  background: #f3f4f6;
+  width: 100%;
+  color: #111827;
+}
+
+.team-form,
+.team-form * {
+  box-sizing: border-box;
+}
+
+/* Wider container */
+.team-form__container {
+  width: 100%;
+  max-width: 980px;          /* increased */
+  margin: 0 auto;
+  padding: 44px 18px 70px;   /* comfortable but not huge */
+}
+
+/* Header */
+.team-form__header {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.team-form__title {
+  font-size: 34px;     /* bigger */
+  font-weight: 800;
+  color: #0b4184;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.team-form__badge {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: #9ca3af;
+  font-size: 14px;     /* bigger */
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.team-form__description {
+  font-size: 16px;     /* bigger */
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+/* Form layout */
+.team-form__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* tighter between card/terms/button */
+}
+
+/* Card */
+.team-form__card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 22px; /* slightly more */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* Section spacing inside card (tight) */
+.team-form__section + .team-form__section {
+  margin-top: 10px; /* reduced */
+}
+
+/* Titles */
+.team-form__section-title {
+  font-size: 20px;   /* bigger */
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 4px;
+  margin-top: 40px;
+}
+
+.team-form__subtitle {
+  font-size: 15px;   /* bigger */
+  color: #6b7280;
+  margin-bottom: 8px; /* tighter */
+}
+
+/* Rows */
+.team-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 6px; /* reduced */
+}
+
+/* Fields */
+.team-form__field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 6px; 
+
+}
+
+.team-form__label {
+  font-size: 15px;    /* bigger */
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 2px; 
+}
+
+/* Inputs */
+.team-form__input,
+.team-form__select {
+  width: 100%;
+  height: 46px;       /* bigger */
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 16px;    /* bigger */
+  color: #111827;
+  font-family: inherit;
+}
+
+.team-form__input::placeholder {
+  color: #9ca3af;
+}
+
+.team-form__input:focus,
+.team-form__select:focus {
+  outline: none;
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 3px rgba(11, 65, 132, 0.08);
+}
+
+/* Select arrow */
+.team-form__select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%239ca3af' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* Placeholder color for empty selects */
+.team-form__select:invalid {
+  color: #9ca3af;
+}
+.team-form__select option {
+  color: #111827;
+}
+
+/* Terms bar */
+.team-form__terms {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 18px; /* not tall */
+}
+
+.team-form__terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.team-form__checkbox {
+  width: 18px;   /* bigger */
+  height: 18px;
+  min-width: 18px;
+  margin-top: 4px;
+  accent-color: #0b4184;
+  cursor: pointer;
+}
+
+.team-form__terms-text {
+  font-size: 15px;  /* bigger */
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* Submit */
+.team-form__submit-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px; /* tighter */
+}
+
+.team-form__submit-btn {
+  min-width: 260px;
+  height: 48px;
+  background: #0b4184;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;  /* bigger */
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0 26px;
+}
+
+.team-form__submit-btn:hover {
+  background: #083366;
+}
+
+.team-form__submit-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .team-form__container {
+    padding: 32px 14px 56px;
+  }
+
+  .team-form__title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .team-form__row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .team-form__field {
+    margin-bottom: 6px;
+  }
+
+  .team-form__input,
+  .team-form__select {
+    height: 44px;
+    font-size: 16px;
+  }
+}
+.team-form__error {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc2626; /* red */
+}

@@ -1,0 +1,32 @@
+.dashboard-container {
+ 
+  color: #1e1e1e;
+  margin-top: 0%;
+}
+
+.dashboard-title {
+  font-weight: 700;
+  font-size: 33px;
+  margin-bottom: 20px;
+  color: #120808;
+}
+
+.submit-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.meeting-details-box {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 25px 30px;
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}

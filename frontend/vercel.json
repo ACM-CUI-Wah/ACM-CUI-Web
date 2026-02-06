@@ -1,0 +1,16 @@
+{
+    "buildCommand": "npm install && npm run build",
+    "outputDirectory": "dist",
+    "devCommand": "npm run dev",
+    "installCommand": "npm install",
+    "framework": "vite",
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ],
+    "env": {
+        "VITE_API_URL": "@vite_api_url"
+    }
+}

@@ -1,0 +1,177 @@
+/* ✅ Everything scoped under .regform-container to avoid overrides */
+
+.regform-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f7f6;
+  padding: 20px;
+}
+
+.regform-container .regform-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Title (✅ renamed from dashboard-title) */
+.regform-container .regform-title {
+  margin: 0 0 18px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0c4182;
+}
+
+/* Form layout */
+.regform-container .regform-form {
+  width: 100%;
+}
+
+.regform-container .regform-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.regform-container .regform-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.regform-container .regform-w45 {
+  width: 48%;
+}
+
+.regform-container .regform-w100 {
+  width: 100%;
+}
+
+/* Labels */
+.regform-container .regform-form label {
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.regform-container .regform-muted {
+  font-size: 12px;
+  color: #666;
+  margin-left: 6px;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* Inputs */
+.regform-container .regform-control {
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.regform-container .regform-control:focus {
+  border-color: #0c4182;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(12, 65, 130, 0.1);
+}
+
+/* Password field */
+.regform-container .regform-passwordField {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.regform-container .regform-passwordField .regform-control {
+  padding-right: 75px; /* space for button */
+}
+
+.regform-container .regform-togglePassword {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 14px;
+  padding: 4px 8px;
+}
+
+.regform-container .regform-togglePassword:hover {
+  color: #000;
+}
+
+/* Errors */
+.regform-container .regform-error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Buttons */
+.regform-container .regform-buttonRow {
+  text-align: center;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.regform-container .regform-submitBtn {
+  padding: 13px 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #0c4182;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  transition: transform 0.08s ease, opacity 0.2s ease;
+}
+
+.regform-container .regform-submitBtn:hover {
+  opacity: 0.95;
+}
+
+.regform-container .regform-submitBtn:active {
+  transform: scale(0.98);
+}
+
+.regform-container .regform-submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .regform-container .regform-card {
+    padding: 25px 20px;
+  }
+
+  .regform-container .regform-row {
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+
+  .regform-container .regform-w45 {
+    width: 100%;
+  }
+
+  .regform-container .regform-submitBtn {
+    width: 100%;
+  }
+}

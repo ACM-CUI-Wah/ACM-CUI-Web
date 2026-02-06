@@ -1,0 +1,174 @@
+/* Animation */
+.custom-navbar-animate {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInNavbar 0.8s ease-out forwards;
+}
+
+@keyframes fadeInNavbar {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-navbar {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #2d66ad !important;
+  z-index:10;
+}
+
+/* Full width but with a nice max width */
+.custom-navbar-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Brand */
+.custom-navbar-brand {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.custom-navbar-brand:hover {
+  transform: scale(1.03);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.custom-navbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.custom-navbar-title:hover {
+  color: #f5f5f5;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+}
+
+/* ✅ Desktop nav spacing control (prevents overflow 1024–1440) */
+.custom-nav {
+  gap: clamp(6px, 0.8vw, 14px);
+  flex-wrap: wrap;            /* allows wrap instead of clipping */
+  justify-content: flex-end;
+}
+
+.custom-nav-link {
+  position: relative;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0.45rem clamp(0.45rem, 0.7vw, 1rem);
+  font-size: clamp(0.92rem, 0.9vw, 1rem);
+  transition: color 0.3s ease;
+}
+
+.custom-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #fff;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.custom-nav-link:hover::after {
+  width: 100%;
+}
+
+.custom-nav-link:hover {
+  color: #f8f9fa;
+}
+
+.custom-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: 0.5rem clamp(0.85rem, 1vw, 1.25rem);
+  margin-left: clamp(6px, 0.7vw, 14px);
+}
+
+/* Buttons */
+.custom-login-link1 {
+  color: #2d66ad !important;
+  background-color: #fff;
+  border-radius: 999px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.custom-login-link1:hover {
+  background-color: #2d66ad;
+  color: #fff !important;
+  box-shadow: 0 0 15px rgba(30, 79, 145, 0.9);
+  transform: scale(1.06);
+  border: 2px solid #fff;
+}
+
+.custom-dashboard-link1 {
+  color: #2d66ad !important;
+  background-color: #ffffff;
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+.custom-dashboard-link1:hover {
+  background-color: #2d66ad !important;
+  color: #fff !important;
+  border: 2px solid #fff;
+  transform: scale(1.06);
+}
+
+
+.custom-navbar-collapse {
+  background: transparent !important;
+  padding: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 991.98px) {
+  .custom-navbar-collapse {
+    background-color: #2d66ad !important;
+    padding: 1rem;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .custom-navbar-collapse .custom-nav-link {
+    margin-bottom: 0.75rem;
+  }
+
+  .custom-pill {
+    display: block;
+    margin-left: 0;
+    margin-bottom: 0.75rem;
+    width: fit-content;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .custom-navbar-title {
+    display: none;
+  }
+  .custom-navbar-logo {
+    height: 36px;
+  }
+}
+
+@media (max-width: 375px) {
+  .custom-navbar-logo {
+    height: 32px;
+  }
+}

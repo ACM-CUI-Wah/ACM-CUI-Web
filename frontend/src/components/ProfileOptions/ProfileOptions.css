@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
+
+.profile-options-box {
+  position: fixed;
+  top: 32%;
+  left: 88%;
+  transform: translate(-50%, -50%);
+  width: 20%;
+  height: 40%;
+  background: #fff;
+  border: 1px solid #0c4182;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15); 
+  font-family: "Work Sans", sans-serif;
+  overflow: hidden; 
+  padding: 8px 0;
+}
+.profile-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #0c4182;
+}
+.option-btn {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid #0c4182;
+  background: white;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #0c4182;
+  transition: all 0.3s ease;
+  padding: 12px;
+}
+
+.option-btn:last-child {
+  border-bottom: none;
+}
+
+.option-btn:hover {
+  background: #0c4182;
+  color: white;
+  transform: scale(1.02); 
+}
+
+@media (max-width: 960px) {
+  .profile-options-box {
+     position: fixed;
+    top: 60%;
+    left: 50%;
+    width: 70%;
+    height: 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-options-box {
+     position: fixed;
+     top: 60%;
+    left: 50%;
+    width: 80%;
+    height: 40%;
+  }
+}

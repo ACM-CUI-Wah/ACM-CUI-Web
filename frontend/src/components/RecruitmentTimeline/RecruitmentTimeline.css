@@ -1,0 +1,119 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400&display=swap');
+
+.timeline-section {
+  padding: 60px 20px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.timeline-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.timeline-main-title {
+  color: #0B4184;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.timeline-subtitle {
+  color: #777;
+  font-size: 1rem;
+}
+
+.timeline-container {
+  width: 100%;
+  max-width: 850px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.timeline-row {
+  background-color: #f4f7fa; 
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: transform 0.2s ease;
+}
+
+.timeline-row:hover {
+  transform: scale(1.01);
+  border-color: #cbd5e0;
+}
+
+.timeline-icon-box {
+  width: 50px;
+  height: 50px;
+  background-color: #eef4ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-icon {
+  font-size: 1.4rem;
+}
+
+.timeline-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-item-title {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #333;
+  font-weight: 700;
+}
+
+.timeline-item-date {
+  margin: 4px 0 0 0;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+
+@media (max-width: 600px) {
+  .timeline-main-title {
+    font-size: 1.8rem;
+  }
+  
+  .timeline-row {
+    padding: 12px 15px;
+  }
+}
+.timeline-icon-box {
+  width: 50px;
+  height: 50px;
+  background-color: #DBEAFE; 
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;  
+}
+
+
+.timeline-custom-img {
+  width: 60%;      
+  height: 60%;
+  object-fit: contain;
+}
+
+
+.timeline-row:hover .timeline-custom-img {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}

@@ -1,0 +1,482 @@
+/* ==========================================
+   Event Detail Page CSS - Final Version
+   ========================================== */
+
+.event-detail-page {
+  font-family: "Ubuntu", sans-serif;
+  background-color: #f5f7fb;
+}
+
+/* HERO WITH FADE */
+.event-hero {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+}
+
+.event-hero-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.event-hero-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 60%,
+    #f5f7fb 100%
+  );
+}
+
+/* MAIN CONTENT LAYOUT */
+.event-content {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 30px;
+}
+
+/* LEFT SIDE */
+.event-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.event-title {
+  color: #0B4184;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.event-intro {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 25px;
+  max-width: 800px;
+}
+
+/* DATE / TIME / VENUE BOX */
+.event-meta-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  max-width: 815px;
+  margin-bottom: 40px;
+}
+
+.event-meta-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.meta-item {
+  flex: 1;
+  background: #edf2f8;
+  padding: 14px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meta-item.full {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.meta-icon {
+  font-size: 20px;
+  color: #003d7c; /* Matched to Registration Blue */
+  flex-shrink: 0;
+}
+
+.meta-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 18px;
+}
+
+.meta-value {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #111827;
+}
+
+/* MAIN INFO BOX */
+.event-info-box {
+  background: #ffffff;
+  width: 815px;
+  min-height: 708px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.event-info-box h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.event-info-box p,
+.event-info-box li {
+  color: #555;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.event-info-box ul {
+  padding-left: 18px;
+}
+
+/* SPEAKER BOX */
+.speaker-box {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  width: 815px;
+  margin-bottom: 40px;
+}
+
+.speaker-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #edf2f8;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.speaker-name {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #111827;
+}
+
+.speaker-title {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* ==========================================
+   RIGHT SIDE - REGISTRATION CARD (UPDATED)
+   ========================================== */
+
+.event-right {
+  align-self: flex-start;
+}
+
+.event-register-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  position: sticky;
+  top: 120px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+/* Registration Row */
+.registration-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.registration-label {
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.registration-count {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Progress Bar */
+/* The container acts as the "gray" remaining part of the bar */
+/* Filled portion of the bar */
+.progress-bar-fill {
+  height: 100%;
+  background-color: #003d7c; /* Navy blue */
+  
+  /* Apply rounding to all corners to ensure the right end is curved */
+  border-radius: 5px; 
+  
+  transition: width 0.5s ease-in-out;
+}
+
+/* Ensure the container has the same height and rounding */
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background-color: #e5e7eb !important; /* Gray track */
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.remaining-text {
+  font-size: 14px;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+/* Button */
+.register-btn {
+  width: 100%;
+  padding: 14px;
+  background: #0B4184;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.register-btn:hover {
+  background: #002a55;
+}
+
+
+
+/* Organized By Section */
+.org-label {
+  color: #6b7280;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.org-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.org-logo-wrapper {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.org-logo-img {
+  max-width: 100%;
+  height: auto;
+}
+
+.org-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.org-members {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Perks List */
+.event-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.perk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #4b5563;
+}
+
+.check-mark {
+  width: 26px; 
+  height: 26px;
+  border-radius: 50%;
+  background-color: #e7f8ef; /* Light green bg */
+  color: #22c55e;           /* Success green text */
+  font-size: 14px;          /* Scaled font size */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* 1. The Full-Screen Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Dims the background */
+  backdrop-filter: blur(4px);    /* Soft blur for focus */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;                /* Sits on top of everything */
+}
+
+/* 2. The Main White Modal Box */
+.registration-modal {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 550px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.registration-modal h3 {
+  color: #0B4184;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.registration-modal p {
+  color: #64748b;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+/* 3. The "X" Close Button */
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: #ef4444;
+}
+
+/* 4. The Option Cards Container (Side-by-Side) */
+.modal-options {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* 5. The Individual Individual/Team Cards */
+.modal-option-card {
+  flex: 1;
+  /* Reduced padding for a slimmer profile */
+  padding: 20px 15px; 
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0; /* Thinner, lighter border */
+  border-radius: 12px;        /* Slightly sharper corners for professionalism */
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  /* Added a max-width so they don't get too wide on large modals */
+  max-width: 180px; 
+  margin: 0 auto;
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Make the icon slightly smaller to match the new card size */
+.modal-option-card i {
+  font-size: 32px; 
+  color: #0B4184;
+  margin-bottom: 12px;
+}
+
+/* Smaller, tighter typography */
+.modal-option-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #1e293b;
+}
+
+.modal-option-card span {
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* Subtle hover state */
+.modal-option-card:hover {
+  border-color: #0B4184;
+  background-color: #f8fafc;
+  transform: translateY(-3px); /* Smaller lift */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-option-card:hover i {
+  transform: scale(1.1);
+}
+
+/* 7. Responsive: Stack cards vertically on mobile */
+@media (max-width: 550px) {
+  .modal-options {
+    flex-direction: column;
+  }
+  
+  .registration-modal {
+    padding: 30px 15px;
+  }
+}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .event-content {
+    grid-template-columns: 1fr;
+    margin-top: 20px;
+  }
+
+  .event-info-box,
+  .speaker-box,
+  .event-meta-box {
+    width: 100%;
+  }
+
+  .event-right {
+    position: relative;
+    top: 0;
+  }
+}

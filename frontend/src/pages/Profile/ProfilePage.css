@@ -1,0 +1,95 @@
+.profile-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-container h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.edit-icon {
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 10px;
+}
+
+.message {
+  color: green;
+  margin-bottom: 16px;
+}
+
+.profile-form div {
+  margin-bottom: 16px;
+}
+
+.profile-form label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #374151;
+}
+
+.profile-form input,
+.profile-form textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.profile-form p {
+  padding: 8px 12px;
+  background-color: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  margin: 0;
+}
+
+.profile-preview {
+  display: block;
+  margin: 8px auto 16px auto;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.submit-btn {
+  background-color: #2563eb;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.cancel-btn {
+  background-color: #e5e7eb;
+  color: #374151;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #d1d5db;
+}

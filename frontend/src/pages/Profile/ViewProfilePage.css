@@ -1,0 +1,50 @@
+.view-profile-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+}
+
+.view-profile-container h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.profile-message {
+  margin-bottom: 16px;
+  color: #dc2626;
+}
+
+.profile-section {
+  margin-bottom: 16px;
+}
+
+.profile-section label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #374151; 
+}
+
+.profile-section p {
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb; 
+  border-radius: 6px;
+  background-color: #f9fafb; 
+  margin: 0;
+}
+
+.profile-preview {
+  display: block;
+  margin: 0 auto 16px auto;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}

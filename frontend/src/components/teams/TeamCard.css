@@ -1,0 +1,53 @@
+.teams-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.teams-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(145deg, #ffffff, #f9f9f9);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  width: 270px;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.teams-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.teams-card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 2px solid #eee;
+}
+
+.teams-card-content {
+  padding: 16px;
+}
+
+.teams-card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #222;
+  margin: 8px 0;
+}
+
+.teams-card-role {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.teams-card-description {
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.6;
+}

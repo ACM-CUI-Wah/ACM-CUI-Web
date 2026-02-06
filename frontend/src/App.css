@@ -1,0 +1,8 @@
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.dashboard-title{
+    font-family: Rethink Sans, sans-serif;
+    font-size: 2.5rem;
+}

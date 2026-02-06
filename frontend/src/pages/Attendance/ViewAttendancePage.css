@@ -1,0 +1,228 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Ropa+Sans&family=Rosario:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+/* ViewAttendancePage.css - Modified for less spacing/smaller elements */
+
+.dashboard-container {
+  /* No change needed for main container width */
+  width: 100%;
+  margin: 0 auto;
+}
+
+.main-content {
+  /* Reduced top padding significantly */
+  padding: 30px 15px 15px 15px;
+}
+
+.dashboard-title {
+  font-weight: 700;
+  /* Reduced font size */
+  font-size: 26px;
+  /* Reduced bottom margin */
+  margin-bottom: 15px;
+  color: #120808;
+  text-align: center;
+}
+
+/* ===== Buttons ===== */
+.btn-design {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Reduced font size */
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  /* Reduced padding (smaller button height/width) */
+  padding: 6px 16px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(to right, #4182E6, #1A54A6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.btn-design:hover {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Meeting Details ===== */
+.meeting-details-box {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px; /* Slightly reduced border radius */
+  /* Reduced padding */
+  padding: 15px 20px;
+  /* Reduced vertical margin */
+  margin: 1.5rem auto;
+  max-width: 500px; /* Reduced max width */
+  display: flex;
+  flex-direction: column;
+  /* Reduced gap between details */
+  gap: 10px;
+  text-align: center;
+}
+
+.meeting-details-box h5 {
+  color: #2D66AD;
+  /* Reduced font size */
+  font-size: 1.2rem;
+  font-weight: 700;
+  /* Reduced padding and margin */
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0; /* Thinner border */
+}
+
+.meeting-details-box p {
+  margin: 0;
+  color: #333;
+  /* Reduced font size */
+  font-size: 0.95rem;
+  /* Reduced line height */
+  line-height: 1.3;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.meeting-details-box p strong {
+  color: #555;
+  font-weight: 600;
+  /* Reduced min width and margin */
+  min-width: 80px;
+  margin-right: 8px;
+}
+
+/* Updated button spacing in the component: */
+/* I've added a class `compact-button-group` to the `div` that wraps the buttons, which you'll need to apply in your React component. */
+/* You need to modify the div wrapping the buttons in `ViewAttendancePage.jsx`: */
+
+/* OLD: */
+/* <div className="text-center mt-3 d-flex justify-content-center gap-3"> */
+
+/* NEW: */
+/* <div className="text-center mt-2 d-flex justify-content-center gap-2 compact-button-group"> */
+
+.compact-button-group {
+    /* Reduced top margin and gap */
+    margin-top: 10px !important;
+    gap: 10px !important;
+}
+
+
+/* ===== Attendance Charts & Stats (Assuming these are in components you haven't shared, applying a general smaller style) ===== */
+.chart-box, .stats-box {
+  background: #fff;
+  /* Reduced padding */
+  padding: 15px;
+  border-radius: 6px; /* Smaller border radius */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.04); /* Lighter shadow */
+  text-align: center;
+  /* Reduced size */
+  width: 250px;
+  min-height: 200px;
+}
+
+.stats-box {
+  text-align: left;
+}
+
+.stats-box p {
+  /* Reduced font size */
+  font-size: 1rem;
+  margin-bottom: 5px; /* Reduced vertical spacing for stats */
+}
+
+.stat-number {
+  font-weight: bold;
+  float: right;
+  color: #2D66AD;
+}
+
+/* Legend item size is fine */
+
+/* ===== Attendance Section ===== */
+.attendance-section {
+  background-color: #fff;
+  /* Reduced padding */
+  padding: 15px;
+  border-radius: 10px; /* Reduced border radius */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06); /* Lighter shadow */
+  /* Reduced top margin */
+  margin-top: 15px;
+  max-width: 700px; /* Reduced max width */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.attendance-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  /* Reduced padding and margin */
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #eee; /* Thinner border */
+  font-weight: bold;
+  color: #2D66AD;
+  /* Reduced font size */
+  font-size: 0.9rem;
+}
+
+.col-name-header { flex: 3; text-align: left; padding-left: 15px; } /* Reduced padding */
+.col-reg-header { flex: 2; text-align: left; }
+.col-status-header { flex: 1.5; display: flex; justify-content: center; }
+
+.attendance-list {
+  display: flex;
+  flex-direction: column;
+  /* Reduced gap between rows */
+  gap: 5px;
+}
+
+.student-attendance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Reduced padding */
+  padding: 6px 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.student-attendance-row:last-child { border-bottom: none; }
+
+.student-name { flex: 3; text-align: left; padding-left: 15px; font-size: 14px; color: #444; } /* Reduced padding and font size */
+.student-reg { flex: 2; text-align: left; font-size: 14px; color: #666; } /* Reduced font size */
+/* Status styles are fine, but will inherit smaller line height */
+
+/* ===== Media Queries ===== */
+@media (max-width: 992px) {
+  .chart-box, .stats-box { width: 48%; } /* Adjusted slightly */
+  .attendance-section { max-width: 100%; padding: 10px; } /* Reduced padding */
+}
+
+@media (max-width: 768px) {
+  .main-content { padding: 15px 10px; } /* Reduced padding */
+  .dashboard-title { font-size: 22px; } /* Reduced font size */
+  .btn-design { width: 100%; margin-bottom: 8px; } /* Reduced margin */
+  .chart-box, .stats-box { width: 100%; margin: 0 auto; }
+  /* Reduced min-width for smaller screens to use less horizontal space */
+  .attendance-header-row, .student-attendance-row { min-width: 500px; } 
+}
+
+@media (max-width: 480px) {
+  .dashboard-title { font-size: 18px; } /* Reduced font size */
+  .btn-design { font-size: 14px; padding: 5px 12px; } /* Further reduced button size */
+  .student-name, .student-reg { font-size: 13px; } /* Further reduced font size */
+}
+
+@media (max-width: 400px) {
+  .student-name { flex: 2; font-size: 12px; padding-left: 8px; } /* Reduced font size and padding */
+  .student-reg { flex: 1.5; font-size: 12px; } /* Reduced font size */
+  .col-status-header { flex: 1; }
+}

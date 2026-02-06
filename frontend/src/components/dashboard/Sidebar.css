@@ -1,0 +1,254 @@
+/* Sidebar.css - Responsive Dashboard Sidebar */
+
+/* ==================== BASE SIDEBAR ==================== */
+
+.sidebar {
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0.5rem 0 1.25rem 0;
+  color: #333;
+}
+
+/* ==================== SIDEBAR ACTIONS ==================== */
+
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 0.25rem;
+}
+
+.no-actions {
+  text-align: center;
+  color: #666;
+  padding: 1rem;
+}
+
+/* ==================== BUTTONS ==================== */
+
+.sidebar-actions .btn {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 0;
+  text-align: left;
+  background-color: #0C4182;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar-actions .btn:hover {
+  background-color: #0a3566;
+  color: #fff;
+  transform: translateX(2px);
+}
+
+.sidebar-actions .btn.active {
+  background-color: #083059;
+  box-shadow: inset 3px 0 0 #fff;
+}
+
+/* ==================== DROPDOWN GROUPS ==================== */
+
+.sidebar-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.25rem;
+}
+
+.dropdown-toggle-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.arrow {
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
+  margin-left: 8px;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ==================== DROPDOWN CONTENT ==================== */
+
+.dropdown-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  margin-top: 4px;
+  padding: 6px;
+  animation: slideDown 0.2s ease-out;
+}
+
+.sub-link {
+  width: 100% !important;
+  background-color: #1a5cad !important;
+  font-size: 0.85rem !important;
+  padding: 10px 14px !important;
+  margin: 2px 0 !important;
+  border-radius: 6px !important;
+}
+
+.sub-link:hover {
+  background-color: #256bbd !important;
+}
+
+.sub-link.active {
+  background-color: #134a8a !important;
+  box-shadow: inset 3px 0 0 #fff;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== TABLET (769px - 1024px) ==================== */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    padding: 0.75rem;
+  }
+
+  .sidebar-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-actions .btn {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+
+  .sub-link {
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ==================== MOBILE (768px and below) ==================== */
+
+@media (max-width: 768px) {
+  .sidebar {
+    padding: 1rem;
+    height: 100%;
+  }
+
+  .sidebar-title {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .sidebar-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+    overflow-y: auto;
+  }
+
+  .sidebar-actions .btn {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    white-space: normal;
+  }
+
+  .sidebar-actions .btn:hover {
+    transform: none;
+    background-color: #0a3566;
+  }
+
+  .sidebar-group {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  .dropdown-toggle-btn {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .arrow {
+    display: inline;
+  }
+
+  .dropdown-content {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.03);
+    box-shadow: none;
+    border-radius: 8px;
+    padding: 6px;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sub-link {
+    width: 100% !important;
+    text-align: left !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+/* ==================== SMALL MOBILE (480px and below) ==================== */
+
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 0.75rem;
+  }
+
+  .sidebar-title {
+    font-size: 1rem;
+  }
+
+  .sidebar-actions {
+    gap: 0.2rem;
+  }
+
+  .sidebar-actions .btn {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+
+  .dropdown-content {
+    padding: 4px;
+    gap: 2px;
+  }
+
+  .sub-link {
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+}

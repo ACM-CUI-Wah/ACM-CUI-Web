@@ -1,0 +1,125 @@
+.attendance-section {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-top: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.attendance-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #eee;
+  font-weight: bold;
+  color: #2D66AD;
+}
+
+.col-name-header {
+  flex: 3;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.col-reg-header {
+  flex: 2;
+  text-align: left;
+}
+
+.col-status-header {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.status-header-labels {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.student-attendance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.student-attendance-row:last-child {
+  border-bottom: none;
+}
+
+.student-name {
+  flex: 3;
+  text-align: left;
+  padding-left: 20px;
+  font-size: 15px;
+  color: #444;
+}
+
+.student-reg {
+  flex: 2;
+  text-align: left;
+  font-size: 15px;
+  color: #666;
+}
+
+.student-status-controls {
+  flex: 1.5;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.circle input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.circle.active::before {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.circle.present.active {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.circle.absent.active {
+  background-color: #F44336;
+  border-color: #F44336;
+}
+
+.circle.leave.active {
+  background-color: #FFC107;
+  border-color: #FFC107;
+}

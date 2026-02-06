@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+
+body {
+  margin: 0;
+  overflow-x: hidden; 
+}
+
+.mission-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.content-container {
+  max-width: 800px;
+  text-align: center;
+}
+
+.scaled-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: rgba(12, 65, 130, 1);
+  margin-top: 2rem;
+   
+
+}
+@keyframes glow {
+  0%, 100% {
+    text-shadow: -4px 0 4px #0c4182dc;
+  }
+  50% {
+    text-shadow: -4px 0 12px #0c4182;
+  }
+}
+
+
+.mission-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5rem;
+  margin-top: 15px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
+  color: rgba(12, 65, 130, 1);
+  justify-content: center;
+}
+
+
+.missions-learn-more-btn {
+  font-family: 'Montserrat', sans-serif;
+  margin-top: 1rem;
+  padding: 15px 40px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgba(12, 65, 130, 1);
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.missions-learn-more-btn:hover {
+  background-color: #092f60; 
+  color: #f9f9f9;
+  transform: translateY(-2px); 
+  cursor: pointer;
+}
+
+.brush-image {
+  position: relative;
+  top: 140px;
+  left: 60%;
+  transform: translateX(-50%);
+  height: auto;
+  z-index: -1;
+  max-width: 100%;
+}
+
+
+ .waves-image {
+  position: absolute;
+  overflow: visible;
+  top: -70px;
+  left: 0;
+  width: 30vw; 
+  height: auto;
+  z-index: -1;
+  max-width: none;
+  min-width: 150px; 
+}
+@media (max-width: 768px) {
+  
+  .mission-text {
+    font-size: 1rem;
+    justify-content: center;
+    line-height: 1.25rem;
+  }
+  .heading {
+    font-size: 2rem;
+  }
+ 
+    .waves-image {
+    top: -50px;         
+    left: 0px;         
+    width: 15vw;        
+    min-width: 130px;   
+    height: auto;
+    z-index: -2;
+    position: absolute;
+  }
+  .missions-learn-more-btn {
+    padding: 12px 30px;
+
+  }
+}

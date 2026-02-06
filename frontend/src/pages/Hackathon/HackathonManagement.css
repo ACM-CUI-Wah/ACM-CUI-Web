@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=M+PLUS+Rounded+1c:wght@700&display=swap');
+
+/* ==================== TITLE & HEADER ==================== */
+.title {
+    color: #0C4182;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    text-shadow: -4px 0 4px #0c4182dc;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    animation: glow 1.5s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: -4px 0 4px #0c4182dc; }
+    50% { text-shadow: -4px 0 20px #2563eb; }
+}
+
+.hackathon-header {
+    margin-bottom: 110px; 
+    text-align: center;
+}
+
+.hackathon-header p {
+    color: #64748b;
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+/* ==================== SECTION & GRID ==================== */
+.hackathon-section {
+    padding: 80px 20px;
+    background-color: #f8faff;
+}
+
+.hackathon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 70px 40px; 
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ==================== CARD DESIGN ==================== */
+.hackathon-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 60px 30px 30px; 
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    text-align: left;
+}
+
+.hackathon-card:hover {
+    transform: translateY(-10px);
+}
+
+.hackathon-icon-badge {
+    position: absolute;
+    top: -35px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75px; /* Slightly increased size for better presence */
+    height: 75px;
+    background: #e0eaff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(30, 58, 138, 0.15);
+    border: 4px solid #ffffff; /* White border to make it pop */
+    z-index: 5;
+    overflow: hidden; /* CRITICAL: Clips the rectangular image to the circle */
+}
+
+.card-logo-img {
+    width: 100%;      /* Take full width of badge */
+    height: 100%;     /* Take full height of badge */
+    object-fit: cover; /* CRITICAL: Fills the circle without stretching */
+    object-position: center;
+    display: block;
+}
+
+.card-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 15px;
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+.description {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    /* Optional: limit description height for card uniformity */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ==================== META INFO ==================== */
+.meta-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #475569;
+}
+
+.small-meta-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* ==================== BUTTONS & ACTIONS ==================== */
+.card-action {
+    display: flex;
+    justify-content: center; 
+    width: 100%;
+}
+
+.learn-more-link {
+    display: inline-block;
+    padding: 12px 40px; 
+    background-color: #1e3a8a;
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: none;
+    outline: none;
+}
+
+.learn-more-link:hover {
+    background-color: #162d6b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+}
+
+.learn-more-link:focus, 
+.learn-more-link:focus-visible {
+    outline: none;
+    border: none;
+}
+
+/* Footer button matching your events section */
+.ev-section-footer {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ev-more-btn-solid {
+    background-color: #0C4182;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.ev-more-btn-solid:hover {
+    background-color: #083366;
+}

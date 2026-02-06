@@ -1,0 +1,44 @@
+.attendance-chart-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.chart-box, .stats-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  text-align: center;
+  width: 280px;
+  min-height: 220px;
+}
+
+.stats-box {
+  text-align: left;
+}
+
+.stats-box p {
+  font-size: 1.1rem;
+  margin: 5px 0;
+}
+
+.stat-number {
+  font-weight: bold;
+  float: right;
+  color: #2D66AD;
+}
+
+.legend-item {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.legend-item.present { background-color: #2d66ad; }
+.legend-item.absent { background-color: #9ba0a4; }
+.legend-item.leave { background-color: #5ba3ea; }

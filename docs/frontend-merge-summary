@@ -1,0 +1,15 @@
+## Functionalities Added
+
+### 1. Landing Page Integration
+- Assembled full landing page layout using modular components.
+- Components added:
+  - Navbar
+  - Hero Section 
+  - Footer  
+  - Blog,Achievements,Clubs
+  - Mission Section
+
+### 2. Responsive Design
+- Layout adapts to all screen sizes.
+- Mobile-first design using Flexbox and Bootstrap.
+

@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+
+.hero-section {
+    background-color: #2d66ad;
+}
+
+h3 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+.hero-box {
+    height: auto;
+    background-color: #80a4cc;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hero-box h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  color: #0C4182;
+}
+
+.hero-box p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #0C4182;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.hero-section img {
+    max-height: 120px;
+}
+
+.hero-section h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+}
+
+@media (max-width: 762px) {
+  .hero-box {
+    height: auto;
+    padding: 1rem;
+  }
+
+  .hero-box h2 {
+    font-size: 1.8rem;
+  }
+
+  .hero-box p {
+    font-size: 1rem;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hero-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .hero-box {
+    height: auto;
+    padding: 1.5rem;
+  }
+
+  .hero-box h2 {
+    font-size: 2.2rem;
+  }
+
+  .hero-box p {
+    font-size: 1.1rem;
+  }
+
+  .hero-section h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-section img {
+    max-height: 100px;
+  }
+}
+
+.hero-logo {
+  max-height: 190px;
+  margin-bottom: 1rem;
+}
+
+.left-heading {
+  margin-bottom: 2rem;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.hero-stats div {
+  min-width: 90px;
+}
+
+@media (max-width: 1024px) {
+  .hero-stats {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-stats {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .left-heading {
+    font-size: 1.8rem;
+  }
+
+  .hero-logo {
+    max-height: 120px;
+  }
+}
+
+.typing-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #fff;
+  animation: blink 0.8s step-end infinite;
+  letter-spacing: 1px;
+}
+
+.logo-wrapper {
+  margin-bottom: 2rem;
+}
+
+.left-heading {
+  display: block;
+  font-size: 2.5rem;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 2rem;
+}
+
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.blinking-cursor::after {
+  content: "|";
+  animation: blink 0.7s infinite;
+  margin-left: 2px;
+  font-weight: normal;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}

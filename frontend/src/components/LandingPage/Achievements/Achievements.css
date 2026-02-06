@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rosario:ital,wght@0,300..700;1,300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+
+.title {
+  font-family: 'Montserrat', sans-serif !important;
+  color: #0C4182;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  text-shadow: -4px 0 4px #0c4182dc;
+  letter-spacing: 2px;
+  animation: glow 1.5s ease-in-out infinite;
+}
+
+.boxcard {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+  padding: 2rem 1.5rem;
+  opacity: 0.9;
+  border-radius: 50px 50px 10px 10px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.boxcard:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+}
+
+.rounded-circle {
+  background: linear-gradient(#FFF, #e9e7e7);
+  height: 100px;
+  width: 100px;
+  border: 4px solid gray;
+  font-family: "Montserrat", sans-serif;
+  font-size: 60px;
+  font-weight: 800;
+  color: black;
+  margin: 0 auto;
+}
+
+.achievement-title {
+  font-family: "Montserrat", sans-serif;
+  color: black;
+  margin-top: 35px;
+  font-weight: 900;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  flex-grow: 1;
+}
+
+.big-o {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: black;
+}
+
+.acheivement-text {
+  color: white;
+  line-height: 1.4;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.arrow {
+  color: white;
+  font-size: 38px;
+  position: absolute;
+  right: 20px;
+  bottom: 8px;
+}
+
+.achievements-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/circle2.png'), url('../assets/circle1.png');
+  background-repeat: no-repeat, no-repeat;
+  background-size: 8%, 34.5%;
+  background-position: 30% 4%, 0% 100%;
+  opacity: 0.6;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.achievements-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .boxcard {
+    padding: 1.5rem 1rem;
+  }
+  .achievements-wrapper {
+    background-image: none;
+  }
+  .rounded-circle {
+    height: 80px;
+    width: 80px;
+    font-size: 40px;
+  }
+  .achievement-title {
+    font-size: 1.2rem;
+  }
+  .acheivement-text {
+    font-size: 1rem;
+  }
+  .arrow {
+    font-size: 30px;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: -4px 0 4px #0c4182dc;
+  }
+  50% {
+    text-shadow: -4px 0 12px #0c4182;
+  }
+}

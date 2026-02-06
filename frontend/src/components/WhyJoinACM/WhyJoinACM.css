@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400&display=swap');
+
+.benefits-section {
+  padding: 80px 5%;
+  background-color: #f8fafd; 
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.benefits-header {
+  margin-bottom: 50px;
+}
+
+.benefits-main-title {
+  color: #0B4184;
+  font-size: 40px;
+  font-style: bold;
+  font-weight: 700;
+  letter-spacing: -1%;
+  line-height: 100%;
+  margin-bottom: 10px;
+  
+}
+
+.benefits-subtitle {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.benefit-card {
+  background: #ffffff;
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 40px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.icon-circle {
+  width: 60px;
+  height: 60px;
+  background-color: #eef4ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.benefit-icon-text {
+  font-size: 1.5rem;
+}
+
+.benefit-card-title {
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.benefit-card-desc {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .benefits-main-title {
+    font-size: 1.8rem;
+  }
+}
+
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  background-color: #DBEAFE; 
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden; 
+}
+
+.benefit-custom-img {
+  width: 60%; 
+  height: 60%;
+  object-fit: contain; 
+}
+
+
+.benefit-card:hover .benefit-custom-img {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}

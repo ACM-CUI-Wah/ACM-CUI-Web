@@ -1,0 +1,54 @@
+.article-container {
+  height: 100vh;
+  padding: 0;
+}
+
+.sidebar-col {
+   background-color: #3470BA; 
+  
+
+  background-image: linear-gradient(
+    to bottom, 
+    #2D66AD, 
+    #4A90E2 70%, 
+    #3470BA 92.58%
+  );
+}
+
+.editor-col {
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.action-panel-col {
+  background-color: #f7f9fc; 
+}
+
+
+
+.article-container {
+ 
+  min-height: 100vh;
+}
+
+
+.Sidebar{
+  background-color: #3470BA !important;
+  background-image: linear-gradient(
+    to bottom,
+    #2D66AD,
+    #4A90E2 70%,
+    #3470BA 92.58%
+  ) !important;
+  color: white;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .article-header-toggle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+}

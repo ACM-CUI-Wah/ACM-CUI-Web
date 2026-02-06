@@ -1,0 +1,687 @@
+/* Import Google Fonts */
+@import url('https://fonts.com/css2?family=Ropa+Sans&family=Rosario:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+
+.dashboard-container {
+    font-family: "Inter", sans-serif;
+    color: #1e1e1e;
+    margin-top: 0%;
+}
+
+/* --- Responsive Navbar Styling --- */
+.navbar1 {
+    background-color: #1e5aa8 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar1 .logo {
+    width: 50px;
+    height: auto;
+}
+
+.navbar1 .acm-title {
+    font-family: "Rosario", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar1 .nav-link {
+    font-family: "Ropa Sans", sans-serif;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.25rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.navbar1 .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar1 .nav-link.active {
+    background-color: #f7a421; /* Highlight color for active item */
+    color: #1e1e1e !important;
+    font-weight: bold;
+}
+
+/* --- Main Content Area --- */
+.main-content {
+   margin-top: 0%;
+    padding: 50px 20px 20px 20px;
+}
+.btn-design {
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* A font similar to the one in the image */
+  font-size: 18px;
+  font-weight: 600; /* Semi-bold */
+  color: #1a1a1a; /* Dark gray for the text */
+  padding: 7px 20px;
+  background-color: #ffffff; /* White background */
+  border-radius: 50px; /* Highly rounded corners */
+  border: 2px solid transparent;
+  background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(to right, #4182E6, #1A54A6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
+}
+.btn-design:hover{
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15); /* Soft, subtle shadow */
+
+}
+
+/* --- Content-Specific Styles (Mostly unchanged) --- */
+.dashboard-title {
+    font-weight: 700;
+    font-size: 33px;
+    margin-bottom: 20px;
+    color: #120808;
+}
+
+/* .filter-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    background-color: #5ba3ea;
+    border: none;
+    color: #120808;
+    font-size: 1rem;
+    font-weight: 600;
+} */
+
+
+
+.chart-box, .stats-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    text-align: center;
+    width: 280px;
+    min-height: 220px;
+}
+
+.stats-box { text-align: left; }
+.stats-box p { font-size: 1.1rem; }
+.stat-number { font-weight: bold; float: right; color: #2D66AD; }
+
+.legend-item {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+.legend-item.present { background-color: #2d66ad; }
+.legend-item.absent { background-color: #9ba0a4; }
+.legend-item.leave { background-color: #5ba3ea; }
+/* Attendance Section */
+.attendance-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    max-width: 800px; /* Adjust as needed */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.attendance-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Aligns "Status" with P A L */
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #eee;
+    font-weight: bold;
+    color: #2D66AD;
+}
+
+.attendance-header-row h5 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.col-name-header {
+    flex: 3; 
+    text-align: left;
+    padding-left: 20px; 
+}
+
+.col-reg-header {
+    flex: 2; /* Allocate space for registration number */
+    text-align: left;
+}
+
+.col-status-header {
+    flex: 1.5; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.status-header-labels {
+    display: flex;
+    gap: 15px; /* Space between P, A, L */
+    margin-top: 5px; /* Space between "STATUS" and P A L */
+}
+
+.status-header-labels span {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+}
+
+
+
+.attendance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
+.student-attendance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    padding: 8px 0;
+    border-bottom: 1px dotted #eee; 
+}
+
+.student-attendance-row:last-child {
+    border-bottom: none;
+}
+
+.student-name {
+    flex: 3;
+    text-align: left;
+    padding-left: 20px;
+    font-size: 15px;
+    color: #444;
+}
+
+.student-reg {
+    flex: 2;
+    text-align: left;
+    font-size: 15px;
+    color: #666;
+}
+
+.student-status-controls {
+    flex: 1.5;
+    display: flex;
+    justify-content: center; 
+    gap: 10px; 
+}
+
+
+.circle {
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 28px; 
+    height: 28px; 
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.circle input[type="radio"] {
+    position: absolute; 
+    opacity: 0;
+    width: -px;
+    height: 1px;
+    overflow: hidden;
+}
+
+
+.circle.active::before {
+    content: '';
+    display: block;
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%;
+    background-color: #fff; 
+}
+
+.circle.present.active {
+    background-color: #4CAF50; 
+    border-color: #4CAF50;
+}
+.circle.absent.active {
+    background-color: #F44336; 
+    border-color: #F44336;
+}
+.circle.leave.active {
+    background-color: #FFC107; 
+    border-color: #FFC107;
+}
+
+
+/* ---  STYLES FOR CALENDAR AND SUBMIT BUTTON --- */
+
+/* Positioning wrapper for the filter buttons and calendar */
+.filter-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+   
+}
+
+/* Styles for the calendar popup */
+.calendar-popup {
+    position: absolute;
+    top: 100%; /* Position it right below the filter buttons */
+    z-index: 1000;
+    margin-top: 5px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Customizing react-datepicker's appearance */
+.react-datepicker {
+    border: none !important;
+    font-family: "Inter", sans-serif;
+}
+
+.react-datepicker__header {
+    background-color: #1e5aa8 !important;
+    color: white !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.react-datepicker__day--selected {
+    background-color: #f7a421 !important;
+    color: white !important;
+}
+
+.react-datepicker__day:hover {
+    background-color: #eef4ff !important;
+}
+
+/* Re-style attendance-columns to remove old background/shadow */
+.attendance-columns {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* Container for the submit button */
+.submit-container {
+    display: flex;
+    justify-content:center; /* Aligns button to the right */
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* 🔹 Custom Form Control Styling */
+.form-control1 {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 180px;           /* default width for inputs */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  display: inline-block;  /* prevents stretching full width */
+  background-color: #fff;
+  color: #333;
+}
+
+textarea.form-control1 {
+  width: 100%;
+  height: 80px;          
+  max-height: 150px;      
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  resize: none;         
+  overflow-y: auto;      
+  background-color: #fff;
+  color: #333;
+}
+
+
+/* Focus effect */
+.form-control1:focus {
+  outline: none;
+  border-color: #2D66AD;
+  box-shadow: 0 0 0 2px rgba(45, 102, 173, 0.2);
+}
+@media (max-width: 768px) {
+  .form-control1 {
+    width: 100%;   /* full width on tablets & phones */
+    margin-bottom: 10px; /* add spacing between stacked inputs */
+  }
+}
+/* Styles for Time and Venue Inputs */
+.meeting-input {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 180px; /* Adjust width as needed */
+    transition: border-color 0.3s ease;
+}
+
+.meeting-input:focus {
+    outline: none;
+    border-color: #2D66AD;
+    box-shadow: 0 0 0 2px rgba(45, 102, 173, 0.2);
+}
+
+/* Styles for Highlight Options Section */
+.highlight-options-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+     
+}
+
+.agenda-options-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+     
+}
+.agenda-options-section h5 {
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+.highlight-options-section h5 {
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* NEW: Styles for the Highlights text input */
+.highlight-input {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+     
+    min-height: 80px;
+  max-height: 300px;
+  overflow-y: hidden; /* hide scrollbar */
+  resize: none;       /* optional: prevent manual resize */
+  
+}
+
+.highlight-input:focus {
+    outline: none;
+    border-color: #2D66AD;
+    box-shadow: 0 0 0 2px rgba(45, 102, 173, 0.2);
+}
+
+
+/* Container for the button and the dropdown list */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Style for the dropdown menu */
+.club-dropdown-menu {
+  position: absolute;
+  top: 100%; /* Position below the button */
+  left: 0;
+  z-index: 1000;
+  display: block; /* 'show' class from Bootstrap handles this */
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+/* Style for the dropdown menu items */
+.club-dropdown-menu .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+/* Style on hover */
+.club-dropdown-menu .dropdown-item:hover,
+.club-dropdown-menu .dropdown-item:focus {
+  color: #1e2125;
+  text-decoration: none;
+  background-color: #e9ecef;
+}
+
+/* Active item style */
+.club-dropdown-menu .dropdown-item.active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #0d6efd;
+}
+
+/* The filter button style you already have in place */
+.filter-btn {
+  /* ... your existing styles for filter-btn ... */
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* View Attedance */
+/* src/styles/AdminDashboard.css - Add or replace these styles */
+
+.meeting-details-box {
+  background-color: #ffffff; /* White background for a clean look */
+  border: 1px solid #e0e0e0; /* Subtle border */
+  border-radius: 12px; /* Slightly more rounded corners */
+  padding: 25px 30px; /* More padding */
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow for depth */
+  width: 100%; /* Ensure it takes full width if space allows */
+  max-width: 600px; /* Max width for better readability on larger screens */
+  margin-left: auto; /* Center the box */
+  margin-right: auto; /* Center the box */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between detail lines */
+}
+
+.meeting-details-box h5 {
+  color: #2D66AD; /* Use your primary blue color */
+  font-size: 1.4rem; /* Slightly larger heading */
+  font-weight: 700; /* Bolder heading */
+  padding-bottom: 10px;
+  margin-bottom: 15px; /* Space after heading */
+  border-bottom: 2px solid #e0e0e0; /* Lighter separator line */
+  text-align: center; /* Center the heading */
+}
+
+.meeting-details-box p {
+  margin-bottom: 0; /* Remove default paragraph margin */
+  color: #333; /* Darker text for better contrast */
+  font-size: 1rem;
+  line-height: 1.5;
+  display: flex; /* Use flex for alignment of strong and text */
+  align-items: baseline; /* Align text baselines */
+}
+
+.meeting-details-box p strong {
+  color: #555; /* Slightly muted color for labels */
+  font-weight: 600; /* Make label bold */
+  min-width: 100px; /* Give a minimum width to labels for alignment */
+  flex-shrink: 0; /* Prevent label from shrinking */
+  margin-right: 10px; /* Space between label and value */
+}
+/* ===========================
+   📱 Responsive Adjustments
+   =========================== */
+
+/* Tablets and smaller laptops */
+@media (max-width: 992px) {
+  .filter-container {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .meeting-input {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .chart-box, .stats-box {
+    width: 45%;
+    min-height: auto;
+  }
+
+  .attendance-section,
+  .highlight-options-section,
+  .agenda-options-section {
+    max-width: 100%;
+    padding: 15px;
+  }
+}
+
+/* Mobile (portrait phones) */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 20px 10px;
+  }
+
+  .dashboard-title {
+    font-size: 24px;
+  }
+
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-design,
+  .meeting-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .chart-box, .stats-box {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ✅ Attendance section scrollable */
+  .attendance-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .attendance-header-row,
+  .student-attendance-row {
+    min-width: 600px; /* keeps table-like layout */
+  }
+
+  .attendance-header-row {
+    flex-direction: row; /* keep headers in one line */
+    align-items: center;
+  }
+
+  .student-attendance-row {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* Extra small phones (≤ 480px) */
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 20px;
+  }
+
+  .btn-design {
+    font-size: 16px;
+    padding: 6px 14px;
+  }
+
+  .meeting-input,
+  .highlight-input {
+    font-size: 13px;
+  }
+
+  .student-name, .student-reg {
+    font-size: 14px;
+  }
+
+  .circle {
+    width: 24px;
+    height: 24px;
+  }
+}
+/* Ultra small phones (≤ 400px) */
+@media (max-width: 400px) {
+  .attendance-header-row,
+  .student-attendance-row {
+    min-width: 480px; /* smaller than 600px */
+  }
+
+  .student-name {
+    flex: 2;   /* reduce space for name */
+    font-size: 13px;
+    padding-left: 10px;
+  }
+
+  .student-reg {
+    flex: 1.5; /* make roll no. smaller */
+    font-size: 13px;
+  }
+
+  .col-status-header,
+  .student-status-controls {
+    flex: 1;   /* shrink status column */
+    gap: 6px;  /* tighter buttons */
+  }
+
+  .circle {
+    width: 22px;
+    height: 22px;
+  }
+
+  .status-header-labels span {
+    font-size: 12px;
+  }
+}

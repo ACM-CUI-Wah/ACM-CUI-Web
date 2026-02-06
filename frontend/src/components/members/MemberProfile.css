@@ -1,0 +1,52 @@
+.mp-container {
+  max-width: 900px; /* Slightly narrower to keep focus centered */
+  margin: 80px auto;
+  padding: 20px;
+}
+
+.mp-box {
+  display: flex;
+  flex-direction: column; /* Stacks image on top of text */
+  align-items: center;    /* Centers items horizontally */
+  justify-content: center;
+  text-align: center;     /* Ensures text inside is centered */
+  gap: 30px;              /* Space between image and text */
+}
+
+/* Image Styling */
+.mp-image-section img {
+  width: 200px;           /* Adjusted size to match reference proportion */
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* Optional: The reference image doesn't seem to have a heavy border, 
+     but you can keep it if you like. I made it subtle here. */
+  border: 4px solid #f8f8f8; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Adds a soft pop */
+}
+
+.mp-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Heading Styling */
+.mp-content h1 {
+  font-size: 48px;        /* Much larger to match the "I'm Sam..." look */
+  font-weight: 500;       /* Not too bold, looks clean */
+  color: #111;            /* Dark black/grey */
+  line-height: 1.2;
+  margin-bottom: 24px;
+  max-width: 800px;       /* Prevents it from stretching too wide */
+}
+
+/* Description Paragraph Styling */
+.mp-content p {
+  font-size: 18px;
+  color: #666;            /* Lighter grey for contrast */
+  line-height: 1.6;
+  max-width: 650px;       /* Restricts width for better readability */
+  margin: 0 auto;
+}

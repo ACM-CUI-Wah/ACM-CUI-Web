@@ -1,0 +1,67 @@
+.blog-banner-wrapper {
+  height: 450px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.blog-banner-wrapper .blog-banner-overlay {
+  background: rgba(0, 0, 0, 0.4); 
+  z-index: 1;
+}
+
+.blog-banner-title {
+  font-size: 2.5rem;
+  max-width: 900px;
+  line-height: 1.4;
+}
+
+.blog-banner-meta {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+}
+
+.blog-banner-meta .dot {
+  font-size: 1.2rem;
+  margin: 0 0.5rem;
+}
+
+.blog-author-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.blog-banner-meta span + span {
+  margin-left: 2rem;
+}
+
+@media (max-width: 576px) {
+  .blog-banner-wrapper {
+    height: 300px;
+  }
+
+  .blog-banner-wrapper .container {
+    padding: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .blog-banner-title {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+
+  .blog-banner-meta {
+    font-size: 0.8rem;
+    gap: 1rem;
+  }
+
+  .blog-banner-meta span + span {
+    margin-left: 1rem;
+  }
+}

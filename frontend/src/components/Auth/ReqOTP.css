@@ -1,0 +1,84 @@
+/* Container - Centered Layout */
+.req-otp-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+  padding: 20px;
+}
+
+/* Form Card */
+.req-otp-card {
+  width: 100%;
+  max-width: 450px; /* Narrower than Reg form for single input */
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* Form Group */
+.otp-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+/* Labels */
+.otp-form-group label {
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Inputs */
+.otp-input {
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensures padding doesn't overflow width */
+}
+
+.otp-input:focus {
+  border-color: #0C4182;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(12, 65, 130, 0.1);
+}
+
+/* Button Wrapper */
+.otp-button-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+
+/* Error Text */
+.error-text {
+  color: #d9534f;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media screen and (max-width: 500px) {
+  .req-otp-card {
+    padding: 30px 20px;
+    max-width: 100%;
+  }
+}

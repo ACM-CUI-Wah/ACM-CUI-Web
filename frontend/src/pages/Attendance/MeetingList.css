@@ -1,0 +1,207 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Ropa+Sans&family=Rosario:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+body {
+    background-color: #f4f6f9;
+    font-family: "Inter", sans-serif;
+    color: #1e1e1e;
+    margin: 0;
+}
+
+.dashboard-title {
+    font-weight: 700;
+    font-size: 33px;
+    margin-bottom: 20px;
+    color: #120808;
+    text-align: center;
+}
+
+
+.btn-design {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 7px 20px;
+    background-color: #ffffff;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(to right, #4182E6, #1A54A6);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.btn-design:hover {
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.attendance-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+
+.list-group-item {
+    flex-direction: column;
+    align-items: start;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: #ffffff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    background-color: #f7f7f7;
+}
+
+.list-group-item .d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-group-item .border.rounded.p-3.bg-light {
+    margin-top: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 0.95rem;
+}
+
+.list-group-item .border.rounded p {
+    margin: 5px 0;
+}
+
+.list-group-item .border.rounded p strong {
+    min-width: 100px;
+    display: inline-block;
+    color: #555;
+}
+
+/* Edit/Delete buttons inside dropdown */
+.list-group-item .d-flex.justify-content-end button,
+.list-group-item .d-flex.justify-content-end a {
+    margin-left: 5px;
+}
+
+/* Navbar styles (if using Navbar inside MeetingList) */
+.navbar1 {
+    background-color: #1e5aa8 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar1 .logo {
+    width: 50px;
+    height: auto;
+}
+
+.navbar1 .acm-title {
+    font-family: "Rosario", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar1 .nav-link {
+    font-family: "Ropa Sans", sans-serif;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.25rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.navbar1 .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar1 .nav-link.active {
+    background-color: #f7a421;
+    color: #1e1e1e !important;
+    font-weight: bold;
+}
+
+.club-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+}
+
+.club-dropdown-menu .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    font-weight: 400;
+    color: #212529;
+    background-color: transparent;
+    border: 0;
+}
+
+.club-dropdown-menu .dropdown-item:hover,
+.club-dropdown-menu .dropdown-item:focus {
+    background-color: #e9ecef;
+}
+
+.club-dropdown-menu .dropdown-item.active {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+
+.filter-btn {
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 24px;
+    }
+
+    .btn-design {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .list-group-item {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-title {
+        font-size: 20px;
+    }
+
+    .btn-design {
+        font-size: 16px;
+        padding: 6px 14px;
+    }
+}

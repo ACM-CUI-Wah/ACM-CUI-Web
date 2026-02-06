@@ -1,0 +1,174 @@
+/* Bills List Page Styling */
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.bills-table-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+.bills-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 0;
+  border: none;
+}
+
+/* Table Header Styling */
+.bills-table thead tr {
+  background-color: #f8f9fa;
+}
+
+.bills-table thead th {
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+/* Table Body Styling */
+.bills-table tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.bills-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.bills-table tbody td {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.9375rem;
+  color: #374151;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+  text-align: left;
+}
+
+/* Last row - remove bottom border */
+.bills-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Image Styling */
+.bills-table tbody td img {
+  border-radius: 6px;
+  object-fit: cover;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Action Column Buttons Container */
+.d-flex.gap-2 {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .bills-table-wrapper {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .bills-table thead th,
+  .bills-table tbody td {
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-design {
+    padding: 0.4rem 1rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Mobile: Stack table as cards */
+  .bills-table-wrapper {
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .bills-table thead {
+    display: none;
+  }
+
+  .bills-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .bills-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .bills-table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .bills-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .d-flex.gap-2 {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* Empty State */
+.bills-table tbody tr.empty-state td {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+/* Loading State */
+.bills-table tbody tr.loading-state td {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}

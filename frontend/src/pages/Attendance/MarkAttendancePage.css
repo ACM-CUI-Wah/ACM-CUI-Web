@@ -1,0 +1,30 @@
+.main-content {
+  padding: 20px 10px; 
+}
+
+.dashboard-title {
+  font-weight: 600;
+  font-size: 24px; 
+  margin-bottom: 15px;
+  color: #120808;
+}
+
+.submit-container {
+  text-align: center;
+}
+
+.btn-design {
+  font-size: 14px; /* smaller button */
+  font-weight: 600;
+  color: #1a1a1a;
+  padding: 5px 15px;
+  border-radius: 25px;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #4182E6, #1A54A6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.btn-design:hover {
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+}
