@@ -15,7 +15,6 @@ from api.views import (
     ApplicationReviewViewSet,
     ApplicationStatusUpdateViewSet,
     RecruitmentApplicationsExcelView,
-    RecruitmentApplicationsPDFView,
 
     # Event Views
     EventDetailView,
@@ -86,7 +85,6 @@ urlpatterns = [
     # Admin Recruitment Views (via router)
     path('recruitment/', include(recruitment_router.urls)),
     path("recruitment/export/excel/", RecruitmentApplicationsExcelView.as_view(), name='export-recruitment-excel'),
-    path("recruitment/export/pdf/", RecruitmentApplicationsPDFView.as_view()),
 
     # Events
     path('events/', EventListCreateView.as_view(), name='events-list-create'),
