@@ -682,3 +682,52 @@ body:not(.dark-mode) .r-table td {
 .rm-mini-btn-copy:hover {
   background: rgba(2, 132, 199, 0.18);
 }
+/* Floating export button bottom-right */
+.export-fab {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 9999;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #1e4f91;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  transition: transform 0.12s ease, opacity 0.2s ease;
+}
+
+.export-fab:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.export-fab:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.export-fab:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* On small screens make it a bit smaller */
+@media (max-width: 480px) {
+  .export-fab {
+    right: 14px;
+    bottom: 14px;
+    padding: 10px 14px;
+    font-size: 14px;
+    gap: 8px;
+  }
+}

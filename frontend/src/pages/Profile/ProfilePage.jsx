@@ -18,41 +18,42 @@ const ProfilePage = () => {
   const [message, setMessage] = useState("");
   const [editMode, setEditMode] = useState(false);
 
-  useEffect(() => {
-    const fetchStudent = async () => {
-      try {
-        const res = await axiosInstance.get("/students/");
-        const students = Array.isArray(res.data) ? res.data : [res.data];
-        const foundStudent = students.find(s => s.user && s.user.id === loggedInUserId);
+useEffect(() => {
+  const fetchStudent = async () => {
+    try {
+      const studentIdFromLS = localStorage.getItem("student_id");
 
-        if (!foundStudent) {
-          setMessage("Student record not found");
-          return;
-        }
-
-        setStudentId(foundStudent.id);
-        setStudent(foundStudent);
-
-        setFormData({
-          profile_desc: foundStudent.profile_desc || "",
-          profile_pic: null,
-          user: {
-            first_name: foundStudent.user.first_name || "",
-            last_name: foundStudent.user.last_name || "",
-            email: foundStudent.user.email || "",
-            username: foundStudent.user.username || "",
-          },
-        });
-
-        setPreview(foundStudent.profile_pic);
-      } catch (err) {
-        console.error(err);
-        setMessage("Failed to fetch student record");
+      if (!studentIdFromLS) {
+        setMessage("student_id missing in localStorage. Please login again.");
+        return;
       }
-    };
 
-    fetchStudent();
-  }, [loggedInUserId]);
+      const res = await axiosInstance.get(`/students/${studentIdFromLS}`);
+      const foundStudent = res.data;
+
+      setStudentId(foundStudent.id);
+      setStudent(foundStudent);
+
+      setFormData({
+        profile_desc: foundStudent.profile_desc || "",
+        profile_pic: null,
+        user: {
+          first_name: foundStudent.user?.first_name || "",
+          last_name: foundStudent.user?.last_name || "",
+          email: foundStudent.user?.email || "",
+          username: foundStudent.user?.username || "",
+        },
+      });
+
+      setPreview(foundStudent.profile_pic);
+    } catch (err) {
+      console.error(err);
+      setMessage("Failed to fetch student record");
+    }
+  };
+
+  fetchStudent();
+}, []);
 
   const handleChange = e => {
     const { name, value, files } = e.target;

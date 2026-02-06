@@ -7,29 +7,39 @@ import axiosInstance from "../../axios";
 const ProfileOptions = () => {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
+
   const [profilePic, setProfilePic] = useState(null);
 
-  const loggedInUserId = parseInt(localStorage.getItem("user_id"));
+  const studentId = localStorage.getItem("student_id");
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axiosInstance.get("/students/");
-        const students = Array.isArray(res.data) ? res.data : [res.data];
-        const user = students.find(s => s.user && s.user.id === loggedInUserId);
-        if (user && user.profile_pic) {
+        if (!studentId) return;
+
+        // ✅ single student request
+        const res = await axiosInstance.get(`/students/${studentId}`);
+        const user = res.data;
+
+        if (user?.profile_pic) {
           setProfilePic(user.profile_pic);
         }
       } catch (err) {
-        console.error("Failed to fetch profile picture:", err);
+        console.error("Failed to fetch profile picture:", err?.response?.data || err.message);
       }
     };
 
     fetchProfile();
-  }, [loggedInUserId]);
+  }, [studentId]);
 
   const handleLogout = () => {
     logout();
+
+    // optional: clear storage
+    localStorage.removeItem("student_id");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("token");
+
     window.location.href = "/login";
   };
 
@@ -59,24 +69,15 @@ const ProfileOptions = () => {
         )}
       </div>
 
-      <button
-        className="option-btn"
-        onClick={() => navigate("/dashboard/edit-profile")}
-      >
+      <button className="option-btn" onClick={() => navigate("/dashboard/edit-profile")}>
         Profile
       </button>
 
-      <button
-        className="option-btn"
-        onClick={() => navigate("/dashboard/otp")}
-      >
+      <button className="option-btn" onClick={() => navigate("/dashboard/otp")}>
         Reset Password
       </button>
 
-      <button
-        className="option-btn"
-        onClick={handleLogout}
-      >
+      <button className="option-btn" onClick={handleLogout}>
         Logout
       </button>
     </div>

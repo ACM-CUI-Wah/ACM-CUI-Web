@@ -168,13 +168,13 @@ const useAuthStore = create((set, get) => ({
       console.log("Signup error response:", err.response?.data);
 
       set({
-        error: err.response?.data?.message || "Signup failed",
+        error: err.response?.data?.message ||err.response?.data || "Signup failed",
         loading: false,
       });
 
       return {
         success: false,
-        message: err.response?.data?.message || "Signup failed",
+        message: err.response?.data?.message||err.response?.data || "Signup failed",
         data: err.response?.data || null,
       };
     }
