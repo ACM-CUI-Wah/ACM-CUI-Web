@@ -16,6 +16,9 @@ from api.models import Meeting, MeetingAttendance
 from api.permissions import IsLeadOrAdmin
 from api.serializers import MeetingSerializer, \
     MeetingAttendanceSerializer
+import os
+from django.conf import settings
+from reportlab.lib.utils import ImageReader
 
 
 class MeetingCreateView(APIView):
@@ -96,191 +99,205 @@ class MeetingPDFView(APIView):
     permission_classes = [IsLeadOrAdmin]
 
     def get(self, request, pk, *args, **kwargs):
-        meeting = self.get_meeting(pk)
-        attendance = self.get_attendance(request.user, meeting)
+        try:
+            meeting = Meeting.objects.get(pk=pk)
+        except Meeting.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "Meeting not found",
+                "data": None
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.role == 'LEAD' and hasattr(request.user, 'student'):
+            club = request.user.student.club
+            attendance = MeetingAttendance.objects.filter(
+                meeting=meeting,
+                user__student__club=club
+            ).select_related('user')
+        else:
+            attendance = MeetingAttendance.objects.filter(
+                meeting=meeting
+            ).select_related('user')
 
         buffer = BytesIO()
-        doc = self.build_document(buffer)
-
-        elements = self.build_elements(request.user, meeting, attendance)
-        doc.build(elements, onFirstPage=self.add_header)
-
-        return self.build_response(buffer, meeting.date)
-
-    def get_meeting(self, pk):
-        try:
-            return Meeting.objects.get(pk=pk)
-        except Meeting.DoesNotExist:
-            raise NotFound("Meeting not found")
-
-    def get_attendance(self, user, meeting):
-        qs = MeetingAttendance.objects.filter(meeting=meeting).select_related("user")
-
-        if user.role == "LEAD" and hasattr(user, "student"):
-            return qs.filter(user__student__club=user.student.club)
-
-        if user.role == "ADMIN":
-            return qs
-
-        return MeetingAttendance.objects.none()
-
-    def build_document(self, buffer):
-        return SimpleDocTemplate(
+        doc = SimpleDocTemplate(
             buffer,
             pagesize=letter,
             rightMargin=72,
             leftMargin=72,
             topMargin=120,
-            bottomMargin=18,
+            bottomMargin=30
         )
 
-    def build_elements(self, user, meeting, attendance):
-        styles = self.get_styles()
         elements = []
+        styles = getSampleStyleSheet()
 
-        elements.append(Paragraph("Minutes of ACM Meeting", styles["title"]))
+        title_style = ParagraphStyle(
+            'TitleStyle',
+            parent=styles['Heading1'],
+            fontName='Helvetica-Bold',
+            fontSize=16,
+            spaceAfter=20,
+            alignment=1,
+            textColor=colors.HexColor('#2c3e50')
+        )
+
+        heading_style = ParagraphStyle(
+            'HeadingStyle',
+            parent=styles['Heading2'],
+            fontName='Helvetica-Bold',
+            fontSize=12,
+            spaceAfter=10,
+            textColor=colors.HexColor('#34495e')
+        )
+
+        body_style = ParagraphStyle(
+            'BodyStyle',
+            parent=styles['Normal'],
+            fontName='Helvetica',
+            fontSize=10,
+            textColor=colors.HexColor('#2c3e50')
+        )
+
+        footer_style = ParagraphStyle(
+            'FooterStyle',
+            parent=styles['Normal'],
+            fontName='Helvetica-Oblique',
+            fontSize=8,
+            textColor=colors.HexColor('#7f8c8d'),
+            alignment=1
+        )
+
+        elements.append(Paragraph("Minutes of ACM Meeting", title_style))
         elements.append(Spacer(1, 0.1 * inch))
 
-        if user.role != "ADMIN":
-            elements.extend(self.club_heading(user, styles))
-
-        elements.extend(self.meeting_details(meeting, styles))
-        elements.extend(self.attendance_section(attendance, styles))
-        elements.extend(self.summary_section(attendance, styles))
-        elements.extend(self.footer(styles))
-
-        return elements
-
-    def get_styles(self):
-        base = getSampleStyleSheet()
-
-        return {
-            "title": ParagraphStyle(
-                "Title",
-                parent=base["Heading1"],
-                fontName="Helvetica-Bold",
-                fontSize=16,
-                alignment=1,
-                spaceAfter=20,
-            ),
-            "heading": ParagraphStyle(
-                "Heading",
-                parent=base["Heading2"],
-                fontName="Helvetica-Bold",
-                fontSize=12,
+        if request.user.role != 'ADMIN' and hasattr(request.user, 'student'):
+            club_name = request.user.student.club.replace('_', ' ').title()
+            club_style = ParagraphStyle(
+                'ClubStyle',
+                parent=styles['Heading2'],
+                fontName='Helvetica-Bold',
+                fontSize=14,
                 spaceAfter=10,
-            ),
-            "body": ParagraphStyle(
-                "Body",
-                fontName="Helvetica",
-                fontSize=10,
-            ),
-            "footer": ParagraphStyle(
-                "Footer",
-                fontName="Helvetica-Oblique",
-                fontSize=8,
                 alignment=1,
-            ),
-        }
+                textColor=colors.HexColor('#2c3e50')
+            )
+            elements.append(Paragraph(f"{club_name} Meeting Minutes", club_style))
+            elements.append(Spacer(1, 0.1 * inch))
 
-    def club_heading(self, user, styles):
-        club_name = user.student.club.replace("_", " ").title()
-        style = ParagraphStyle(
-            "Club",
-            parent=styles["heading"],
-            fontSize=14,
-            alignment=1,
-        )
-        return [
-            Paragraph(f"{club_name} Meeting Minutes", style),
-            Spacer(1, 0.1 * inch),
-        ]
+        
+        def convert_to_12h(time_obj):
+            return time_obj.strftime('%I:%M %p') if time_obj else "N/A"
 
-    def meeting_details(self, meeting, styles):
-        def fmt(time):
-            return time.strftime("%I:%M %p") if time else "N/A"
-
-        data = [
-            ["Date:", meeting.date],
-            ["Time:", f"{fmt(meeting.start_time)} - {fmt(meeting.end_time)}"],
+        meeting_data = [
+            ["Date:", str(meeting.date)],
+            ["Time:", f"{convert_to_12h(meeting.start_time)} - {convert_to_12h(meeting.end_time)}"],
             ["Venue:", meeting.venue],
             ["Agenda:", meeting.agenda or "Not specified"],
-            ["Highlights:", meeting.highlights or "Not specified"],
+            ["Highlights:", meeting.highlights or "Not specified"]
         ]
 
-        table = Table(data, colWidths=[1.5 * inch, 4 * inch])
-        table.setStyle(self.base_table_style())
+        meeting_table = Table(meeting_data, colWidths=[1.5 * inch, 4 * inch])
+        meeting_table.setStyle(TableStyle([
+            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#bdc3c7')),
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#ecf0f1')),
+            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#2c3e50')),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ]))
+        elements.append(meeting_table)
+        elements.append(Spacer(1, 0.25 * inch))
 
-        return [table, Spacer(1, 0.25 * inch)]
+        elements.append(Paragraph("Attendance Record", heading_style))
+        elements.append(Spacer(1, 0.1 * inch))
 
-    def attendance_section(self, attendance, styles):
-        rows = [["Name", "Roll No", "Status"]]
-
+        attendance_data = [["Name", "Roll No", "Status"]]
         for record in attendance:
-            student = getattr(record.user, "student", None)
-            rows.append([
-                record.user.get_full_name(),
-                getattr(student, "roll_no", "N/A"),
-                record.status,
+            try:
+                roll_no = record.user.student.roll_no
+            except:
+                roll_no = "N/A"
+            attendance_data.append([
+                f"{record.user.first_name} {record.user.last_name}",
+                roll_no,
+                record.status
             ])
 
-        if len(rows) == 1:
-            return [Paragraph("No attendance records found.", styles["body"])]
+        if len(attendance_data) > 1:
+            attendance_table = Table(attendance_data, colWidths=[2.5*inch, 1.5*inch, 1*inch])
+            attendance_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2c3e50')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 11),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#f8f9fa')),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 10),
+                ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#dee2e6')),
+            ]))
+            elements.append(attendance_table)
+        else:
+            elements.append(Paragraph("No attendance records found.", body_style))
 
-        table = Table(rows, colWidths=[2.5 * inch, 1.5 * inch, 1 * inch])
-        table.setStyle(self.attendance_table_style())
+        elements.append(Spacer(1, 0.25 * inch))
 
-        return [
-            Paragraph("Attendance Record", styles["heading"]),
-            Spacer(1, 0.1 * inch),
-            table,
-        ]
+    
+        present_count = attendance.filter(status='PRESENT').count()
+        absent_count = attendance.filter(status='ABSENT').count()
+        leave_count = attendance.filter(status='LEAVE').count()
+        summary_text = f"<b>Summary:</b> Present: {present_count}, Absent: {absent_count}, Leave: {leave_count}, Total: {attendance.count()}"
+        elements.append(Paragraph(summary_text, body_style))
 
-    def summary_section(self, attendance, styles):
-        summary = (
-            f"<b>Summary:</b> "
-            f"Present: {attendance.filter(status='PRESENT').count()}, "
-            f"Absent: {attendance.filter(status='ABSENT').count()}, "
-            f"Leave: {attendance.filter(status='LEAVE').count()}, "
-            f"Total: {attendance.count()}"
-        )
-        return [Spacer(1, 0.25 * inch), Paragraph(summary, styles["body"])]
+        
+        elements.append(Spacer(1, 0.5*inch))
+        generated_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        elements.append(Paragraph(f"Generated on: {generated_date}", footer_style))
 
-    def footer(self, styles):
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return [
-            Spacer(1, 0.5 * inch),
-            Paragraph(f"Generated on: {timestamp}", styles["footer"]),
-        ]
+        def add_header(canvas, doc):
+            canvas.saveState()
+            width, height = doc.pagesize
 
-    def base_table_style(self):
-        return TableStyle([
-            ("GRID", (0, 0), (-1, -1), 1, colors.grey),
-            ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
-        ])
+            
+            canvas.setFillColor(colors.HexColor('#ffffff'))
+            canvas.rect(0, height - 1.2*inch, width, 1.2*inch, fill=1, stroke=0)
 
-    def attendance_table_style(self):
-        return TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), colors.black),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-            ("GRID", (0, 0), (-1, -1), 1, colors.grey),
-        ])
+            
+            logo_path = os.path.join(settings.BASE_DIR, 'assets', 'acm_logo.png')
+            logo_width = 0
+            logo_x = 50
+            if os.path.exists(logo_path):
+                try:
+                    logo = ImageReader(logo_path)
+                    logo_size = 1*inch
+                    logo_y = height - 1.1*inch
+                    canvas.drawImage(logo, logo_x, logo_y, width=logo_size, height=logo_size, preserveAspectRatio=True)
+                    logo_width = logo_size
+                except Exception as e:
+                    print(f"Error loading logo: {e}")
 
-    def add_header(self, canvas, doc):
-        canvas.saveState()
-        canvas.setFont("Helvetica-Bold", 16)
-        canvas.drawCentredString(
-            doc.pagesize[0] / 2,
-            doc.pagesize[1] - 0.6 * inch,
-            "ASSOCIATION FOR COMPUTING MACHINERY",
-        )
-        canvas.restoreState()
 
-    def build_response(self, buffer, date):
+            text_start_x = logo_x + logo_width + 0.2*inch
+            canvas.setFillColor(colors.HexColor('#2c3e50'))
+            canvas.setFont('Helvetica-Bold', 16)
+            canvas.drawString(text_start_x, height - 0.6*inch, "ASSOCIATION FOR COMPUTING MACHINERY")
+
+            canvas.setFont('Helvetica', 10)
+            canvas.drawString(text_start_x + 0.2*inch, height - 0.8*inch, "COMSATS University Islamabad, Wah Chapter")
+
+        
+            canvas.setStrokeColor(colors.HexColor('#bdc3c7'))
+            canvas.setLineWidth(1)
+            canvas.line(0.5*inch, height - 1.2*inch, width - 0.5*inch, height - 1.2*inch)
+
+            canvas.restoreState()
+
+        doc.build(elements, onFirstPage=add_header)
+
         buffer.seek(0)
-        response = HttpResponse(buffer, content_type="application/pdf")
-        response["Content-Disposition"] = (
-            f'attachment; filename="acm_meeting_minutes_{date}.pdf"'
-        )
+        response = HttpResponse(buffer, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="acm_meeting_minutes_{meeting.date}.pdf"'
         return response
