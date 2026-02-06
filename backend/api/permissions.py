@@ -46,3 +46,22 @@ class SignUpPermission(permissions.BasePermission):
             if request.user.role == LEAD and request.user.student.club != request.data['club']:
                 raise PermissionDenied('Registering users of another club is not allowed.')
         return True
+
+
+class IsAdminOrAuthor(permissions.BasePermission):
+    """
+    Allows access to admins or the author of the blog.
+    """
+    message = 'Only admins or the author of this blog can perform this action.'
+
+    def has_permission(self, request, view):
+        # Allow authenticated users to reach object-level check
+        return request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        # Admin can do anything
+        if request.user.role == ADMIN:
+            return True
+
+        # Author can access their own blog
+        return obj.createdBy == request.user

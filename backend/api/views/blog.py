@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from api.models import Blog
 from api.permissions import IsAdmin
 from api.serializers import BlogSerializer, BlogUploadSerializer, BlogUpdateSerializer, InlineImageSerializer
+from api.permissions import IsAdminOrAuthor
 
 
 class InlineImageUploadView(APIView):
@@ -292,7 +293,7 @@ class InlineImageUploadView(APIView):
 
 
 class BlogEditView(APIView):
-    permission_classes = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAdminOrAuthor]
     parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request, pk, *args, **kwargs):
