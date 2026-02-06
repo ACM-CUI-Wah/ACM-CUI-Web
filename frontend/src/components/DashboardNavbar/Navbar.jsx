@@ -80,55 +80,60 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
     navigate(result.type === "blog" ? `/blog/${result.id}` : `/events/${result.id}`);
   };
 
-  const renderAuthButtons = () => {
-    if (!token) {
-      return (
-        <Link
-          to="/login"
-          className="login-link px-4 py-2 ms-lg-3 fw-semibold"
-          style={{ backgroundColor: "#ffffff", cursor: "pointer", textDecoration:"none" }}
-        >
-          Login
-        </Link>
-      );
-    }
-
+ const renderAuthButtons = () => {
+  if (!token) {
     return (
-      <>
-        <Button
-          variant="light"
-          className="login-link px-0 py-0 ms-lg-3"
-          style={{ backgroundColor: "transparent", border: "none" }}
-          onClick={() => setShowOptions(!showOptions)}
-        >
-          {profilePic ? (
-            <img
-              src={profilePic}
-              alt="Profile"
-              className="navbar-profile-pic"
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "50%",
-                objectFit: "cover"
-              }}
-            />
-          ) : (
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "50%",
-                backgroundColor: "#ccc"
-              }}
-            />
-          )}
-        </Button>
-
-        {showOptions && <ProfileOptions navigate={navigate} />}
-      </>
+      <Link
+        to="/login"
+        className="login-link px-4 py-2 ms-lg-3 fw-semibold"
+        style={{ backgroundColor: "#ffffff", cursor: "pointer", textDecoration: "none" }}
+      >
+        Login
+      </Link>
     );
-  };
+  }
+
+  return (
+    <div className="profile-wrapper position-relative">
+      <Button
+        variant="light"
+        className="login-link px-0 py-0 ms-lg-3"
+        style={{ backgroundColor: "transparent", border: "none" }}
+        onClick={() => setShowOptions((v) => !v)}
+      >
+        {profilePic ? (
+          <img
+            src={profilePic}
+            alt="Profile"
+            className="navbar-profile-pic"
+            style={{
+              width: "36px",
+              height: "36px",
+              borderRadius: "50%",
+              objectFit: "cover"
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "36px",
+              height: "36px",
+              borderRadius: "50%",
+              backgroundColor: "#ccc"
+            }}
+          />
+        )}
+      </Button>
+
+      {showOptions && (
+        <div className="profile-dropdown">
+          <ProfileOptions navigate={navigate} />
+        </div>
+      )}
+    </div>
+  );
+};
+
 
   return (
     <BootstrapNavbar expand="lg" className="custom-navbar1 shadow-sm">

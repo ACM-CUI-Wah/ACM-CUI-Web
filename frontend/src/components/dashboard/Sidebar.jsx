@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "../../store/authStore.js";
 import axiosInstance from "../../axios";
@@ -7,46 +7,70 @@ import "./Sidebar.css";
 const Sidebar = ({ onNavigate }) => {
   const { role } = useAuthStore();
   const location = useLocation();
-  const loggedInUserId = parseInt(localStorage.getItem("user_id"));
+
+  const loggedInUserId = Number(localStorage.getItem("user_id"));
+  const studentIdFromLS = localStorage.getItem("student_id");
+
   const [student, setStudent] = useState(null);
   const [activeDropdown, setActiveDropdown] = useState(null);
 
-  useEffect(() => {
-    const fetchStudent = async () => {
-      try {
-        const res = await axiosInstance.get("/students/");
-        const students = Array.isArray(res.data) ? res.data : [res.data];
-        const foundStudent = students.find(
-          (s) => s.user && s.user.id === loggedInUserId
-        );
-        if (foundStudent) setStudent(foundStudent);
-      } catch (err) {
-        console.error("Failed to fetch student profile:", err);
+  // -----------------------------
+  // Fetch student (FIXES student null)
+  // -----------------------------
+useEffect(() => {
+  let mounted = true;
+
+  const fetchStudent = async () => {
+    try {
+      const studentId = localStorage.getItem("student_id");
+
+      if (!studentId) {
+        console.error("student_id missing in localStorage");
+        if (mounted) setStudent(null);
+        return;
       }
-    };
 
-    fetchStudent();
-  }, [loggedInUserId]);
+      const res = await axiosInstance.get(`/students/${studentId}`);
+      if (mounted) setStudent(res.data);
+    } catch (err) {
+      console.error("Failed to fetch student:", err?.response?.data || err.message);
+      if (mounted) setStudent(null);
+    }
+  };
 
+  fetchStudent();
+  return () => {
+    mounted = false;
+  };
+}, []);
+
+  // -----------------------------
+  // Treasurer check (safe)
+  // -----------------------------
+  const isTreasurer = useMemo(() => {
+    return String(student?.title || "").trim().toUpperCase() === "TREASURER";
+  }, [student]);
+
+  // -----------------------------
+  // UI helpers
+  // -----------------------------
   const toggleDropdown = useCallback((name) => {
     setActiveDropdown((prev) => (prev === name ? null : name));
   }, []);
 
   const handleLinkClick = useCallback(() => {
-    if (onNavigate) {
-      onNavigate();
-    }
+    if (onNavigate) onNavigate();
   }, [onNavigate]);
 
-  // Check if path is active
-  const isActive = useCallback((path) => {
-    return location.pathname === path;
-  }, [location.pathname]);
+  const isActive = useCallback(
+    (path) => location.pathname === path,
+    [location.pathname]
+  );
 
-  // Check if any child path is active
-  const isGroupActive = useCallback((paths) => {
-    return paths.some((path) => location.pathname.startsWith(path));
-  }, [location.pathname]);
+  const isGroupActive = useCallback(
+    (paths) => paths.some((path) => location.pathname.startsWith(path)),
+    [location.pathname]
+  );
 
   const getDashboardTitle = () => {
     switch (role) {
@@ -61,7 +85,7 @@ const Sidebar = ({ onNavigate }) => {
     }
   };
 
-  // Reusable nav link component
+  // Reusable nav link
   const NavLink = ({ to, children, className = "" }) => (
     <Link
       to={to}
@@ -72,27 +96,30 @@ const Sidebar = ({ onNavigate }) => {
     </Link>
   );
 
-  // Dropdown component
+  // Dropdown group
   const DropdownGroup = ({ name, label, children, paths = [] }) => (
     <div className="sidebar-group">
       <button
-        className={`btn btn-primary dropdown-toggle-btn ${isGroupActive(paths) ? "active" : ""}`}
+        className={`btn btn-primary dropdown-toggle-btn ${
+          isGroupActive(paths) ? "active" : ""
+        }`}
         onClick={() => toggleDropdown(name)}
         aria-expanded={activeDropdown === name}
+        type="button"
       >
         <span>{label}</span>
-        <span className={`arrow ${activeDropdown === name ? "open" : ""}`}>▼</span>
+        <span className={`arrow ${activeDropdown === name ? "open" : ""}`}>
+          ▼
+        </span>
       </button>
 
       {activeDropdown === name && (
-        <div className="dropdown-content">
-          {children}
-        </div>
+        <div className="dropdown-content">{children}</div>
       )}
     </div>
   );
 
-  // Sub link component for dropdowns
+  // Sub link
   const SubLink = ({ to, children }) => (
     <Link
       to={to}
@@ -103,6 +130,17 @@ const Sidebar = ({ onNavigate }) => {
     </Link>
   );
 
+  // ✅ Reusable Finance Group
+  const FinanceGroup = () => (
+    <DropdownGroup name="finance" label="Finance" paths={["/dashboard/bills"]}>
+      <SubLink to="/dashboard/bills">View Bills</SubLink>
+      <SubLink to="/dashboard/bills/create">Add Bill</SubLink>
+    </DropdownGroup>
+  );
+
+  // -----------------------------
+  // NAVS
+  // -----------------------------
   const renderAdminNav = () => (
     <>
       <NavLink to="/dashboard/recruitment">Recruitment</NavLink>
@@ -116,78 +154,64 @@ const Sidebar = ({ onNavigate }) => {
     </>
   );
 
-  const renderLeadNav = () => {
+  const renderLeadNav = () => (
+    <>
+      {/* Attendance Group */}
+      <DropdownGroup
+        name="attendance"
+        label="Attendance"
+        paths={["/dashboard/mark-attendance", "/dashboard/meeting-history"]}
+      >
+        <SubLink to="/dashboard/mark-attendance">Mark Attendance</SubLink>
+        <SubLink to="/dashboard/meeting-history">View Attendance</SubLink>
+      </DropdownGroup>
 
-    return (
-      <>
-        {/* Attendance Group */}
-        <DropdownGroup
-          name="attendance"
-          label="Attendance"
-          paths={["/dashboard/mark-attendance", "/dashboard/meeting-history"]}
-        >
-          <SubLink to="/dashboard/mark-attendance">Mark Attendance</SubLink>
-          <SubLink to="/dashboard/meeting-history">View Attendance</SubLink>
-        </DropdownGroup>
+      {/* Events Group */}
+      <DropdownGroup
+        name="events"
+        label="Events"
+        paths={["/dashboard/events-list", "/dashboard/events/create"]}
+      >
+        <SubLink to="/dashboard/events-list">All Events</SubLink>
+        <SubLink to="/dashboard/events/create">Create Event</SubLink>
+        <SubLink to="/dashboard/events/management">Event Registration</SubLink>
+      </DropdownGroup>
 
-        {/* Events Group */}
-        <DropdownGroup
-          name="events"
-          label="Events"
-          paths={["/dashboard/events-list", "/dashboard/events/create"]}
-        >
-          <SubLink to="/dashboard/events-list">All Events</SubLink>
-          <SubLink to="/dashboard/events/create">Create Event</SubLink>
-           <SubLink to="/dashboard/events/management">Event Registration</SubLink>
-        </DropdownGroup>
+      {/* Blogs Group */}
+      <DropdownGroup
+        name="blogs"
+        label="Blogs"
+        paths={["/dashboard/myblog", "/dashboard/article", "/dashboard/blogs"]}
+      >
+        <SubLink to="/dashboard/myblog">My BlogPosts</SubLink>
+        <SubLink to="/dashboard/article">Post BlogPost</SubLink>
+      </DropdownGroup>
 
-        {/* Blogs Group */}
-        <DropdownGroup
-          name="blogs"
-          label="Blogs"
-          paths={["/dashboard/myblog", "/dashboard/article", "/dashboard/blogs"]}
-        >
-          <SubLink to="/dashboard/myblog">My BlogPosts</SubLink>
-          <SubLink to="/dashboard/article">Post BlogPost</SubLink>
-        </DropdownGroup>
+      {/* Members Group */}
+      <DropdownGroup
+        name="members"
+        label="Members"
+        paths={["/dashboard/members", "/dashboard/signup"]}
+      >
+        <SubLink to="/dashboard/members">View Members</SubLink>
+        <SubLink to="/dashboard/signup">Signup New Member</SubLink>
+      </DropdownGroup>
 
-        {/* Members Group */}
-        <DropdownGroup
-          name="members"
-          label="Members"
-          paths={["/dashboard/members", "/dashboard/signup"]}
-        >
-          <SubLink to="/dashboard/members">View Members</SubLink>
-          <SubLink to="/dashboard/signup">Signup New Member</SubLink>
-        </DropdownGroup>
+      {/* ✅ Finance should show if LEAD + Treasurer */}
+      {isTreasurer && <FinanceGroup />}
+    </>
+  );
 
-       
-      </>
-    );
-  };
-
-  const renderStudentNav = () => {
-        const isTreasurer = student?.title?.toUpperCase() === "TREASURER";
-
-    return (
+  const renderStudentNav = () => (
     <>
       <NavLink to="/dashboard/article">Post Blog</NavLink>
       <NavLink to="/dashboard/myblog">My BlogPosts</NavLink>
       <NavLink to="/dashboard/events-list">Upcoming Events</NavLink>
-       {/* Finance Group - Treasurer Only */}
-        {isTreasurer && (
-          <DropdownGroup
-            name="finance"
-            label="Finance"
-            paths={["/dashboard/bills"]}
-          >
-            <SubLink to="/dashboard/bills">View Bills</SubLink>
-            <SubLink to="/dashboard/bills/create">Add Bill</SubLink>
-          </DropdownGroup>
-        )}
+
+   
+      {isTreasurer && <FinanceGroup />}
     </>
   );
-};
 
   const renderNavigation = () => {
     switch (role) {
@@ -197,16 +221,18 @@ const Sidebar = ({ onNavigate }) => {
         return renderLeadNav();
       case "STUDENT":
         return renderStudentNav();
-
+      default:
+        return null;
     }
   };
 
   return (
     <nav className="sidebar" role="navigation" aria-label="Dashboard navigation">
       <h3 className="sidebar-title">{getDashboardTitle()}</h3>
-      <div className="sidebar-actions">
-        {renderNavigation()}
-      </div>
+
+   
+
+      <div className="sidebar-actions">{renderNavigation()}</div>
     </nav>
   );
 };

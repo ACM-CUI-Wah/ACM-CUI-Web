@@ -1,7 +1,23 @@
+/* ==================== NAVBAR BASE ==================== */
+
 .custom-navbar1 {
   background-color: #0C4182;
   font-family: "Poppins", sans-serif;
-  padding: 14px 0; /* was 18px (tight widths benefit from less padding) */
+  padding: 14px 0;
+  position: relative;         /* ✅ helps z-index stacking */
+  z-index: 3000;              /* ✅ keep navbar above page */
+}
+
+/* IMPORTANT:
+   Bootstrap collapse sometimes sets overflow hidden in some cases
+   which can clip absolutely positioned dropdowns.
+*/
+.custom-navbar1,
+.custom-navbar1 .container,
+.custom-navbar1 .navbar-collapse,
+.custom-navbar1 .navbar-collapse.show,
+.custom-navbar1 .navbar-collapse.collapsing {
+  overflow: visible !important; /* ✅ prevents dropdown clipping */
 }
 
 /* Replace px-4 with responsive padding */
@@ -19,10 +35,13 @@
   white-space: nowrap;
 }
 
-/* Nav links layout */
+/* ==================== NAV LINKS ==================== */
+
 .nav-links {
-  gap: clamp(8px, 1.2vw, 18px); /* responsive spacing */
-  flex-wrap: nowrap;            /* default: keep single row */
+  gap: clamp(8px, 1.2vw, 18px);
+  flex-wrap: wrap;              /* ✅ allow wrapping instead of overlap */
+  justify-content: center;
+  align-items: center;
 }
 
 .nav-links .nav-link {
@@ -30,9 +49,9 @@
   font-weight: 500;
   position: relative;
   text-decoration: none;
-  margin: 0;                    /* remove old margin system */
+  margin: 0;
   padding: 0.45rem clamp(0.35rem, 0.7vw, 0.8rem);
-  white-space: nowrap;          /* ✅ prevents "Our / Mission" word breaking */
+  white-space: nowrap;          /* ✅ prevents "Our / Mission" splitting */
   font-size: clamp(0.92rem, 0.95vw, 1rem);
 }
 
@@ -51,12 +70,36 @@
   width: 100%;
 }
 
-/* Right area (search + profile/login) */
+/* ==================== RIGHT AREA (SEARCH + PROFILE) ==================== */
+
 .navbar-right {
-  flex-shrink: 0; /* don't let it squeeze the nav in weird ways */
+  flex-shrink: 0;
+  position: relative;
+  z-index: 5000;               /* ✅ keeps profile & dropdown above links */
 }
 
-/* Search icon */
+/* ✅ This is the KEY: wrapper for profile + dropdown positioning */
+.profile-wrapper {
+  position: relative;
+  z-index: 6000;
+}
+
+/* Dropdown container that wraps ProfileOptions */
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 7000;
+}
+
+/* Optional: make dropdown look nicer if ProfileOptions has no bg */
+.profile-dropdown > * {
+  position: relative;
+  z-index: 7000;
+}
+
+/* ==================== SEARCH ==================== */
+
 .search-icon {
   position: absolute;
   right: 16px;
@@ -67,14 +110,6 @@
   pointer-events: none;
 }
 
-/* Login/Profile button */
-.login-link {
-  font-family: "Roboto", sans-serif !important;
-  color: #2d66ad !important;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-}
-
 /* dropdown */
 .search-dropdown {
   position: absolute;
@@ -83,11 +118,12 @@
   right: 0;
   background: white;
   border: 1px solid #dcdcdc;
-  z-index: 2000;
+  z-index: 8000;               /* ✅ higher than navbar links */
   max-height: 300px;
   overflow-y: auto;
   border-radius: 4px;
 }
+
 .search-item {
   padding: 8px 12px;
   cursor: pointer;
@@ -96,7 +132,28 @@
   background: #f2f2f2;
 }
 
+/* ==================== LOGIN / PROFILE BUTTON ==================== */
+
+.login-link {
+  font-family: "Roboto", sans-serif !important;
+  color: #2d66ad !important;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+/* If you want cursor pointer consistently */
+.login-link:hover {
+  opacity: 0.95;
+}
+
+/* Profile pic class (used in your JSX) */
+.navbar-profile-pic {
+  display: block;
+}
+
 /* ==================== MENU TOGGLE BUTTON ==================== */
+
 .menu-toggle-btn {
   background-color: transparent !important;
   border: none !important;
@@ -114,19 +171,19 @@
   background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-/* ✅ KEY FIX: 992–1199 (lg to xl) is tight -> hide brand title */
+/* ==================== RESPONSIVE FIXES ==================== */
+
+/* Hide brand title on tight widths */
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .navbar-brand-title {
     display: none;
   }
 }
 
-/* ✅ KEY FIX: 1000–1032 (your problem range) -> allow WRAP of items (not words) */
+/* Extra tight range tweaks */
 @media (min-width: 1000px) and (max-width: 1032px) {
   .nav-links {
-    flex-wrap: wrap;       /* ✅ moves whole links to next line if needed */
     row-gap: 8px;
-    justify-content: center;
   }
 
   .nav-links .nav-link {
@@ -134,7 +191,6 @@
     font-size: 0.9rem;
   }
 
-  /* slightly shrink profile/login so it doesn't force wrapping */
   .navbar-profile-pic {
     width: 32px !important;
     height: 32px !important;
@@ -144,7 +200,6 @@
 /* Mobile tweaks */
 @media (max-width: 991.98px) {
   .nav-links {
-    flex-wrap: wrap;
     gap: 10px;
   }
 }

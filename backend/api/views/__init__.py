@@ -8,4 +8,4 @@ from .meeting import MeetingPDFView, MeetingListView, MeetingRUDView, MeetingCre
 from .root import api_root
 from .user import StudentRUView, StudentsListView, PublicStudentsListView
 from .recruitment import RecruitmentSessionViewSet, ApplicationReviewViewSet, ApplicationStatusUpdateViewSet, \
-    ApplicationSubmitView, ActiveRecruitmentSessionView
+    ApplicationSubmitView, ActiveRecruitmentSessionView, RecruitmentApplicationsExcelView

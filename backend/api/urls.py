@@ -14,6 +14,7 @@ from api.views import (
     RecruitmentSessionViewSet,
     ApplicationReviewViewSet,
     ApplicationStatusUpdateViewSet,
+    RecruitmentApplicationsExcelView,
 
     # Event Views
     EventDetailView,
@@ -83,6 +84,7 @@ urlpatterns = [
 
     # Admin Recruitment Views (via router)
     path('recruitment/', include(recruitment_router.urls)),
+    path("recruitment/export/excel/", RecruitmentApplicationsExcelView.as_view(), name='export-recruitment-excel'),
 
     # Events
     path('events/', EventListCreateView.as_view(), name='events-list-create'),
@@ -91,5 +93,6 @@ urlpatterns = [
     path('events/registrations/', EventRegistrationListCreateView.as_view(), name='registration-create'),
     path('events/registrations/<int:pk>/', EventRegistrationDetailView.as_view(), name='registration-detail'),
     path('events/registrations/<int:pk>/delete/', EventRegistrationDeleteView.as_view(), name='registration-delete'),
-    path('events/registrations/<int:pk>/status/', RegistrationStatusUpdateView.as_view(), name='registration-status-update'),
+    path('events/registrations/<int:pk>/status/', RegistrationStatusUpdateView.as_view(),
+         name='registration-status-update'),
 ]

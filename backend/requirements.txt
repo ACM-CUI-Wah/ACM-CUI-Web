@@ -9,10 +9,12 @@ djangorestframework==3.16.0
 djangorestframework_simplejwt==5.5.1
 docker==7.1.0
 drf-spectacular==0.28.0
+et_xmlfile==2.0.0
 idna==3.10
 inflection==0.5.1
 jsonschema==4.25.0
 jsonschema-specifications==2025.4.1
+openpyxl==3.1.5
 pillow==11.3.0
 psycopg2-binary==2.9.11
 PyJWT==2.10.1

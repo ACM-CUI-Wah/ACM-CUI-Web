@@ -284,7 +284,7 @@ function CreateBillPage() {
 
           {/* File Input */}
           <div className="form-group">
-            <label className="custom-label">Upload Image (Optional)</label>
+            <label className="custom-label">Upload Image</label>
             <input
               type="file"
               id="bill-image-upload"
