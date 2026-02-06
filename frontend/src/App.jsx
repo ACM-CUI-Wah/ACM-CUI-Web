@@ -9,6 +9,7 @@ import RequireAuth from "./route/RequireAuth.jsx";
 import LandingPage from "./pages/Landing/LandingPage.jsx";
 import DashboardPage from "./pages/DashboardPage/DashboardPage.jsx";
 import ContactPage from "./pages/Contact/ContactPage.jsx";
+import CreditsPage from "./pages/Credits/CreditsPage.jsx";
 import MissionPage from "./pages/MissionPage.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
 import AchievementPage from "./pages/AchievementPage.jsx";
@@ -96,6 +97,15 @@ function App() {
           element={
             <>
               <ContactPage />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/credits"
+          element={
+            <>
+              <CreditsPage />
               <Footer />
             </>
           }

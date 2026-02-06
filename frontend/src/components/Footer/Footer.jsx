@@ -65,7 +65,9 @@ const Footer = () => {
             <p>Security</p> 
             <p>Status</p>
           </div>
-          <div className="ms-auto">
+          <div className="ms-auto d-flex align-items-center gap-3">
+            <Link to="/credits" className="built-by-link">Built by CodeHub Team</Link>
+            <span className="text-secondary">|</span>
             <p className="font mb-0">© 2026 ACM CUI Wah</p>
           </div>
         </div>
