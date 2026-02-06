@@ -5,7 +5,6 @@ from api.models import User, Student
 from django.contrib.auth import authenticate
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -17,11 +16,12 @@ class StudentSerializer(serializers.ModelSerializer):
     roll_no = serializers.RegexField(regex='^(?:FA|SP)[0-9]{2}-B(?:CS|AI|SE)-[0-9]{3}$', max_length=20,
                                      allow_blank=False)
     club = serializers.ChoiceField(choices=[
-        'codehub',
-        'graphics_and_media',
-        'social_media_and_marketing',
-        'registration_and_decor',
-        'events_and_logistics',
+        'CODEHUB',
+        'GRAPHICS',
+        'SOCIAL_MEDIA_MARKETING',
+        'MEDIA',
+        'DECOR',
+        'EVENTS_LOGISTICS',
         ''  # Allow empty club for executives
     ],
         allow_blank=True,
