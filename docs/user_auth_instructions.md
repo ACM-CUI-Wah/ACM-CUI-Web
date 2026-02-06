@@ -26,9 +26,10 @@ Because only a LEAD user can register new users, the LEAD sets an initial passwo
 The typical flow:
 
 1. The user clicks "Forgot password?" and enters their email.
-2. A request is sent to `auth/otp`, which responds with a short-lived JSON Web Token (JWT) (expires in 5 minutes).
-3. The user sends this JWT along with their new password to `auth/password/reset`.
-4. The password is updated if the token is valid and unexpired.
+2. A request is sent to `auth/otp`, which responds with a short-lived JWT (expires in 5 minutes).
+3. The OTP in the token can be compared with the user-inputted token, and if they are the same, then proceed to the next step.
+4. The user sends this JWT along with their new password to `auth/password/reset`.
+5. The password is updated if the token is valid and unexpired.
 
 This method ensures security while respecting the "LEAD-only register" requirement. 
 
