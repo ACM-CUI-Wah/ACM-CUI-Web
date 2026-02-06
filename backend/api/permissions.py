@@ -6,6 +6,7 @@ LEAD = 'LEAD'
 STUDENT = 'STUDENT'
 TREASURER = 'TREASURER'
 
+
 # Custom permissions for user types
 
 class IsLead(permissions.BasePermission):
@@ -13,6 +14,7 @@ class IsLead(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role == LEAD
+
 
 class IsAdmin(permissions.BasePermission):
     """
@@ -23,22 +25,27 @@ class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role == ADMIN
 
+
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
             return True
         return request.user.is_authenticated and request.user.role == ADMIN
 
+
 class IsLeadOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and (request.user.role == LEAD or ADMIN)
 
+
 def is_staff(role: str):
     return role == LEAD or ADMIN
+
 
 class IsTreasurer(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and (request.user.student.title.upper() == TREASURER)
+
 
 class SignUpPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -48,6 +55,7 @@ class SignUpPermission(permissions.BasePermission):
         return True
 
 
+# NOTE: This was created for blogs
 class IsAdminOrAuthor(permissions.BasePermission):
     """
     Allows access to admins or the author of the blog.
@@ -65,3 +73,16 @@ class IsAdminOrAuthor(permissions.BasePermission):
 
         # Author can access their own blog
         return obj.createdBy == request.user
+
+
+# NOTE: This was created for events
+class IsAdminOrLeadOrReadOnly(permissions.BasePermission):
+    """
+    Allows ADMIN or LEAD to access unsafe methods.
+    Restricts other uses to safe methods only.
+    """
+
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
+            return True
+        return request.user.is_authenticated and (request.user.role == ADMIN or request.user.role == LEAD)
