@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent.jsx";
+import Navbar from "../../components/DashboardNavbar/Navbar.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
 import EventHero from "../../components/LandingPage/Events/EventHeroSection.jsx";
 import EventListing from "../../components/LandingPage/Events/EventListing.jsx";
@@ -12,7 +12,7 @@ const PublicEventsListPage = () => {
 
     return (
         <div className="events-page">
-            <NavbarComponent />
+            <Navbar/>
             <main className="events-main">
                 <EventHero />
                 <EventListing />

@@ -1,5 +1,6 @@
 import React from 'react';
 import './RecruitmentCTA.css';
+import { Link } from 'react-router-dom';
 
 const RecruitmentCTA = () => {
   return (
@@ -10,9 +11,9 @@ const RecruitmentCTA = () => {
           Become a part of ACM CUI WAH and unlock opportunities for learning, 
           networking, and career growth in the tech industry.
         </p>
-        <button className="cta-button" onClick={() => window.location.href = '#'}>
+        <Link to="/recruitmentForm" className="cta-button" >
           Start Your Application <span>&rarr;</span>
-        </button>
+        </Link>
       </div>
     </section>
   );

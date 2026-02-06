@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Footer from "../../components/Footer/Footer.jsx";
-import NavbarComponent from "../../components/LandingPage/Navbar/NavbarComponent.jsx";
+import Navbar from "../../components/DashboardNavbar/Navbar.jsx";
 import RecruitmentHero from "../../components/RecruitmentHero/RecruitmentHero.jsx";
 import WhyJoinACM from "../../components/WhyJoinACM/WhyJoinACM.jsx";
 import RecruitmentTimeline from "../../components/RecruitmentTimeline/RecruitmentTimeline.jsx";
@@ -20,7 +20,7 @@ const RecruitmentPage = () => {
     <div className="recruitment-page">
       
   
-     <NavbarComponent/>
+     <Navbar/>
 
       {/* Main Content */}
       <main className="recruitment-main">

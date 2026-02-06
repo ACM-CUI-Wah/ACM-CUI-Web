@@ -1,47 +1,42 @@
-
-
-.navbar-animate {
-  opacity: 0;
-  transform: translateY(-20px);
-  animation: fadeInNavbar 0.8s ease-out forwards;
-  position: relative;
-  z-index: 10;
-}
-.navbar {
-  position: relative; 
-  z-index: 10; 
-}
-
-@keyframes fadeInNavbar {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.nav-link {
-
-  position: relative;
-  color: #000;
-}
-
 .custom-navbar1 {
   background-color: #0C4182;
   font-family: "Poppins", sans-serif;
-  padding: 18px;
+  padding: 14px 0; /* was 18px (tight widths benefit from less padding) */
 }
 
+/* Replace px-4 with responsive padding */
+.navbar-container {
+  padding-left: clamp(12px, 2vw, 24px);
+  padding-right: clamp(12px, 2vw, 24px);
+}
+
+/* Brand */
 .navbar-logo {
   height: 40px;
 }
 
+.navbar-brand-title {
+  white-space: nowrap;
+}
+
+/* Nav links layout */
+.nav-links {
+  gap: clamp(8px, 1.2vw, 18px); /* responsive spacing */
+  flex-wrap: nowrap;            /* default: keep single row */
+}
+
 .nav-links .nav-link {
   color: #fff !important;
-  margin: 0 12px;
   font-weight: 500;
   position: relative;
   text-decoration: none;
+  margin: 0;                    /* remove old margin system */
+  padding: 0.45rem clamp(0.35rem, 0.7vw, 0.8rem);
+  white-space: nowrap;          /* ✅ prevents "Our / Mission" word breaking */
+  font-size: clamp(0.92rem, 0.95vw, 1rem);
 }
 
+/* underline animation */
 .nav-links .nav-link::after {
   content: "";
   position: absolute;
@@ -52,11 +47,16 @@
   background: #fff;
   transition: width 0.3s ease-in-out;
 }
-
 .nav-links .nav-link:hover::after {
   width: 100%;
 }
 
+/* Right area (search + profile/login) */
+.navbar-right {
+  flex-shrink: 0; /* don't let it squeeze the nav in weird ways */
+}
+
+/* Search icon */
 .search-icon {
   position: absolute;
   right: 16px;
@@ -67,113 +67,15 @@
   pointer-events: none;
 }
 
-.login-btn {
-  background-color: #ffffff !important;
-  color: #1E4F91 !important;
-  border-radius: 8px;
-  padding: 6px 16px;
-  font-size: 14px;
-}
-
-.toggle-switch {
-  width: 50px;
-  height: 26px;
-  background-color: #e0e0e0;
-  border-radius: 26px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  padding: 2px;
-}
-
-.dropdown .dropdown-menu.custom-dropdown-menu {
-  min-width: 250px;
-  min-height: 150px;
-}
-
+/* Login/Profile button */
 .login-link {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: "Roboto", sans-serif !important;
   color: #2d66ad !important;
   border-radius: 25px;
   transition: all 0.3s ease;
 }
 
-.toggle-circle {
-  width: 22px;
-  height: 22px;
-  background-color: #ffffff;
-  color: #000000;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
-  font-size: 14px;
-}
-
-.toggle-switch.dark .toggle-circle {
-  transform: translateX(24px);
-}
-
-.navbar-brand p {
-  font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  max-width: 150px;
-}
-
-body.dark-mode {
-  background-color: #131A2A;
-  color: #ffffff;
-}
-
-body.dark-mode .custom-navbar {
-  background-color: #0D1224 !important;
-}
-
-body.dark-mode .nav-links .nav-link {
-  color: #ffffff !important;
-}
-
-body.dark-mode .search-input {
-  background-color: #1F2B3D;
-  color: #ffffff;
-  border: 1px solid #3a4a63;
-}
-
-body.dark-mode .search-input::placeholder {
-  color: #bbbbbb;
-}
-
-body.dark-mode .login-btn {
-  background-color: #2C354B !important;
-  color: #ffffff !important;
-}
-
-body.dark-mode .toggle-switch {
-  background-color: #3b4c66;
-}
-
-body.dark-mode .toggle-circle {
-  background-color: #ffffff;
-  color: #1E4F91;
-}
-
-@media (max-width: 991px) {
-  .search-container-mobile {
-    flex: 1;
-    margin-right: 12px;
-  }
-
-  .search-container-mobile .search-input {
-    width: 100%;
-  }
-}
+/* dropdown */
 .search-dropdown {
   position: absolute;
   top: 100%;
@@ -186,12 +88,10 @@ body.dark-mode .toggle-circle {
   overflow-y: auto;
   border-radius: 4px;
 }
-
 .search-item {
   padding: 8px 12px;
   cursor: pointer;
 }
-
 .search-item:hover {
   background: #f2f2f2;
 }
@@ -205,13 +105,46 @@ body.dark-mode .toggle-circle {
   border-radius: 6px;
   transition: background-color 0.2s ease;
 }
-
 .menu-toggle-btn:hover,
 .menu-toggle-btn:focus {
   background-color: rgba(255, 255, 255, 0.1) !important;
   color: #fff !important;
 }
-
 .menu-toggle-btn:active {
   background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ✅ KEY FIX: 992–1199 (lg to xl) is tight -> hide brand title */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .navbar-brand-title {
+    display: none;
+  }
+}
+
+/* ✅ KEY FIX: 1000–1032 (your problem range) -> allow WRAP of items (not words) */
+@media (min-width: 1000px) and (max-width: 1032px) {
+  .nav-links {
+    flex-wrap: wrap;       /* ✅ moves whole links to next line if needed */
+    row-gap: 8px;
+    justify-content: center;
+  }
+
+  .nav-links .nav-link {
+    padding: 0.35rem 0.45rem;
+    font-size: 0.9rem;
+  }
+
+  /* slightly shrink profile/login so it doesn't force wrapping */
+  .navbar-profile-pic {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+/* Mobile tweaks */
+@media (max-width: 991.98px) {
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }

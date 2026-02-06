@@ -1,5 +1,6 @@
 import React from 'react';
 import './RecruitmentHero.css';
+import { Link } from 'react-router-dom';
 
 
 const RecruitmentHero = () => {
@@ -34,8 +35,8 @@ const RecruitmentHero = () => {
         </div>
 
         <div className="hero-buttons">
-          <button className="btn-primary">Join ACM &rarr;</button>
-          <button className="btn-secondary">View Events</button>
+          <Link to="/recruitmentForm" className="btn-primary">Join ACM &rarr;</Link>
+          <Link to="/events" className="btn-secondary">View Events</Link>
         </div>
       </div>
 

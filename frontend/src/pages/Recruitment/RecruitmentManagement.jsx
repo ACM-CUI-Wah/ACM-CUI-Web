@@ -429,7 +429,7 @@ const RecruitmentManagement = () => {
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
-            <option value="">All Role</option>
+            <option value="">All Clubs</option>
             {roleOptions.map((r) => (
               <option key={r} value={r}>
                 {r}
@@ -459,7 +459,7 @@ const RecruitmentManagement = () => {
                 <th>Name</th>
                 <th>Roll No.</th>
                 <th>Email</th>
-                <th>Preferred Role</th>
+                <th>Preferred Club</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -645,12 +645,12 @@ const RecruitmentManagement = () => {
 
               <div className="rm-grid-2">
                 <div className="rm-kv">
-                  <span>Preferred Role</span>
+                  <span>Preferred Club</span>
                   <b>{selectedApp.role_preferences?.preferred_role || "-"}</b>
                 </div>
 
                 <div className="rm-kv">
-                  <span>Secondary Role</span>
+                  <span>Secondary Club</span>
                   <b>{selectedApp.role_preferences?.secondary_role || "-"}</b>
                 </div>
               </div>

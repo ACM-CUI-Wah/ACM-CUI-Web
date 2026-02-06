@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import NavbarComponent from '../../components/LandingPage/Navbar/NavbarComponent';
 import Footer from '../../components/Footer/Footer';
 import axiosInstance from '../../axios';
 import './EventIndividualForm.css';
+import Navbar from '../../components/DashboardNavbar/Navbar';
 
 const EventIndividualForm = () => {
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ const EventIndividualForm = () => {
 
   return (
     <div className="event-individual-page">
-      <NavbarComponent />
+      <Navbar/>
 
       <div className="event-registration-container">
         <div className="form-header">
@@ -202,7 +202,7 @@ const EventIndividualForm = () => {
 
           {/* Submit Button */}
           <div className="submit-container">
-            <button type="submit" className="submit-btn" disabled={loading}>
+            <button type="submit" className="submit-btn1" disabled={loading}>
               {loading ? 'Submitting...' : 'Submit Application'}
             </button>
           </div>
