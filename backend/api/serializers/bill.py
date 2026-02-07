@@ -15,12 +15,21 @@ class BillSerializer(serializers.ModelSerializer):
             return None
         return get_bucket_public_url(obj.image)
 
+
+class BillWriteSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(write_only=True, required=True)
+
+    class Meta:
+        model = Bill
+        fields = '__all__'
+        read_only_fields = ['id']
+
     def create(self, validated_data):
-        image = validated_data.pop("image", None)
+        uploaded_image = validated_data.pop("image", None)
         bill = Bill.objects.create(**validated_data)
 
-        if image:
-            bill.image = upload_file(image, "bills")
+        if uploaded_image:
+            bill.image = upload_file(uploaded_image, "bills")
             bill.save(update_fields=["image"])
 
         return bill
