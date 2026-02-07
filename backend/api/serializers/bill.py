@@ -10,7 +10,7 @@ class BillSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
-    def get_image_url(self, obj):
+    def get_image(self, obj):
         if not obj.image:
             return None
         return get_bucket_public_url(obj.image)
