@@ -186,6 +186,8 @@ class RolePreferences(models.Model):
         help_text="Any previous relevant experience"
     )
     weekly_availability = models.CharField(
+        blank=True,
+        null=True,
         max_length=100,
         help_text="Available hours per week for ACM activities"
     )
