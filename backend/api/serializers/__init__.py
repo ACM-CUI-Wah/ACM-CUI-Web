@@ -1,5 +1,5 @@
 from .admin import AdminSerializer
-from .bill import BillSerializer
+from .bill import BillSerializer, BillWriteSerializer
 from .blog import BlogSerializer, BlogImageSerializer, BlogUpdateSerializer, BlogUploadSerializer, InlineImageSerializer
 from .event import EventSerializer, EventTypeSerializer, EventWriteSerializer, EventRegistrationCreateSerializer, RegistrationStatusUpdateSerializer, EventParticipantSerializer, EventParticipantReadSerializer, EventRegistrationReadSerializer
 from .meeting import MeetingSerializer, MeetingAttendanceSerializer

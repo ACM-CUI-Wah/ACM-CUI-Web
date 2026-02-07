@@ -33,3 +33,15 @@ class BillWriteSerializer(serializers.ModelSerializer):
             bill.save(update_fields=["image"])
 
         return bill
+
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if image:
+            instance.image = upload_file(image, "bills")
+
+        instance.save()
+        return instance
