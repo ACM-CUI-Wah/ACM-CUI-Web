@@ -11,14 +11,3 @@ class Bill(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     date = models.DateField(default=date.today)
     image = models.CharField(max_length=255)
-
-    def save(self, *args, **kwargs):
-        if self.id is None:
-            saved_image = self.image
-            self.image = None
-            super(Bill, self).save(*args, **kwargs)
-            self.image = saved_image
-            if 'force_insert' in kwargs:
-                kwargs.pop('force_insert')
-
-        super().save(*args, **kwargs)
