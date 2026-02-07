@@ -114,6 +114,8 @@ class RolePreferencesSerializer(serializers.ModelSerializer):
     - secondary_role: Backup role choice
     - join_purpose: Motivation statement
     """
+    weekly_availability = serializers.CharField(required=False)
+    
     class Meta:
         model = RolePreferences
         fields = ['application_id', 'preferred_role', 'secondary_role', 'join_purpose', 'previous_experience', 'weekly_availability', 'linkedin_profile']
