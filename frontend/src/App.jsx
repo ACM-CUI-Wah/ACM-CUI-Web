@@ -132,7 +132,7 @@ function App() {
         />
 
         {/* Recruitment (public) */}
-        <Route path="/recruitment" element={<RecruitmentPage />} />
+        <Route path="/recruitment" element={<><RecruitmentPage /><Footer /></>} />
         <Route
           path="/recruitmentForm"
           element={
