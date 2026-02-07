@@ -172,7 +172,10 @@ AUTH_USER_MODEL = 'api.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
-EMAIL_FILE_PATH = "api/tmp/api_emails"
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'ACM CUI Wah <acmcuidevs@gmail.com>'
+EMAIL_USE_TLS = True
 
 # Media files configuration
 MEDIA_URL = '/media/'
