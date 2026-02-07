@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import get_user_model
 from rest_framework import generics, status
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -53,15 +55,17 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
         user_data = {}
 
         for key, value in request.data.items():
-            if key.startswith('user[') and key.endswith(']'):
-                # Extract field name from user[field_name]
-                field_name = key[5:-1]
-                # Only include if the value has actually changed
-                if field_name == 'id':
-                    continue  # Skip id field
-                current_value = getattr(user, field_name, None)
-                if str(current_value) != str(value):
-                    user_data[field_name] = value
+            if key == 'user':
+                try:
+                    nested = json.loads(value)
+                except json.JSONDecodeError:
+                    nested = {}
+                for field_name, field_value in nested.items():
+                    if field_name == 'id':
+                        continue
+                    current_value = getattr(user, field_name, None)
+                    if str(current_value) != str(field_value):
+                        user_data[field_name] = field_value
             elif key == 'profile_pic':
                 data['profile_pic'] = value
             elif key == 'profile_desc':
