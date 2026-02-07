@@ -146,7 +146,6 @@ useEffect(() => {
       <NavLink to="/dashboard/recruitment">Recruitment</NavLink>
       <NavLink to="/dashboard/events/management">Event Registrations</NavLink>
       <NavLink to="/dashboard/members">Member Management</NavLink>
-      <NavLink to="/dashboard/blogs">Handle Blogs</NavLink>
       <NavLink to="/dashboard/events-list">Events</NavLink>
       <NavLink to="/dashboard/events/create">Create Event</NavLink>
       <NavLink to="/dashboard/signup">Signup New Members</NavLink>

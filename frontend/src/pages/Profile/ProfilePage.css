@@ -68,7 +68,7 @@
   gap: 10px;
 }
 
-.submit-btn {
+.ep-submit-btn {
   background-color: #2563eb;
   color: #fff;
   padding: 8px 16px;
@@ -77,7 +77,7 @@
   cursor: pointer;
 }
 
-.submit-btn:hover {
+.ep-submit-btn:hover {
   background-color: #1d4ed8;
 }
 
