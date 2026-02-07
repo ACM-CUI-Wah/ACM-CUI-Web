@@ -13,7 +13,7 @@ class BillSerializer(serializers.ModelSerializer):
     def get_image_url(self, obj):
         if not obj.image:
             return None
-        return get_bucket_public_url(obj.file)
+        return get_bucket_public_url(obj.image)
 
     def create(self, validated_data):
         image = validated_data.pop("image", None)
