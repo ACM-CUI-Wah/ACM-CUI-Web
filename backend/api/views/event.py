@@ -10,6 +10,7 @@ from api.serializers import (
     EventParticipantReadSerializer,
     EventRegistrationReadSerializer,
 )
+from api.utils import delete_from_bucket
 
 
 class EventListCreateView(generics.ListCreateAPIView):
@@ -28,6 +29,10 @@ class EventDetailView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method in ['PUT', 'PATCH']:
             return EventWriteSerializer
         return EventSerializer
+
+    def perform_destroy(self, instance):
+        delete_from_bucket("events", instance.image)
+        instance.delete()
 
 
 class EventTypeListCreateView(generics.ListCreateAPIView):

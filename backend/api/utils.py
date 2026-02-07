@@ -73,3 +73,8 @@ def upload_file(file, folder):
 
 def get_bucket_public_url(path):
     return f"{settings.SUPABASE_URL}/storage/v1/object/public/{settings.SUPABASE_BUCKET}/{path}"
+
+def delete_from_bucket(bucket: str, path: str):
+    if not path:
+        return
+    supabase.storage.from_(bucket).remove([path])

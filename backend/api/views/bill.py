@@ -2,6 +2,7 @@ from rest_framework import generics
 from api.models import Bill
 from api.serializers import BillSerializer, BillWriteSerializer
 from api.permissions import IsTreasurer
+from api.utils import delete_from_bucket
 
 
 class BillListCreateView(generics.ListCreateAPIView):
@@ -22,3 +23,7 @@ class BillRUDView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method in ['PUT', 'PATCH']:
             return BillWriteSerializer
         return BillSerializer
+
+    def perform_destroy(self, instance):
+        delete_from_bucket("bills", instance.image)
+        instance.delete()
