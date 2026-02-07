@@ -37,16 +37,17 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = '__all__'
 
-    def validate(self, data):
-        """Validate that club is required for non-executive members"""
-        title = data.get('title', '')
-        club = data.get('club', '')
-
-        # If not an executive title and club is empty, raise error
-        if title not in self.EXECUTIVE_TITLES and not club:
-            raise ValidationError({'club': 'Club selection is required for non-executive members.'})
-
-        return data
+    # NOTE: This was not written by backend team and is causing problems.
+    # def validate(self, data):
+    #     """Validate that club is required for non-executive members"""
+    #     title = data.get('title', '')
+    #     club = data.get('club', '')
+    #
+    #     # If not an executive title and club is empty, raise error
+    #     if title not in self.EXECUTIVE_TITLES and not club:
+    #         raise ValidationError({'club': 'Club selection is required for non-executive members.'})
+    #
+    #     return data
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
