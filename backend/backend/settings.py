@@ -32,7 +32,6 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 # Allowed hosts - comma separated in environment variable
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -90,7 +89,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
-        "APP_DIRS": True, 
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -103,7 +102,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "backend.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -123,6 +121,9 @@ DATABASES = {
     }
 }
 
+SUPABASE_BUCKET = "media"
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -142,7 +143,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -153,7 +153,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

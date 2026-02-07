@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from api.models import Event, EventType, EventRegistration, EventParticipant, RegistrationType, RegistrationStatus
 from django.db import transaction
+from api.utils import get_bucket_public_url, upload_file
 
 
 class EventTypeSerializer(serializers.ModelSerializer):
@@ -19,24 +20,16 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
-    
+
     def get_registration_count(self, obj):
-        # Count all registrations except cancelled ones
-        return obj.registrations.exclude(status=RegistrationStatus.CANCELLED).count()
-    
+        return obj.registrations.exclude(
+            status=RegistrationStatus.CANCELLED
+        ).count()
+
     def get_image(self, obj):
-        request = self.context.get('request')
-        if obj.image and hasattr(obj.image, 'url'):
-            try:
-                # Check if file exists
-                if obj.image.storage.exists(obj.image.name):
-                    if request:
-                        return request.build_absolute_uri(obj.image.url)
-                    return obj.image.url
-            except:
-                pass
-        # Return default image or None
-        return None
+        if not obj.image:
+            return None
+        return get_bucket_public_url(obj.image)
 
 
 class EventWriteSerializer(serializers.ModelSerializer):
@@ -45,6 +38,11 @@ class EventWriteSerializer(serializers.ModelSerializer):
     )
     time_from = serializers.TimeField(format='%I:%M %p')
     time_to = serializers.TimeField(format='%I:%M %p')
+
+    image = serializers.ImageField(
+        write_only=True,
+        required=False
+    )
 
     class Meta:
         model = Event
@@ -64,6 +62,28 @@ class EventWriteSerializer(serializers.ModelSerializer):
             'hosts',
         ]
         read_only_fields = ['id']
+
+    def create(self, validated_data):
+        image = validated_data.pop('image', None)
+        event = Event.objects.create(**validated_data)
+
+        if image:
+            event.image = upload_file(image, "events")
+            event.save(update_fields=["image"])
+
+        return event
+
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if image:
+            instance.image_path = upload_file(image, "events")
+
+        instance.save()
+        return instance
 
 
 class EventParticipantSerializer(serializers.ModelSerializer):

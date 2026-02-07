@@ -47,8 +47,7 @@ class Event(models.Model):
     time_from = models.TimeField()
     time_to = models.TimeField()
     location = models.CharField(max_length=200, blank=True)
-    image = models.ImageField(upload_to='events/', default=f'{settings.MEDIA_ROOT}/events/default.png', blank=True,
-                              null=True)
+    image = models.CharField(max_length=255, blank=True, null=True)
     total_seats = models.PositiveIntegerField(default=0)
     tags = ArrayField(
         models.CharField(

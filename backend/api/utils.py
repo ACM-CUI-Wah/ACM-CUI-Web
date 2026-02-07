@@ -1,5 +1,7 @@
 from datetime import datetime
-
+from .supabase import supabase
+from django.conf import settings
+from uuid import uuid4
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import send_mail
 
@@ -22,6 +24,7 @@ def get_tokens_for_user(user, **claims):
         'access': str(refresh.access_token),
     }
 
+
 def send_otp(destination: str, **data):
     """
     Sends OTP to destination. This function is currently development
@@ -38,6 +41,7 @@ def send_otp(destination: str, **data):
         fail_silently=False,
     )
 
+
 def send_password(destination: str, **data):
     send_mail(
         subject='Account Creation Notice',
@@ -47,5 +51,25 @@ def send_password(destination: str, **data):
         fail_silently=False,
     )
 
+
 def current_time():
     return datetime.now().time()
+
+
+def upload_file(file, folder):
+    """
+    Upload a file to the public bucket.
+    Returns the path that can be used to construct the URL.
+    """
+
+    path = f"{folder}/{uuid4()}_{file.name}"
+
+    supabase.storage.from_(settings.SUPABASE_BUCKET).upload(
+        path,
+        file.read(),
+        file_options={"content-type": file.content_type}
+    )
+    return path
+
+def get_bucket_public_url(path):
+    return f"{settings.SUPABASE_URL}/storage/v1/object/public/{settings.SUPABASE_BUCKET}/{path}"
