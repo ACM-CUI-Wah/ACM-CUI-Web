@@ -26,6 +26,7 @@ const imageNameMap = {
   "Malick Haris Ali": "Malik Haris",
   "Ramlah Munir": "RAMLAH MUNIR",
   "Aleesha Yasin": "Alesha yasin",
+  "Abdul Wahab": "Abdul Wahab",
 };
 
 const getTeamImage = (name) => {
@@ -88,6 +89,7 @@ const CreditsPage = () => {
     { name: "M. Umar", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/muhammad-umar-a323712b9" },
     { name: "Muhammad Hafeez", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/contacthhafeez" },
     { name: "Aryan Afzal", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/muhammadaryanafzal" },
+    { name: "Abdul Wahab", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/abdul-wahab-428851314/" },
     { name: "Abdul Wasay", role: "Design Team", linkedin: "https://www.linkedin.com/in/abdul-wasay-3664ab289" },
     { name: "Farhad Ali", role: "Design Team", linkedin: "https://www.linkedin.com/in/farhad-ali-029857283" },
   ];
