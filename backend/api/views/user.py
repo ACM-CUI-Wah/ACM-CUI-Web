@@ -39,11 +39,11 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
-    def get_serializer_class(self):
-        """Use ProfileUpdateSerializer for PATCH requests (profile updates)"""
-        if self.request.method == 'PATCH':
-            return ProfileUpdateSerializer
-        return StudentSerializer
+    # def get_serializer_class(self):
+    #     """Use ProfileUpdateSerializer for PATCH requests (profile updates)"""
+    #     if self.request.method == 'PATCH':
+    #         return ProfileUpdateSerializer
+    #     return StudentSerializer
 
     def partial_update(self, request, *args, **kwargs):
         """Handle PATCH requests for profile updates with nested user data"""
@@ -66,10 +66,8 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
                     current_value = getattr(user, field_name, None)
                     if str(current_value) != str(field_value):
                         user_data[field_name] = field_value
-            elif key == 'profile_pic':
-                data['profile_pic'] = value
-            elif key == 'profile_desc':
-                data['profile_desc'] = value
+            else:
+                data[key] = value
 
         # Only include user data if there are actual changes
         if user_data:
