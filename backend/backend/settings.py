@@ -171,9 +171,25 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'api.User'
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
-EMAIL_FILE_PATH = "api/tmp/api_emails"
+# Email Configuration for Production (Railway-compatible)
+# Use environment variables to configure email provider
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.smtp.EmailBackend'  # Use SMTP by default
+)
+
+# SMTP Configuration (works on Railway with port 587/465)
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))  # Port 587 for TLS (Railway-compatible)
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False') == 'True'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+
+# For development: fallback to console backend if no credentials
+if not EMAIL_HOST_USER and DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Media files configuration
 MEDIA_URL = '/media/'
