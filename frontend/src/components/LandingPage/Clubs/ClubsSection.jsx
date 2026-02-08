@@ -48,7 +48,6 @@ const ClubsSection = () => {
           </div>
           <h4>CODE HUB</h4>
           <p>Hands-on coding, real-world challenges, and technical growth.</p>
-          <span>Explore</span>
         </motion.div>
 
         {/* EVENTS */}
@@ -58,7 +57,6 @@ const ClubsSection = () => {
           </div>
           <h4>EVENTS & LOGISTICS</h4>
           <p>Planning and executing impactful technical events.</p>
-          <span>Explore</span>
         </motion.div>
 
         {/* GRAPHICS */}
@@ -68,7 +66,6 @@ const ClubsSection = () => {
           </div>
           <h4>GRAPHICS</h4>
           <p>Designing visuals that communicate ideas beautifully.</p>
-          <span>Explore</span>
         </motion.div>
 
         {/* SOCIAL MEDIA & MARKETING */}
@@ -78,7 +75,6 @@ const ClubsSection = () => {
           </div>
           <h4>SOCIAL MEDIA & MARKETING</h4>
           <p>Promoting ACM through engaging digital campaigns.</p>
-          <span>Explore</span>
         </motion.div>
 
         {/* DECOR */}
@@ -88,7 +84,6 @@ const ClubsSection = () => {
           </div>
           <h4>DECOR</h4>
           <p>Transforming spaces to reflect creativity and innovation.</p>
-          <span>Explore</span>
         </motion.div>
 
 
@@ -114,4 +109,3 @@ const ClubsSection = () => {
 };
 
 export default ClubsSection;
-

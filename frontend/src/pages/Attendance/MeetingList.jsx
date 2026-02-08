@@ -100,13 +100,6 @@ const MeetingList = () => {
 
                   {/* ✅ Meeting Edit/Delete */}
                   <div className="d-flex justify-content-end mt-2">
-                    {/* Edit meeting */}
-                    <Link
-                      to={`/edit-meeting/${meeting.id}`}
-                      className="btn btn-sm btn-outline-secondary me-2"
-                    >
-                      <i className="bi bi-pencil"></i>
-                    </Link>
 
                     {/* Delete meeting */}
                     <button
@@ -127,3 +120,4 @@ const MeetingList = () => {
 };
 
 export default MeetingList;
+

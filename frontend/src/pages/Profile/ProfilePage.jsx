@@ -188,7 +188,7 @@ useEffect(() => {
 
         {editMode && (
           <div className="button-group">
-            <button type="submit" disabled={loading} className="submit-btn">
+            <button type="submit" disabled={loading} className="ep-submit-btn">
               {loading ? "Updating..." : "Save Changes"}
             </button>
             <button type="button" className="cancel-btn" onClick={handleCancel}>

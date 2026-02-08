@@ -7,9 +7,10 @@ const useAuthStore = create((set, get) => ({
   token: localStorage.getItem("token") || null,
   role: localStorage.getItem("role") || null,
   club: localStorage.getItem("club") || null,
-  resetToken: null,
+  resetToken: null, // Note: This might not be needed anymore if user enters OTP manually
   loading: false,
   error: null,
+ otpToken: null,
 
   // ===========================
   // LOGIN
@@ -74,69 +75,52 @@ const useAuthStore = create((set, get) => ({
   },
 
   // ===========================
-  // REQUEST OTP
+  // 1. REQUEST OTP
   // ===========================
   requestOtp: async (email) => {
     set({ loading: true, error: null });
-
     try {
       const res = await axiosInstance.post("/auth/otp/", { email });
 
-      const resetToken = res.data?.token?.access;
+      // capture the token from response (adjust path if needed: res.data.token or res.data.otp)
+      const tokenReceived = res.data?.token?.access || res.data?.token || res.data?.otp;
 
-      set({ resetToken, loading: false });
-
-      return { success: true, resetToken };
+      // SAVE TO LOCAL STORAGE so we can compare it in the next screen
+      localStorage.setItem("otpToken", tokenReceived);
+      
+      set({ otpToken: tokenReceived, loading: false });
+      return { success: true };
 
     } catch (err) {
-      const apiError = err.response?.data;
-      let errorMessage = "OTP request failed";
-
-      if (apiError?.non_field_errors) {
-        errorMessage = apiError.non_field_errors.join(", ");
-      }
-
-      set({ error: errorMessage, loading: false });
-      return { success: false, error: errorMessage };
+      set({ loading: false, error: "Failed to request OTP" });
+      return { success: false };
     }
   },
 
   // ===========================
-  // RESET PASSWORD
+  // 2. RESET PASSWORD (API CALL ONLY)
   // ===========================
-  resetPassword: async (newPassword) => {
+  resetPassword: async (validToken, newPassword) => {
     set({ loading: true, error: null });
 
     try {
-      const { resetToken } = get();
+      // We send the Validated Token and Password to backend
       const res = await axiosInstance.put("/auth/password/reset", {
-        token: resetToken,
+        token: validToken, 
         password: newPassword,
       });
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      localStorage.removeItem("club");
-
-      set({
-        loading: false,
-        resetToken: null,
-        token: null,
-        user_id: null,
-        role: null,
-        club: null,
-      });
-
+      // Cleanup
+      localStorage.removeItem("otpToken");
+      set({ loading: false, otpToken: null });
+      
       return { success: true, data: res.data };
 
     } catch (err) {
       const apiError = err.response?.data;
-      let errorMessage = "Password reset failed";
-
-      if (apiError?.non_field_errors) {
-        errorMessage = apiError.non_field_errors.join(", ");
-      }
-
+      // Handle "Invalid Token" response from backend if it still fails
+      const errorMessage = apiError?.token ? apiError.token[0] : "Reset failed";
+      
       set({ error: errorMessage, loading: false });
       return { success: false, error: errorMessage };
     }
@@ -168,13 +152,13 @@ const useAuthStore = create((set, get) => ({
       console.log("Signup error response:", err.response?.data);
 
       set({
-        error: err.response?.data?.message ||err.response?.data || "Signup failed",
+        error: err.response?.data?.message || err.response?.data || "Signup failed",
         loading: false,
       });
 
       return {
         success: false,
-        message: err.response?.data?.message||err.response?.data || "Signup failed",
+        message: err.response?.data?.message || err.response?.data || "Signup failed",
         data: err.response?.data || null,
       };
     }

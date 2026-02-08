@@ -322,10 +322,17 @@ const EventTeamForm = () => {
                       }
                       required
                     >
-                      <option value="">Select your semester</option>
-                      <option value="CS">Computer Science</option>
-                      <option value="SE">Software Engineering</option>
-                      <option value="AI">Artificial Intelligence</option>
+                      <option value="">Select your department</option>
+                  <option value="CS">Computer Science</option>
+                  <option value="SE">Software Engineering</option>
+                  <option value="AI">Artificial Intelligence</option>
+                  <option value="EE">Electrical Engineering</option>
+                  <option value="CE">Computer Engineering</option>
+                  <option value="ME">Mechanical Engineering</option>
+                  <option value="CE">Civil Engineering</option>
+                  <option value="BBA">Business Administration</option>
+                  <option value="HUM">Humanities Department</option>
+                  <option value="MATH">Mathematics Department</option>
                     </select>
                   </div>
                 </div>

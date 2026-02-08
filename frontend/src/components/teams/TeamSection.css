@@ -39,15 +39,14 @@
 
 .team-track {
   display: flex;
- 
   position: absolute;
-  left: 0;
+  left: 50%; /* CHANGED: Anchors the track to the center */
   top: 50%;
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
   padding-left: 0;
+  /* Note: Remove 'gap' from CSS media queries if possible, let JS handle it */
 }
-
 .card-wrapper {
   width: 300px;
   flex-shrink: 0;

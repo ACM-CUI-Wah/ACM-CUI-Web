@@ -169,9 +169,15 @@ const EventDetailPage = () => {
               {Math.max(0, event.total_seats - (event.registration_count || 0))} spots available!
             </p>
 
-            <button className="register-btn" onClick={() => setShowModal(true)}>
-              Register Now
-            </button>
+            {new Date(event.date) >= new Date(new Date().toDateString()) ? (
+              <button className="register-btn" onClick={() => setShowModal(true)}>
+                Register Now
+              </button>
+            ) : (
+              <button className="register-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                Event Ended
+              </button>
+            )}
 
             <hr style={{ border: '0', borderTop: '1px solid #eee', margin: '20px 0' }} />
 

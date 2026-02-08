@@ -14,7 +14,7 @@ const EventListing = () => {
   const [searchParams] = useSearchParams();
 
   // Manually defined categories for the filter buttons
-  const categories = ["All Events", "Hackathon", "Seminar", "Workshop", "Networking"];
+  const categories = ["All Events", "Hackathon", "Seminar", "Workshop", "Networking", "Student Week"];
 
   // Get category from URL query param, default to "All Events"
   const categoryFromUrl = searchParams.get("category");
