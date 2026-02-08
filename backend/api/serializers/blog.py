@@ -28,6 +28,7 @@ class BlogImageSerializer(serializers.ModelSerializer):
 
 
 class InlineImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(write_only=True)
     url = serializers.SerializerMethodField()
 
     class Meta:
