@@ -10,22 +10,20 @@ from api.models import Blog
 from api.permissions import IsAdmin
 from api.serializers import BlogSerializer, BlogUploadSerializer, BlogUpdateSerializer, InlineImageSerializer
 from api.permissions import IsAdminOrAuthor
-from api.utils import delete_from_bucket
 
 
-class InlineImageUploadView(generics.CreateAPIView):
+class InlineImageUploadView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = InlineImageSerializer
     parser_classes = [MultiPartParser, FormParser]
 
-    # def post(self, request, *args, **kwargs):
-    #     serializer = InlineImageSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         image = serializer.save()
-    #         image_url = request.build_absolute_uri(image.image.url)
-    #         return Response({"url": image_url}, status=status.HTTP_201_CREATED)
-    #
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        serializer = InlineImageSerializer(data=request.data)
+        if serializer.is_valid():
+            image = serializer.save()
+            image_url = request.build_absolute_uri(image.image.url)
+            return Response({"url": image_url}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @extend_schema(
@@ -206,20 +204,49 @@ class BlogListAPIView(generics.ListAPIView):
         return queryset
 
 
+@extend_schema(
+    summary="Get a single blog post",
+    description="Retrieve a single blog post by its ID.",
+    responses={
+        200: OpenApiResponse(
+            response=BlogSerializer,
+            description="Blog post retrieved successfully."
+        ),
+        404: OpenApiResponse(
+            description="Blog post not found",
+            examples=[
+                OpenApiExample(
+                    "Not Found",
+                    value={
+                        "status": "error",
+                        "message": "Blog post not found",
+                        "data": None
+                    }
+                )
+            ]
+        ),
+    }
+)
+class BlogDetailView(APIView):
+    """
+    API endpoint to retrieve a single blog post by ID.
+    """
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            blog = Blog.objects.get(pk=pk)
+            serializer = BlogSerializer(blog, context={"request": request})
+            return Response({
+                "status": "success",
+                "message": "Blog post retrieved successfully",
+                "data": serializer.data
+            }, status=status.HTTP_200_OK)
+        except Blog.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "Blog post not found",
+                "data": None
+            }, status=status.HTTP_404_NOT_FOUND)
 
-class InlineImageUploadView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = InlineImageSerializer
-    parser_classes = [MultiPartParser, FormParser]
-
-    # def post(self, request, *args, **kwargs):
-    #     serializer = InlineImageSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         image = serializer.save()
-    #         image_url = request.build_absolute_uri(image.image.url)
-    #         return Response({"url": image_url}, status=status.HTTP_201_CREATED)
-    #
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema(
     summary="Edit a blog post",
@@ -295,6 +322,20 @@ class InlineImageUploadView(generics.CreateAPIView):
         )
     ],
 )
+class InlineImageUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, *args, **kwargs):
+        serializer = InlineImageSerializer(data=request.data)
+        if serializer.is_valid():
+            image = serializer.save()
+            image_url = request.build_absolute_uri(image.image.url)
+            return Response({"url": image_url}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class BlogEditView(APIView):
     permission_classes = [IsAdminOrAuthor]
     parser_classes = [MultiPartParser, FormParser]
@@ -369,32 +410,22 @@ class BlogEditView(APIView):
         ),
     },
 )
-class BlogDeleteView(generics.DestroyAPIView):
-    queryset = Blog.objects.all()
+class BlogDeleteView(APIView):
     permission_classes = [IsAuthenticated, IsAdmin]
-    serializer_class = BlogSerializer
 
-    def perform_destroy(self, instance):
-        for blog_image in instance.images.all():
-            if blog_image.image:
-                delete_from_bucket("media", blog_image.image)
-        super().perform_destroy(instance)
+    def delete(self, request, pk, *args, **kwargs):
+        try:
+            blog = Blog.objects.get(pk=pk)
+        except Blog.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "Blog post not found",
+                "data": None
+            }, status=status.HTTP_404_NOT_FOUND)
 
-    # def delete(self, request, pk, *args, **kwargs):
-    #     try:
-    #         blog = Blog.objects.get(pk=pk)
-    #     except Blog.DoesNotExist:
-    #         return Response({
-    #             "status": "error",
-    #             "message": "Blog post not found",
-    #             "data": None
-    #         }, status=status.HTTP_404_NOT_FOUND)
-    #
-    #     blog.delete()
-    #     return Response({
-    #         "status": "success",
-    #         "message": "Blog post deleted successfully",
-    #         "data": None
-    #     }, status=status.HTTP_200_OK)
-
-
+        blog.delete()
+        return Response({
+            "status": "success",
+            "message": "Blog post deleted successfully",
+            "data": None
+        }, status=status.HTTP_200_OK)
