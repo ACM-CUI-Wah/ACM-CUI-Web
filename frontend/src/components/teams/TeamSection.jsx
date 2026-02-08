@@ -21,7 +21,7 @@ const teamData = [
   },
   {
     image: socialImage,
-    title: "Social Media and Marketing",
+    title: "Social Media & Marketing",
     description:
       "Dedicated to building creativity, communication, and digital presence through modern marketing strategies."
   },
@@ -39,7 +39,7 @@ const teamData = [
   },
   {
     image: decorImage,
-    title: "Decor and Registration",
+    title: "Decor",
     description:
       "Ensuring events feel welcoming, vibrant, and well-organized with creative decoration and planning."
   }
@@ -67,6 +67,8 @@ const TeamSection = () => {
           "VICE PRESIDENT",
           "SECRETARY",
           "TREASURER",
+          "ADVISOR",
+          "LEAD ADVISOR",
           "DIRECTOR OPERATIONS",
           "COORDINATOR"
         ];

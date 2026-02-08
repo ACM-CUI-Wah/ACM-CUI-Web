@@ -1,13 +1,14 @@
 import React from 'react';
 import './RecruitmentHero.css';
 import { Link } from 'react-router-dom';
+import recruitmentImage from '../../assets/RecruitmentTable.png';
 
 
 const RecruitmentHero = () => {
   return (
     <section className="hero-container">
       <div className="hero-content">
-    
+
         <div className="recruitment-badge">
           <span className="badge-icon">⚡</span>
           Spring 2026 Recruitment Now Open
@@ -15,7 +16,7 @@ const RecruitmentHero = () => {
 
         <h1 className="hero-title">ACM CUI WAH CHAPTER</h1>
         <p className="hero-subtitle">
-          Empowering students to innovate, collaborate, and excel in computing. 
+          Empowering students to innovate, collaborate, and excel in computing.
           Join the largest computing society at COMSATS University.
         </p>
 
@@ -41,10 +42,10 @@ const RecruitmentHero = () => {
       </div>
 
       <div className="hero-image-container">
-        
-        <img 
-          src="..\..\src\assets\RecruitmentTable.png" 
-          alt="Interview Illustration" 
+
+        <img
+          src={recruitmentImage}
+          alt="Recruitment Illustration"
           className="hero-illustration"
         />
       </div>

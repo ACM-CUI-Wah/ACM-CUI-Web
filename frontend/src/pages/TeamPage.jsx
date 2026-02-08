@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, Link } from "react-router-dom";
 import Navbar from "../components/DashboardNavbar/Navbar";
-import MemberCard from "../components/members/MemberCard"; 
+import MemberCard from "../components/members/MemberCard";
 import "../styles/TeamPage.css";
 import axiosInstance from "../axios";
 
@@ -14,11 +14,11 @@ const TeamPage = () => {
   const [loading, setLoading] = useState(true);
 
   const clubMap = {
-    "Code Hub": "codehub",
-    "Graphics and Media": "graphics_and_media",
-    "Social Media and Marketing": "social_media_and_marketing",
-    "Decor and Registration": "registration_and_decor",
-    "Events and Logistics": "events_and_logistics"
+    "Code Hub": "CODEHUB",
+    "Graphics and Media": "GRAPHICS",
+    "Social Media & Marketing": "SOCIAL_MEDIA_MARKETING",
+    "Decor": "DECOR",
+    "Events and Logistics": "EVENTS_LOGISTICS"
   };
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const TeamPage = () => {
   return (
     <div>
       <Navbar />
-      
+
       <div className="team-detail">
         <div className="team-detail-card">
           {image && (
@@ -66,7 +66,7 @@ const TeamPage = () => {
           )}
           <div className="team-detail-content">
             <h1 className="team-detail-title">{title}</h1>
-            {role && <h3 className="team-detail-role">{role}</h3>} 
+            {role && <h3 className="team-detail-role">{role}</h3>}
             <p className="team-detail-description">{description}</p>
             <Link to="/teams" className="back-button">
               ← Back to Teams
@@ -78,7 +78,7 @@ const TeamPage = () => {
       <div className="members-section">
         <div className="members-container">
           <h2 className="members-title">Team Members</h2>
-          
+
           {loading ? (
             <p>Loading members...</p>
           ) : members.length === 0 ? (
