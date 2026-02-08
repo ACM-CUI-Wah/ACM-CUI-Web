@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { FiSearch } from "react-icons/fi";
 import axiosInstance from "../../../axios";
 import "./EventListing.css";
 
@@ -8,7 +7,6 @@ import dateIcon from "../../../assets/Date.png";
 import timeIcon from "../../../assets/Time.png";
 
 const EventListing = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,34 +52,20 @@ const EventListing = () => {
     }
   };
 
-  // Filter logic for category and search term
+  // Filter logic for category only
   const filteredEvents = events.filter((event) => {
     const eventTypeLabel = event.event_type?.type || event.event_type?.name || "";
-    
-    const matchesCategory = 
-      activeCategory === "All Events" || 
+
+    const matchesCategory =
+      activeCategory === "All Events" ||
       eventTypeLabel.toLowerCase() === activeCategory.toLowerCase();
 
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesCategory && matchesSearch;
+    return matchesCategory;
   });
 
   return (
     <section className="ev-list-wrapper">
       <div className="ev-list-header">
-        {/* Search Input Section */}
-        <div className="ev-list-search-box">
-          <FiSearch className="ev-list-search-icon" />
-          <input
-            type="text"
-            placeholder="Search for events..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="ev-list-input"
-          />
-        </div>
-
         {/* Filter Controls Section */}
         <div className="ev-list-filters">
           <div className="ev-list-categories">
@@ -89,9 +73,8 @@ const EventListing = () => {
               <button
                 key={cat}
                 // Applies active class strictly when selected
-                className={`ev-list-pill ${
-                  activeCategory === cat ? "ev-list-pill--active" : ""
-                }`}
+                className={`ev-list-pill ${activeCategory === cat ? "ev-list-pill--active" : ""
+                  }`}
                 onClick={() => setActiveCategory(cat)}
               >
                 {cat}
@@ -120,8 +103,8 @@ const EventListing = () => {
           </div>
         ) : (
           filteredEvents.map((event) => (
-            <div 
-              className="ev-list-card" 
+            <div
+              className="ev-list-card"
               key={event.id}
               onClick={() => navigate(`/events/${event.id}`)}
             >
