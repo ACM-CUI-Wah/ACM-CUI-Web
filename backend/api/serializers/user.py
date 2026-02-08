@@ -106,29 +106,29 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class StudentListSerializer(serializers.ModelSerializer):
     user = UserListSerializer()
-    profile_pic_url = serializers.SerializerMethodField()
+    profile_pic = serializers.SerializerMethodField()
 
     class Meta:
         model = Student
         fields = '__all__'
 
-    def get_profile_pic_url(self, obj):
+    def get_profile_pic(self, obj):
         if not obj.profile_pic:
             return None
         return get_bucket_public_url(obj.profile_pic)
 
 class PublicStudentSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
-    profile_pic_url = serializers.SerializerMethodField()
+    profile_pic = serializers.SerializerMethodField()
 
     class Meta:
         model = Student
-        fields = ['full_name', 'title', 'profile_pic_url', 'user_id', 'club']
+        fields = ['full_name', 'title', 'profile_pic', 'user_id', 'club']
 
     def get_full_name(self, obj):
         return f"{obj.user.first_name} {obj.user.last_name}"
 
-    def get_profile_pic_url(self, obj):
+    def get_profile_pic(self, obj):
         if not obj.profile_pic:
             return None
         return get_bucket_public_url(obj.profile_pic)
