@@ -205,6 +205,50 @@ class BlogListAPIView(generics.ListAPIView):
 
 
 @extend_schema(
+    summary="Get a single blog post",
+    description="Retrieve a single blog post by its ID.",
+    responses={
+        200: OpenApiResponse(
+            response=BlogSerializer,
+            description="Blog post retrieved successfully."
+        ),
+        404: OpenApiResponse(
+            description="Blog post not found",
+            examples=[
+                OpenApiExample(
+                    "Not Found",
+                    value={
+                        "status": "error",
+                        "message": "Blog post not found",
+                        "data": None
+                    }
+                )
+            ]
+        ),
+    }
+)
+class BlogDetailView(APIView):
+    """
+    API endpoint to retrieve a single blog post by ID.
+    """
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            blog = Blog.objects.get(pk=pk)
+            serializer = BlogSerializer(blog, context={"request": request})
+            return Response({
+                "status": "success",
+                "message": "Blog post retrieved successfully",
+                "data": serializer.data
+            }, status=status.HTTP_200_OK)
+        except Blog.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "Blog post not found",
+                "data": None
+            }, status=status.HTTP_404_NOT_FOUND)
+
+
+@extend_schema(
     summary="Edit a blog post",
     description=(
             "Allows authenticated users (author/lead/admin) to edit an existing blog post. "

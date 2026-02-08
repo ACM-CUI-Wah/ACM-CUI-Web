@@ -5,7 +5,7 @@ import "./BlogCard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 
-import axios from "axios";
+import axiosInstance from "../../axios";
 
 const BlogCard = ({
   id,
@@ -23,9 +23,9 @@ const BlogCard = ({
 }) => {
   const navigate = useNavigate();
 
-  
 
-  const canEdit = role!="ADMIN" && (String(currentUserId) === String(authorId));
+
+  const canEdit = role != "ADMIN" && (String(currentUserId) === String(authorId));
   console.log(canEdit)
   const canDelete = role === "ADMIN";
 
@@ -38,21 +38,13 @@ const BlogCard = ({
     e.preventDefault();
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("You must be logged in to delete a blog.");
-      return;
-    }
-
     try {
-      await axios.delete(`http://localhost:8000/api/blogs/${id}/delete/`, {
-        headers: { Authorization: `Token ${token}` },
-      });
+      await axiosInstance.delete(`/blogs/${id}/delete/`);
       alert("Blog deleted successfully!");
-      if (onDelete) onDelete(id); 
+      if (onDelete) onDelete(id);
     } catch (err) {
       console.error("Delete failed:", err.response || err);
-      alert("Failed to delete blog. You may not have permission.");
+      alert(err.response?.data?.message || "Failed to delete blog. You may not have permission.");
     }
   };
 
@@ -62,7 +54,7 @@ const BlogCard = ({
         <div className="blogCard-container border container">
           <div className="blog-img-container py-3">
             <img
-              src={image }
+              src={image}
               alt="Blog"
               className="blog-image img-fluid"
             />
@@ -81,7 +73,7 @@ const BlogCard = ({
           <div className="d-flex pt-3 flex-row align-items-center justify-content-start bottom w-100">
             <span className="d-flex blog-author-pfp">
               <img
-                src={authorImg }
+                src={authorImg}
                 alt="Author"
                 className="author-image img-fluid"
               />

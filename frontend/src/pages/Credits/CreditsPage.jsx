@@ -14,7 +14,7 @@ const imageNameMap = {
   "Muhammad Shafay": "Muhammad Shafay",
   "M. Alyan": "Alyan Khattak",
   "Aqsa Arif": "Aqsa Arif",
-  "Muhammad Hafeez": "Abdul Hafeez",
+  "Abdul Hafeez": "Abdul Hafeez",
   "Aryan Afzal": "Muhammad Aryan",
   "Abdul Wasay": "Abdul Wasay",
   "Farhad Ali": "Farhad Ali",
@@ -46,6 +46,7 @@ const getTeamImage = (name) => {
 const roleDescriptions = {
   "Project Manager": "Led the overall project coordination, timeline management, and team synchronization.",
   "Project Lead": "Directed technical decisions, code reviews, and development workflow.",
+  "Technical Lead": "Managed frontend, backend development, and GitHub workflows. Oversaw technical architecture and deployment.",
   "Backend Lead": "Architected server-side systems, APIs, and database structures.",
   "Frontend Lead": "Designed component architecture, UI/UX implementation, and frontend best practices.",
   "Design Lead": "Created visual identity, UI designs, and ensured consistent design language.",
@@ -64,7 +65,7 @@ const CreditsPage = () => {
     { name: "Malick Haris Ali", role: "Backend Lead", linkedin: "https://www.linkedin.com/in/malik-haris-ali-29257a297" },
     { name: "Aqsa Arif", role: "Frontend Lead", linkedin: "https://www.linkedin.com/in/aqsa-arif-1b66a12b8" },
     { name: "Farhad Ali", role: "Design Lead", linkedin: "https://www.linkedin.com/in/farhad-ali-029857283" },
-    { name: "Muhammad Hafeez", role: "Github Manager", linkedin: "https://www.linkedin.com/in/contacthhafeez" },
+    { name: "Abdul Hafeez", role: "Github Manager", linkedin: "https://www.linkedin.com/in/contacthhafeez" },
     { name: "Ifra Ahmed", role: "Backend Team", linkedin: "https://www.linkedin.com/in/ifra-ahmed-096423319" },
     { name: "Ramlah Munir", role: "Backend Team", linkedin: "https://www.linkedin.com/in/ramlah-munir/" },
     { name: "Adeel Asghar", role: "Backend Team", linkedin: "https://www.linkedin.com/in/adeelasghar11" },
@@ -76,6 +77,7 @@ const CreditsPage = () => {
 
   const v2Team = [
     { name: "Fakhir Hassan", role: "Project Manager", linkedin: "https://www.linkedin.com/in/fakhir-hassan-154788270/" },
+    { name: "Abdul Hafeez", role: "Technical Lead", linkedin: "https://www.linkedin.com/in/contacthhafeez" },
     { name: "Ifra Ahmed", role: "Project Lead", linkedin: "https://www.linkedin.com/in/ifra-ahmed-096423319" },
     { name: "Malick Haris Ali", role: "Backend Lead", linkedin: "https://www.linkedin.com/in/malik-haris-ali-29257a297" },
     { name: "Ayaan Ahmed Khan", role: "Frontend Lead", linkedin: "https://www.linkedin.com/in/ayaan-ahmed-khan-448600351" },
@@ -87,7 +89,6 @@ const CreditsPage = () => {
     { name: "Aroosa Jabeen", role: "Backend Team", linkedin: "www.linkedin.com/in/aroosaa" },
     { name: "Aqsa Arif", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/aqsa-arif-1b66a12b8" },
     { name: "M. Umar", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/muhammad-umar-a323712b9" },
-    { name: "Muhammad Hafeez", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/contacthhafeez" },
     { name: "Aryan Afzal", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/muhammadaryanafzal" },
     { name: "Abdul Wahab", role: "Frontend Team", linkedin: "https://www.linkedin.com/in/abdul-wahab-428851314/" },
     { name: "Abdul Wasay", role: "Design Team", linkedin: "https://www.linkedin.com/in/abdul-wasay-3664ab289" },
@@ -98,6 +99,7 @@ const CreditsPage = () => {
 
   const getRoleClass = (role) => {
     if (role.includes("Manager")) return "role-manager";
+    if (role.includes("Technical Lead")) return "role-technical-lead";
     if (role.includes("Project Lead")) return "role-lead";
     if (role.includes("Backend Lead")) return "role-backend-lead";
     if (role.includes("Frontend Lead")) return "role-frontend-lead";

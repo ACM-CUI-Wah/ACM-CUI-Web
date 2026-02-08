@@ -41,6 +41,44 @@
   margin-bottom: 50px;
 }
 
+/* Credits Page */
+.credits-page-wrapper {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.credits-page {
+  padding: 40px 20px 60px;
+}
+
+.credits-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.credits-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.credits-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0C4182;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.credits-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Version Tabs */
+
+
 .version-tab {
   padding: 12px 32px;
   font-size: 1rem;
@@ -183,16 +221,60 @@
 }
 
 /* Role Colors */
-.role-manager { background: #e74c3c; color: #fff; }
-.role-lead { background: #f39c12; color: #fff; }
-.role-github { background: #6c757d; color: #fff; }
-.role-backend-lead { background: #27ae60; color: #fff; }
-.role-frontend-lead { background: #00d4ff; color: #0C4182; }
-.role-design-lead { background: #9b59b6; color: #fff; }
-.role-backend { background: #d5f5e3; color: #27ae60; }
-.role-frontend { background: #d6eef8; color: #0C4182; }
-.role-design { background: #ebdef0; color: #9b59b6; }
-.role-default { background: #eee; color: #666; }
+.role-manager {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.role-technical-lead {
+  background: #8e44ad;
+  color: #fff;
+}
+
+.role-lead {
+  background: #f39c12;
+  color: #fff;
+}
+
+.role-github {
+  background: #6c757d;
+  color: #fff;
+}
+
+.role-backend-lead {
+  background: #27ae60;
+  color: #fff;
+}
+
+.role-frontend-lead {
+  background: #00d4ff;
+  color: #0C4182;
+}
+
+.role-design-lead {
+  background: #9b59b6;
+  color: #fff;
+}
+
+.role-backend {
+  background: #d5f5e3;
+  color: #27ae60;
+}
+
+.role-frontend {
+  background: #d6eef8;
+  color: #0C4182;
+}
+
+.role-design {
+  background: #ebdef0;
+  color: #9b59b6;
+}
+
+.role-default {
+  background: #eee;
+  color: #666;
+}
 
 /* Footer Note */
 .credits-footer-note {

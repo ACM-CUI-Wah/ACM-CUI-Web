@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from api.views import (
     SignupView, OTPView, LoginView, PasswordChangeView, LogoutView,
-    BlogUploadView, BlogListAPIView, BlogEditView, BlogDeleteView,
+    BlogUploadView, BlogListAPIView, BlogDetailView, BlogEditView, BlogDeleteView,
     MeetingRUDView, MeetingCreateView, MeetingListView, MeetingAttendanceListView,
     MeetingAttendanceRUDView, StudentsListView, StudentRUView, MeetingPDFView,
     api_root, AdminRUDView,
@@ -57,6 +57,7 @@ urlpatterns = [
 
     # Blogs
     path('blogs/', BlogListAPIView.as_view(), name='blog-list'),
+    path('blogs/<int:pk>/', BlogDetailView.as_view(), name='blog-detail'),
     path('blogs/upload/', BlogUploadView.as_view(), name='blog-upload'),
     path('blogs/<int:pk>/edit/', BlogEditView.as_view(), name='blog-edit'),
     path('blogs/<int:pk>/delete/', BlogDeleteView.as_view(), name='blog-delete'),
