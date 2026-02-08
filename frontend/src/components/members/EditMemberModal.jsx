@@ -35,7 +35,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         club: member.club || "",
         title: member.title || "",
         user: {
-          id: member.user?.id || "",
+          id: member.user.id, // Don't use fallback - ID must exist
           first_name: member.user?.first_name || "",
           last_name: member.user?.last_name || "",
           email: member.user?.email || "",
@@ -199,15 +199,12 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
                 style={inputStyle}
               >
                 <option value="">-- Select a Club --</option>
-                <option value="codehub">CodeHub</option>
-                <option value="graphics_and_media">Graphics & Media</option>
-                <option value="social_media_and_marketing">
-                  Social Media & Marketing
-                </option>
-                <option value="registration_and_decor">
-                  Registration & Decor
-                </option>
-                <option value="events_and_logistics">Events & Logistics</option>
+                <option value="CODEHUB">CodeHub</option>
+                <option value="GRAPHICS">Graphics</option>
+                <option value="MEDIA">Media</option>
+                <option value="SOCIAL_MEDIA_MARKETING">Social Media & Marketing</option>
+                <option value="DECOR">Decor</option>
+                <option value="EVENTS_LOGISTICS">Events & Logistics</option>
               </select>
             </div>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axiosInstance from "../../axios";
-import { FaEye, FaEdit } from "react-icons/fa";
+import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import ViewMemberModal from "../../components/members/ViewMemberModal";
 import EditMemberModal from "../../components/members/EditMemberModal";
 import "./TrackMemberPage.css";
@@ -23,6 +23,11 @@ const TrackMembersPage = () => {
   const [isViewModalOpen, setViewModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+
+  // Delete state
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   // Fetch members
   const fetchMembers = useCallback(async () => {
@@ -63,6 +68,32 @@ const TrackMembersPage = () => {
     fetchMembers();
     handleCloseModals();
   }, [fetchMembers, handleCloseModals]);
+
+  // Delete handlers
+  const handleDeleteClick = useCallback((member) => {
+    setMemberToDelete(member);
+    setDeleteModalOpen(true);
+  }, []);
+
+  const handleCancelDelete = useCallback(() => {
+    setDeleteModalOpen(false);
+    setMemberToDelete(null);
+  }, []);
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (!memberToDelete) return;
+    setDeleting(true);
+    try {
+      await axiosInstance.delete(`/students/${memberToDelete.id}`);
+      setMembers((prev) => prev.filter((m) => m.id !== memberToDelete.id));
+      setDeleteModalOpen(false);
+      setMemberToDelete(null);
+    } catch (err) {
+      alert(err.response?.data?.detail || "Failed to delete member");
+    } finally {
+      setDeleting(false);
+    }
+  }, [memberToDelete]);
 
   // Memoized table headers
   const tableHeaders = useMemo(() => [
@@ -151,6 +182,14 @@ const TrackMembersPage = () => {
                   >
                     <FaEdit />
                   </button>
+                  <button
+                    className="action-btn btn-delete"
+                    onClick={() => handleDeleteClick(member)}
+                    title="Delete Member"
+                    aria-label={`Delete ${member.user?.username}`}
+                  >
+                    <FaTrash />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -203,6 +242,13 @@ const TrackMembersPage = () => {
               >
                 <FaEdit /> Edit
               </button>
+              <button
+                className="action-btn btn-delete"
+                onClick={() => handleDeleteClick(member)}
+                aria-label={`Delete ${member.user?.username}`}
+              >
+                <FaTrash /> Delete
+              </button>
             </footer>
           </article>
         ))}
@@ -220,6 +266,37 @@ const TrackMembersPage = () => {
         member={selectedMember}
         onSave={handleSaveSuccess}
       />
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && memberToDelete && (
+        <div className="modal-overlay" onClick={handleCancelDelete}>
+          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Delete Member</h2>
+            <p>
+              Are you sure you want to delete <strong>{memberToDelete.user?.username}</strong>?
+            </p>
+            <p className="delete-warning">
+              This will permanently delete the member and their user account. This action cannot be undone.
+            </p>
+            <div className="delete-modal-actions">
+              <button
+                className="btn-cancel"
+                onClick={handleCancelDelete}
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn-confirm-delete"
+                onClick={handleConfirmDelete}
+                disabled={deleting}
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

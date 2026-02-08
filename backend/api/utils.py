@@ -18,7 +18,7 @@ def get_tokens_for_user(user, **claims):
     refresh = RefreshToken.for_user(user)
     refresh['user_id'] = user.id
     refresh['email'] = user.email
-    refresh['otp'] = claims['otp']
+    refresh['otp'] = claims.get('otp')
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
@@ -27,29 +27,41 @@ def get_tokens_for_user(user, **claims):
 
 def send_otp(destination: str, **data):
     """
-    Sends OTP to destination. This function is currently development
-    only. It uses the 'file' backend and so it will dump all emails to tmp/api_messages.
+    Sends OTP to destination using Django's email backend (SMTP).
+    Works with Gmail App Passwords.
 
     :param destination: Receiver's email
     :param data: Dict containing extra data (Optional)
     """
-    send_mail(
-        "OTP Verification",
-        f"This is your requested OTP: {data['otp']}",
-        from_email=settings.DEFAULT_FROM_EMAIL,   # ✅ Explicit
-        recipient_list=[destination],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            subject="OTP Verification - ACM CUI Wah",
+            message=f"Your OTP for password reset is: {data.get('otp')}\n\nThis OTP is valid for 10 minutes.\n\nIf you didn't request this, please ignore this email.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[destination],
+            fail_silently=False,
+        )
+        print(f"✅ OTP email sent successfully to {destination}")
+    except Exception as e:
+        print("OTP EMAIL ERROR:", e)
+        raise
 
 def send_password(destination: str, **data):
-    send_mail(
-        subject='Account Creation Notice',
-        message=f'Your account has been created with username: {data["username"]} and password: {data["password"]}.\nYou are advised to change the password as soon as possible.',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[destination],
-        fail_silently=False,
-    )
-
+    """
+    Sends password email using Django's email backend (SMTP).
+    """
+    try:
+        send_mail(
+            subject="Account Creation - ACM CUI Wah",
+            message=f'Your account has been created successfully!\n\nUsername: {data.get("username")}\nPassword: {data.get("password")}\n\nPlease change your password after logging in.\n\nBest regards,\nACM CUI Wah Team',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[destination],
+            fail_silently=False,
+        )
+        print(f"✅ Password email sent successfully to {destination}")
+    except Exception as e:
+        print("PASSWORD EMAIL ERROR:", e)
+        raise
 
 def current_time():
     return datetime.now().time()

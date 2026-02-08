@@ -25,7 +25,7 @@ const MissionSection = () => {
           <div className="content-container">
             <img src={Brush} alt="Brush" className="brush-image" />
 
-           
+
             <motion.h1
               className="heading"
               variants={fadeUp}
@@ -36,7 +36,7 @@ const MissionSection = () => {
               Our Mission
             </motion.h1>
 
-     
+
             <motion.p
               className="mission-text"
               variants={fadeUp}
@@ -52,22 +52,6 @@ const MissionSection = () => {
               community events, we strive to inspire and uplift the next
               generation of computing professionals.
             </motion.p>
-
-            <motion.div
-              className="text-center"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              transition={{ delay: 0.4 }}
-              viewport={{ once: false, amount: 0.3 }}
-            >
-              <button
-                type="button"
-                className="btn missions-learn-more-btn"
-              >
-                Learn more →
-              </button>
-            </motion.div>
           </div>
         </div>
       </div>

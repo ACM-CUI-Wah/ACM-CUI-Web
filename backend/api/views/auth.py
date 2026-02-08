@@ -215,13 +215,18 @@ class OTPView(APIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=False):
-            send_otp(data['email'], otp=otp)
-            user = User.objects.get(email=data['email'])
-            token = get_tokens_for_user(user, otp=str(otp))
-            response_data = {
-                'token': token
-            }
-            return Response(data=response_data, status=status.HTTP_200_OK)
+            try:
+                send_otp(data['email'], otp=otp)
+                user = User.objects.get(email=data['email'])
+                token = get_tokens_for_user(user, otp=str(otp))
+                response_data = {
+                    'token': token
+                }
+                return Response(data=response_data, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({
+                    'error': f'Failed to send OTP email: {str(e)}'
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({
             'errors': serializer.errors
         }, status.HTTP_400_BAD_REQUEST)

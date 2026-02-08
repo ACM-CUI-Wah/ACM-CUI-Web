@@ -21,7 +21,7 @@ const teamData = [
   },
   {
     image: socialImage,
-    title: "Social Media and Marketing",
+    title: "Social Media & Marketing",
     description:
       "Dedicated to building creativity, communication, and digital presence through modern marketing strategies."
   },
@@ -39,7 +39,7 @@ const teamData = [
   },
   {
     image: decorImage,
-    title: "Decor and Registration",
+    title: "Decor",
     description:
       "Ensuring events feel welcoming, vibrant, and well-organized with creative decoration and planning."
   }
@@ -67,6 +67,8 @@ const TeamSection = () => {
           "VICE PRESIDENT",
           "SECRETARY",
           "TREASURER",
+          "ADVISOR",
+          "LEAD ADVISOR",
           "DIRECTOR OPERATIONS",
           "COORDINATOR"
         ];
@@ -113,34 +115,39 @@ const TeamSection = () => {
   };
 
   const getTransformStyles = () => {
-    let cardWidth, gap, scale;
+    let cardWidth, gap;
 
+    // Define sizes based on your CSS breakpoints
     if (windowWidth <= 480) {
       cardWidth = 240;
       gap = 15;
-      scale = 1.02;
     } else if (windowWidth <= 768) {
       cardWidth = 260;
       gap = 20;
-      scale = 1.05;
     } else if (windowWidth <= 1024) {
       cardWidth = 280;
-      gap = 40;
-      scale = 1.1;
+      gap = 30; // Adjusted for tablet
     } else {
       cardWidth = 300;
       gap = 40;
-      scale = 1.1;
     }
 
-    const scaledCardWidth = cardWidth * scale;
-    const viewportCenter = windowWidth / 2;
-    const cardCenter = scaledCardWidth / 2;
-    const totalCardWidth = cardWidth;
-    const offsetForActiveCard = activeIndex * totalCardWidth;
+    // Calculate the distance from the start of the track to the center of the active card
+    const distanceToActiveCardCenter = (activeIndex * (cardWidth + gap)) + (cardWidth / 2);
 
     return {
-      transform: `translateX(${viewportCenter - cardCenter - offsetForActiveCard + 80 - (windowWidth > 1024 ? 300 : 0)}px) translateY(-50%)`
+      // We translate NEGATIVE distance. 
+      // Since 'left' is 50%, this pulls the active card perfectly to the middle.
+      transform: `translateX(-${distanceToActiveCardCenter}px) translateY(-50%)`,
+      
+      // Inline flex styles to ensure exact math sync
+      display: "flex",
+      gap: `${gap}px`, 
+      
+      // Ensure these override any potential CSS conflicts
+      position: "absolute",
+      left: "50%",
+      top: "50%",
     };
   };
 

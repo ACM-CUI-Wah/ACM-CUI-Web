@@ -25,11 +25,11 @@ function Regform() {
     { value: "codehub", label: "CodeHub" },
     { value: "graphics_and_media", label: "Graphics and Media" },
     { value: "social_media_and_marketing", label: "Social Media and Marketing" },
-    { value: "registration_and_decor", label: "Registration and Decor" },
+    { value: "registration_and_decor", label: "Decor" },
     { value: "events_and_logistics", label: "Events and Logistics" },
   ];
 
-  const executiveTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "TREASURER"];
+  const executiveTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "TREASURER", "ADVISOR", "LEAD ADVISOR", "DIRECTOR OPERATIONS"];
   const isExecutiveTitle = executiveTitles.includes(formData.title);
 
   const [titleInputMode, setTitleInputMode] = useState(false);
@@ -164,7 +164,7 @@ function Regform() {
       return;
     }
 
-    const execTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "TREASURER"];
+    const execTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "TREASURER", "ADVISOR", "LEAD ADVISOR", "DIRECTOR OPERATIONS"];
     const isExec = execTitles.includes(formData.title);
     if (!formData.club && !isExec) {
       alert("Club selection is required for non-executive members.");
@@ -410,6 +410,9 @@ function Regform() {
                 <option value="VICE PRESIDENT">VICE PRESIDENT</option>
                 <option value="TREASURER">TREASURER</option>
                 <option value="SECRETARY">SECRETARY</option>
+                <option value="ADVISOR">ADVISOR</option>
+                <option value="LEAD ADVISOR">LEAD ADVISOR</option>
+                <option value="DIRECTOR OPERATIONS">DIRECTOR OPERATIONS</option>
                 <option value="custom">-- ENTER CUSTOM TITLE --</option>
               </select>
 

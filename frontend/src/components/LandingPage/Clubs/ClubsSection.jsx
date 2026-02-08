@@ -31,7 +31,7 @@ const ClubsSection = () => {
         viewport={{ once: true }}
       >
         <h1 className="csl-clubs-title-text">CLUBS</h1>
-        
+
         <p>
           A community of innovators, designers, and problem-solvers
           building impactful technology together.
@@ -48,7 +48,6 @@ const ClubsSection = () => {
           </div>
           <h4>CODE HUB</h4>
           <p>Hands-on coding, real-world challenges, and technical growth.</p>
-          <span>Explore</span>
         </motion.div>
 
         {/* EVENTS */}
@@ -58,7 +57,6 @@ const ClubsSection = () => {
           </div>
           <h4>EVENTS & LOGISTICS</h4>
           <p>Planning and executing impactful technical events.</p>
-          <span>Explore</span>
         </motion.div>
 
         {/* GRAPHICS */}
@@ -68,17 +66,15 @@ const ClubsSection = () => {
           </div>
           <h4>GRAPHICS</h4>
           <p>Designing visuals that communicate ideas beautifully.</p>
-          <span>Explore</span>
         </motion.div>
 
-        {/* MEDIA */}
+        {/* SOCIAL MEDIA & MARKETING */}
         <motion.div className="club-card" whileHover={hoverEffect}>
           <div className="icon-circle">
-            <img src={vector4} alt="Media & Marketing" />
+            <img src={vector4} alt="Social Media & Marketing" />
           </div>
-          <h4>MEDIA & MARKETING</h4>
+          <h4>SOCIAL MEDIA & MARKETING</h4>
           <p>Promoting ACM through engaging digital campaigns.</p>
-          <span>Explore</span>
         </motion.div>
 
         {/* DECOR */}
@@ -88,11 +84,18 @@ const ClubsSection = () => {
           </div>
           <h4>DECOR</h4>
           <p>Transforming spaces to reflect creativity and innovation.</p>
-          <span>Explore</span>
         </motion.div>
 
-        {/* EMPTY SLOT */}
-        <div className="club-card empty-card"></div>
+
+        {/* MEDIA */}
+        <motion.div className="club-card" whileHover={hoverEffect}>
+          <div className="icon-circle">
+            <img src={vector3} alt="Media" />
+          </div>
+          <h4>MEDIA</h4>
+          <p>Capturing and sharing ACM's story through creative content.</p>
+          <span>Explore</span>
+        </motion.div>
       </div>
 
       <div className="clubs-btn-wrapper">
@@ -106,4 +109,3 @@ const ClubsSection = () => {
 };
 
 export default ClubsSection;
-
