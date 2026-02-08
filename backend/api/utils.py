@@ -27,33 +27,85 @@ def get_tokens_for_user(user, **claims):
 
 def send_otp(destination: str, **data):
     """
-    Sends OTP to destination. This function is currently development
-    only. It uses the 'file' backend and so it will dump all emails to tmp/api_messages.
+    Sends OTP to destination using Resend HTTP API.
+    More reliable than SMTP on cloud platforms like Railway.
 
     :param destination: Receiver's email
     :param data: Dict containing extra data (Optional)
     """
+    import requests
+    
+    resend_api_key = settings.EMAIL_HOST_PASSWORD  # Use the Resend API key
+    
+    if not resend_api_key or resend_api_key == '':
+        print("WARNING: No Resend API key configured, skipping email")
+        return
+    
     try:
-        send_mail(
-            "OTP Verification",
-            f"This is your requested OTP: {data.get('otp')}",
-            settings.DEFAULT_FROM_EMAIL,
-            [destination],
-            fail_silently=False,
+        response = requests.post(
+            'https://api.resend.com/emails',
+            headers={
+                'Authorization': f'Bearer {resend_api_key}',
+                'Content-Type': 'application/json'
+            },
+            json={
+                'from': settings.DEFAULT_FROM_EMAIL,
+                'to': [destination],
+                'subject': 'OTP Verification',
+                'html': f'<p>This is your requested OTP: <strong>{data.get("otp")}</strong></p>'
+            }
         )
+        
+        if response.status_code != 200:
+            error_msg = response.json() if response.text else response.text
+            print(f"Resend API Error: {response.status_code} - {error_msg}")
+            raise Exception(f"Failed to send email: {error_msg}")
+            
+        print(f"✅ OTP email sent successfully to {destination}")
+        
     except Exception as e:
         print("OTP EMAIL ERROR:", e)
         raise
 
 def send_password(destination: str, **data):
+    """
+    Sends password email using Resend HTTP API.
+    """
+    import requests
+    
+    resend_api_key = settings.EMAIL_HOST_PASSWORD
+    
+    if not resend_api_key or resend_api_key == '':
+        print("WARNING: No Resend API key configured, skipping email")
+        return
+        
     try:
-        send_mail(
-            subject="Account Creation Notice",
-            message=f'Your account has been created with username: {data.get("username")} and password: {data.get("password")}.\nYou are advised to change the password as soon as possible.',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[destination],
-            fail_silently=False,
+        response = requests.post(
+            'https://api.resend.com/emails',
+            headers={
+                'Authorization': f'Bearer {resend_api_key}',
+                'Content-Type': 'application/json'
+            },
+            json={
+                'from': settings.DEFAULT_FROM_EMAIL,
+                'to': [destination],
+                'subject': 'Account Creation Notice',
+                'html': f'''
+                    <p>Your account has been created with the following credentials:</p>
+                    <p><strong>Username:</strong> {data.get("username")}</p>
+                    <p><strong>Password:</strong> {data.get("password")}</p>
+                    <p><em>You are advised to change the password as soon as possible.</em></p>
+                '''
+            }
         )
+        
+        if response.status_code != 200:
+            error_msg = response.json() if response.text else response.text
+            print(f"Resend API Error: {response.status_code} - {error_msg}")
+            raise Exception(f"Failed to send email: {error_msg}")
+            
+        print(f"✅ Password email sent successfully to {destination}")
+        
     except Exception as e:
         print("PASSWORD EMAIL ERROR:", e)
         raise
