@@ -18,7 +18,7 @@ def get_tokens_for_user(user, **claims):
     refresh = RefreshToken.for_user(user)
     refresh['user_id'] = user.id
     refresh['email'] = user.email
-    refresh['otp'] = claims['otp']
+    refresh['otp'] = claims.get('otp')
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
@@ -33,23 +33,30 @@ def send_otp(destination: str, **data):
     :param destination: Receiver's email
     :param data: Dict containing extra data (Optional)
     """
-    send_mail(
-        "OTP Verification",
-        f"This is your requested OTP: {data['otp']}",
-        from_email=settings.DEFAULT_FROM_EMAIL,   # ✅ Explicit
-        recipient_list=[destination],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            "OTP Verification",
+            f"This is your requested OTP: {data.get('otp')}",
+            settings.DEFAULT_FROM_EMAIL,
+            [destination],
+            fail_silently=False,
+        )
+    except Exception as e:
+        print("OTP EMAIL ERROR:", e)
+        raise
 
 def send_password(destination: str, **data):
-    send_mail(
-        subject='Account Creation Notice',
-        message=f'Your account has been created with username: {data["username"]} and password: {data["password"]}.\nYou are advised to change the password as soon as possible.',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[destination],
-        fail_silently=False,
-    )
-
+    try:
+        send_mail(
+            subject="Account Creation Notice",
+            message=f'Your account has been created with username: {data.get("username")} and password: {data.get("password")}.\nYou are advised to change the password as soon as possible.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[destination],
+            fail_silently=False,
+        )
+    except Exception as e:
+        print("PASSWORD EMAIL ERROR:", e)
+        raise
 
 def current_time():
     return datetime.now().time()
