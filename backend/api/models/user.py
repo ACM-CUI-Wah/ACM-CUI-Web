@@ -45,5 +45,5 @@ class Student(models.Model):
     roll_no = models.CharField(max_length=20, default="")
     club = models.CharField(max_length=50)
     title = models.CharField(max_length=30, null=True, blank=True) # Designation in the ACM hierarchy structure
-    profile_pic = models.ImageField(upload_to='profile_pics/', default='profile_pics/default.jpg')
+    profile_pic = models.CharField(max_length=255, null=True, blank=True)
     profile_desc = models.TextField(max_length=200, null=True, blank=True)

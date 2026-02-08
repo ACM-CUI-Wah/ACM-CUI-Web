@@ -1,5 +1,4 @@
 import json
-
 from django.contrib.auth import get_user_model
 from rest_framework import generics, status
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -9,6 +8,7 @@ from api.models import Student
 from api.permissions import IsLeadOrAdmin
 from api.serializers import StudentSerializer, StudentListSerializer, PublicStudentSerializer, \
     ProfileUpdateSerializer
+from api.utils import delete_from_bucket
 
 User = get_user_model()
 DEFAULT_PASSWORD = '12345'
@@ -90,3 +90,7 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
         student.delete()  # Delete the student record
         user.delete()  # Delete the user record
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def perform_destroy(self, instance):
+        delete_from_bucket("media", instance.profile_pic)
+        instance.delete()
