@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from api.models import User, Student
 from django.contrib.auth import authenticate
+from api.utils import upload_file, delete_from_bucket, get_bucket_public_url
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,55 +14,69 @@ class UserSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    roll_no = serializers.RegexField(regex='^(?:FA|SP)[0-9]{2}-B(?:CS|AI|SE)-[0-9]{3}$', max_length=20,
-                                     allow_blank=False)
-    club = serializers.ChoiceField(choices=[
-        'CODEHUB',
-        'GRAPHICS',
-        'SOCIAL_MEDIA_MARKETING',
-        'MEDIA',
-        'DECOR',
-        'EVENTS_LOGISTICS',
-        ''  # Allow empty club for executives
-    ],
+    profile_pic = serializers.ImageField(write_only=True, required=False)  # incoming file
+    profile_pic_url = serializers.SerializerMethodField()  # public URL for read
+
+    roll_no = serializers.RegexField(
+        regex='^(?:FA|SP)[0-9]{2}-B(?:CS|AI|SE)-[0-9]{3}$',
+        max_length=20,
+        allow_blank=False
+    )
+    club = serializers.ChoiceField(
+        choices=[
+            'CODEHUB',
+            'GRAPHICS',
+            'SOCIAL_MEDIA_MARKETING',
+            'MEDIA',
+            'DECOR',
+            'EVENTS_LOGISTICS',
+            ''
+        ],
         allow_blank=True,
         required=False
     )
     title = serializers.CharField(required=False, allow_blank=True)
     content = serializers.CharField(required=False)
 
-    # Executive titles that don't require a club (ACM-wide positions)
     EXECUTIVE_TITLES = ['PRESIDENT', 'VICE PRESIDENT', 'SECRETARY', 'TREASURER']
 
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = '__all__'  # will include profile_pic_url
+        read_only_fields = ['profile_pic_url']
 
-    # NOTE: This was not written by backend team and is causing problems.
-    # def validate(self, data):
-    #     """Validate that club is required for non-executive members"""
-    #     title = data.get('title', '')
-    #     club = data.get('club', '')
-    #
-    #     # If not an executive title and club is empty, raise error
-    #     if title not in self.EXECUTIVE_TITLES and not club:
-    #         raise ValidationError({'club': 'Club selection is required for non-executive members.'})
-    #
-    #     return data
+    def get_profile_pic_url(self, obj):
+        if not obj.profile_pic:
+            return None
+        return get_bucket_public_url(obj.profile_pic)
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        user_data['password'] = make_password(password=user_data['password'])
+        uploaded_file = validated_data.pop('profile_pic', None)
+
+        # Create user
+        user_data['password'] = make_password(user_data['password'])
         user = User.objects.create(**user_data)
+
+        # Create student
         student = Student.objects.create(user=user, **validated_data)
+
+        # Upload profile pic
+        if uploaded_file:
+            student.profile_pic = upload_file(uploaded_file, "profiles")
+            student.save(update_fields=["profile_pic"])
+
         return student
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user', None)
+        uploaded_file = validated_data.pop('profile_pic', None)
 
+        # Update Student fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
+        # Update user
         if user_data:
             for attr, value in user_data.items():
                 if attr == 'password':
@@ -70,8 +85,16 @@ class StudentSerializer(serializers.ModelSerializer):
                     setattr(instance.user, attr, value)
             instance.user.save()
 
+        # Handle profile pic replacement
+        if uploaded_file:
+            if instance.profile_pic:
+                delete_from_bucket("media", instance.profile_pic)
+
+            instance.profile_pic = upload_file(uploaded_file, "profiles")
+
         instance.save()
         return instance
+
 
 
 # NOTE: This serializer is for the students list view

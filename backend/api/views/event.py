@@ -31,7 +31,7 @@ class EventDetailView(generics.RetrieveUpdateDestroyAPIView):
         return EventSerializer
 
     def perform_destroy(self, instance):
-        delete_from_bucket("events", instance.image)
+        delete_from_bucket("media", instance.image)
         instance.delete()
 
 

@@ -25,5 +25,5 @@ class BillRUDView(generics.RetrieveUpdateDestroyAPIView):
         return BillSerializer
 
     def perform_destroy(self, instance):
-        delete_from_bucket("bills", instance.image)
+        delete_from_bucket("media", instance.image)
         instance.delete()
