@@ -18,7 +18,7 @@ class Blog(models.Model):
 
 class BlogImage(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=blog_image_upload_path)
+    image = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f'Image for blog {self.blog.id}'
@@ -33,5 +33,5 @@ def temp_inline_upload_path(instance, filename):
     return f"temp_inline/{unique_name}"
 
 class InlineImage(models.Model):
-    image = models.ImageField(upload_to=temp_inline_upload_path)
+    image = models.CharField(max_length=255, blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
