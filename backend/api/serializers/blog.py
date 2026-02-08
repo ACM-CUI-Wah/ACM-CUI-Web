@@ -2,6 +2,7 @@ from typing import Optional
 from django.conf import settings
 from rest_framework import serializers
 from api.models import Blog, BlogImage, InlineImage
+from api.utils import get_bucket_public_url, upload_file, delete_from_bucket
 
 # Allowed types & default max size (5 MB)
 ALLOWED_IMAGE_TYPES = ("image/jpeg", "image/png", "image/webp")
@@ -18,19 +19,48 @@ class BlogImageSerializer(serializers.ModelSerializer):
         fields = ("id", "relative_path", "image_url")
 
     def get_relative_path(self, obj) -> str:
-        return obj.image.name
+        return obj.image
 
     def get_image_url(self, obj) -> Optional[str]:
-        request = self.context.get('request')
-        if obj.image and request:
-            return request.build_absolute_uri(obj.image.url)
-        return None
+        if not obj.image:
+            return None
+        return get_bucket_public_url(obj.image)
 
 
 class InlineImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(write_only=True)
+    url = serializers.SerializerMethodField()
+
     class Meta:
         model = InlineImage
-        fields = ['id', 'image', 'uploaded_at']
+        fields = ['id', 'image', 'url', 'uploaded_at']
+
+    def get_url(self, obj):
+        if not obj.image:
+            return None
+        return get_bucket_public_url(obj.image)
+
+    def create(self, validated_data):
+        image = validated_data.pop('image', None)
+        inline_image = InlineImage.objects.create(**validated_data)
+
+        if image:
+            inline_image.image = upload_file(image, "blogs")
+            inline_image.save(update_fields=["image"])
+
+        return inline_image
+
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if image:
+            instance.image = upload_file(image, "blogs")
+
+        instance.save()
+        return instance
 
 
 class BlogSerializer(serializers.ModelSerializer):
@@ -57,8 +87,10 @@ class BlogUploadSerializer(serializers.Serializer):
 
     def validate_images(self, images):
         for img in images:
-            if img.size > MAX_IMAGE_SIZE:
-                raise serializers.ValidationError(f"{img.name} exceeds the max size of {MAX_IMAGE_SIZE} bytes.")
+            # NOTE: Image size limit is set in Supabase bucket. Setting it in two places might cause inconsistency.
+            # if img.size > MAX_IMAGE_SIZE:
+            #     raise serializers.ValidationError(f"{img.name} exceeds the max size of {MAX_IMAGE_SIZE} bytes.")
+
             content_type = getattr(img, "content_type", None)
             if content_type not in ALLOWED_IMAGE_TYPES:
                 raise serializers.ValidationError(f"{img.name} has invalid content type ({content_type}).")
@@ -75,7 +107,8 @@ class BlogUploadSerializer(serializers.Serializer):
         )
 
         for img in validated_data["images"]:
-            BlogImage.objects.create(blog=blog, image=img)
+            image_path = upload_file(img, "blogs")
+            BlogImage.objects.create(blog=blog, image=image_path)
 
         return blog
 
@@ -105,10 +138,20 @@ class BlogUpdateSerializer(serializers.ModelSerializer):
         instance.save()
 
         if images_to_delete:
-            BlogImage.objects.filter(blog=instance, id__in=images_to_delete).delete()
+            images = BlogImage.objects.filter(
+                blog=instance,
+                id__in=images_to_delete
+            )
+
+            for img in images:
+                if img.image:
+                    delete_from_bucket("media", img.image)
+
+            images.delete()
 
         if new_images:
             for img in new_images:
-                BlogImage.objects.create(blog=instance, image=img)
+                image_path = upload_file(img, "blogs")
+                BlogImage.objects.create(blog=instance, image=image_path)
 
         return instance
