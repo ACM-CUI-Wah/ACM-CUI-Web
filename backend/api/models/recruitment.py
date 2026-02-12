@@ -86,6 +86,7 @@ class RecruitmentApplication(models.Model):
         choices=ApplicationStatus.choices,
         default=ApplicationStatus.UNDER_REVIEW
     )
+    comment = models.TextField(blank=True, null=True, default="")
 
     class Meta:
         ordering = ['id']

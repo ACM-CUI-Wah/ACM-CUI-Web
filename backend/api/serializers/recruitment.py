@@ -143,11 +143,10 @@ class RecruitmentApplicationSerializer(serializers.ModelSerializer):
     - id: Primary Key
     - recruitment_session: FK to RecruitmentSession
     - status: ENUM (Under Review, Accepted, Rejected, Interviews)
-    - created_at: Timestamp
     """
     class Meta:
         model = RecruitmentApplication
-        fields = ['id', 'recruitment_session', 'status']
+        fields = ['id', 'recruitment_session', 'status', 'comment']
 
 
 class RecruitmentApplicationDetailSerializer(serializers.ModelSerializer):
@@ -163,7 +162,7 @@ class RecruitmentApplicationDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentApplication
         fields = [
-            'id', 'recruitment_session', 'status',
+            'id', 'recruitment_session', 'status', 'comment',
             'personal_info', 'academic_info', 'role_preferences'
         ]
 
@@ -189,10 +188,10 @@ class RecruitmentApplicationSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentApplication
         fields = [
-            'id', 'recruitment_session', 'status',
+            'id', 'recruitment_session', 'status', 'comment',
             'personal_info', 'academic_info', 'role_preferences'
         ]
-        read_only_fields = ['id', 'status']
+        read_only_fields = ['id', 'status', 'comment']
     
     def create(self, validated_data):
         """
