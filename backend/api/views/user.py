@@ -1,7 +1,7 @@
 import json
 from django.contrib.auth import get_user_model
 from rest_framework import generics, status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from api.models import Student
@@ -37,7 +37,7 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     # def get_serializer_class(self):
     #     """Use ProfileUpdateSerializer for PATCH requests (profile updates)"""
