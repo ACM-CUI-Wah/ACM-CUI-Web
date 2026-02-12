@@ -228,6 +228,7 @@ class RecruitmentApplicationSubmissionSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'recruitment_session': instance.recruitment_session.id,
             'status': instance.status,
+            'comment': instance.comment,
             'personal_info': PersonalInfoSerializer(instance.personal_info).data,
             'academic_info': AcademicInfoSerializer(instance.academic_info).data,
             'role_preferences': RolePreferencesSerializer(instance.role_preferences).data,
