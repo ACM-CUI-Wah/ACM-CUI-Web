@@ -45,43 +45,43 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
     #         return ProfileUpdateSerializer
     #     return StudentSerializer
 
-    def partial_update(self, request, *args, **kwargs):
-        """Handle PATCH requests for profile updates with nested user data"""
-        instance = self.get_object()
-        user = instance.user
-
-        # Parse nested user[field] format from multipart form data
-        data = {}
-        user_data = {}
-
-        for key, value in request.data.items():
-            if key == 'user':
-                try:
-                    nested = json.loads(value)
-                except json.JSONDecodeError:
-                    nested = {}
-                for field_name, field_value in nested.items():
-                    if field_name == 'id':
-                        continue
-                    current_value = getattr(user, field_name, None)
-                    if str(current_value) != str(field_value):
-                        user_data[field_name] = field_value
-            else:
-                data[key] = value
-
-        # Only include user data if there are actual changes
-        if user_data:
-            data['user'] = user_data
-
-        serializer = self.get_serializer(instance, data=data, partial=True)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        self.perform_update(serializer)
-
-        # Return full student data after update
-        response_serializer = StudentSerializer(instance)
-        return Response(response_serializer.data)
+    # def partial_update(self, request, *args, **kwargs):
+    #     """Handle PATCH requests for profile updates with nested user data"""
+    #     instance = self.get_object()
+    #     user = instance.user
+    #
+    #     # Parse nested user[field] format from multipart form data
+    #     data = {}
+    #     user_data = {}
+    #
+    #     for key, value in request.data.items():
+    #         if key == 'user':
+    #             try:
+    #                 nested = json.loads(value)
+    #             except json.JSONDecodeError:
+    #                 nested = {}
+    #             for field_name, field_value in nested.items():
+    #                 if field_name == 'id':
+    #                     continue
+    #                 current_value = getattr(user, field_name, None)
+    #                 if str(current_value) != str(field_value):
+    #                     user_data[field_name] = field_value
+    #         else:
+    #             data[key] = value
+    #
+    #     # Only include user data if there are actual changes
+    #     if user_data:
+    #         data['user'] = user_data
+    #
+    #     serializer = self.get_serializer(instance, data=data, partial=True)
+    #     if not serializer.is_valid():
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #
+    #     self.perform_update(serializer)
+    #
+    #     # Return full student data after update
+    #     response_serializer = StudentSerializer(instance)
+    #     return Response(response_serializer.data)
 
     def destroy(self, request, *args, **kwargs):
         """Delete student and their associated user account"""
