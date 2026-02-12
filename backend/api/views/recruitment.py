@@ -195,9 +195,7 @@ class RecruitmentApplicationsExcelView(APIView):
         ws.title = "Recruitment Applications"
 
         headers = [
-            "Application ID", "Status",
-            "Session", "Application Start", "Application End",
-            "Interview Start", "Interview End", "Result Date",
+            "Status",
             "First Name", "Last Name", "Email", "Phone",
             "Registration No", "Program", "Current Semester",
             "Skills", "Relevant Coursework",
@@ -214,13 +212,7 @@ class RecruitmentApplicationsExcelView(APIView):
             role = getattr(app, "role_preferences", None)
 
             ws.append([
-                app.id, app.status,
-                session.uni_session,
-                session.application_start,
-                session.application_end,
-                session.interview_start,
-                session.interview_end,
-                session.result_date,
+                app.status,
                 personal.first_name if personal else "",
                 personal.last_name if personal else "",
                 personal.email if personal else "",

@@ -1,7 +1,7 @@
 from .admin import AdminRUDView
 from .auth import SignupView, OTPView, LoginView, LogoutView, PasswordChangeView
 from .bill import BillRUDView, BillListCreateView
-from .blog import BlogEditView, BlogDeleteView, BlogUploadView, InlineImageUploadView, BlogListAPIView
+from .blog import BlogEditView, BlogDeleteView, BlogUploadView, InlineImageUploadView, BlogListAPIView, BlogDetailView
 from .event import EventDetailView, EventTypeListCreateView, EventListCreateView, EventRegistrationListCreateView, RegistrationStatusUpdateView, EventRegistrationDeleteView, EventRegistrationDetailView
 from .meeting import MeetingPDFView, MeetingListView, MeetingRUDView, MeetingCreateView, MeetingAttendanceRUDView, \
     MeetingAttendanceListView

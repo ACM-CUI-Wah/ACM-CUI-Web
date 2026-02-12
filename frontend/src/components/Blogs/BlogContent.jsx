@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../axios";
 import "./BlogContent.css";
 
 const BlogContent = () => {
@@ -13,17 +13,16 @@ const BlogContent = () => {
     const fetchBlog = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:8000/api/blogs/");
-        // find blog by id
-        const foundBlog = res.data.find((b) => String(b.id) === id);
-        if (foundBlog) {
-          setBlog(foundBlog);
+        const res = await axiosInstance.get(`/blogs/${id}/`);
+        // API returns {status, message, data}
+        if (res.data.status === "success") {
+          setBlog(res.data.data);
         } else {
-          setError("Blog not found");
+          setError(res.data.message || "Blog not found");
         }
       } catch (err) {
         console.error("Error fetching blog:", err);
-        setError("Failed to fetch blog");
+        setError(err.response?.data?.message || "Failed to fetch blog");
       } finally {
         setLoading(false);
       }
@@ -74,7 +73,7 @@ const BlogContent = () => {
         />
       )}
 
-  
+
       <div
         className="blog-content"
         dangerouslySetInnerHTML={{ __html: blog.content }}
