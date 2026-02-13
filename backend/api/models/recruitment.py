@@ -16,7 +16,7 @@ class Program(models.TextChoices):
     BSCS = "BSCS"
     BSSE = "BSSE"
     BSAI = "BSAI"
-    BSEE = "BSSE"
+    BSEE = "BSEE"
     BSCE = "BSCE"
     BSME = "BSME"
     BSCVE = "BSCVE"
