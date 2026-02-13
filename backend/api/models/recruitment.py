@@ -16,7 +16,13 @@ class Program(models.TextChoices):
     BSCS = "BSCS"
     BSSE = "BSSE"
     BSAI = "BSAI"
-
+    BSEE = "BSSE"
+    BSCE = "BSCE"
+    BSME = "BSME"
+    BSCVE = "BSCVE"
+    BBA = "BBA"
+    HUM = "HUM"
+    BS_MATH = "BS_MATH"
 
 class Role(models.TextChoices):
     CODEHUB = "CODEHUB"
