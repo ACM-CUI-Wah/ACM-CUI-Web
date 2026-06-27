@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     title: "",
     profile_desc: "",
-    profile_pic: null,
+    profile_pic_url: null,
     user: { first_name: "", last_name: "", email: "", username: "" },
   });
   const [preview, setPreview] = useState(null);
@@ -36,7 +36,7 @@ useEffect(() => {
 
       setFormData({
         profile_desc: foundStudent.profile_desc || "",
-        profile_pic: null,
+        profile_pic_url: null,
         user: {
           first_name: foundStudent.user?.first_name || "",
           last_name: foundStudent.user?.last_name || "",
@@ -45,7 +45,7 @@ useEffect(() => {
         },
       });
 
-      setPreview(foundStudent.profile_pic);
+      setPreview(foundStudent.profile_pic_url);
     } catch (err) {
       console.error(err);
       setMessage("Failed to fetch student record");
@@ -82,7 +82,7 @@ useEffect(() => {
     try {
       const data = new FormData();
       if (formData.profile_desc) data.append("profile_desc", formData.profile_desc);
-      if (formData.profile_pic) data.append("profile_pic", formData.profile_pic);
+      if (formData.profile_pic_url) data.append("profile_pic_url", formData.profile_pic_url);
 
       data.append("user[id]", loggedInUserId);
       data.append("user[first_name]", formData.user.first_name);
@@ -109,7 +109,7 @@ useEffect(() => {
   const handleCancel = () => {
     setFormData({
       profile_desc: student.profile_desc || "",
-      profile_pic: null,
+      profile_pic_url: null,
       user: {
         first_name: student.user.first_name || "",
         last_name: student.user.last_name || "",
@@ -117,7 +117,7 @@ useEffect(() => {
         username: student.user.username || "",
       },
     });
-    setPreview(student.profile_pic);
+    setPreview(student.profile_pic_url);
     setEditMode(false);
     setMessage("");
   };

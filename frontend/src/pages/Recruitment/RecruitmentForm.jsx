@@ -88,7 +88,8 @@ const RecruitmentForm = () => {
 
     if (Array.isArray(errObj)) {
       errObj.forEach((item) => {
-        if (typeof item === "string") lines.push(prefix ? `${prefix}: ${item}` : item);
+        if (typeof item === "string")
+          lines.push(prefix ? `${prefix}: ${item}` : item);
         else lines.push(...flattenErrors(item, prefix));
       });
       return lines;
@@ -211,10 +212,14 @@ const RecruitmentForm = () => {
 
     // Registration validation + auto uppercase + cap max_length=20
     if (name === "regNumber") {
-      const cleaned = value.toUpperCase().replace(/\s+/g, "").slice(0, LIMITS.regNumber);
+      const cleaned = value
+        .toUpperCase()
+        .replace(/\s+/g, "")
+        .slice(0, LIMITS.regNumber);
       setFormData((prev) => ({ ...prev, regNumber: cleaned }));
 
-      if (cleaned && !regNoRegex.test(cleaned)) setRegError("Format must be like SP23-BSE-090");
+      if (cleaned && !regNoRegex.test(cleaned))
+        setRegError("Format must be like SP23-BSE-090");
       else setRegError("");
 
       return;
@@ -250,7 +255,11 @@ const RecruitmentForm = () => {
       setFormData((prev) => ({ ...prev, coursework: capped }));
 
       const items = parseCommaList(capped);
-      const errMsg = validateCommaItems(items, LIMITS.courseworkItem, "Coursework");
+      const errMsg = validateCommaItems(
+        items,
+        LIMITS.courseworkItem,
+        "Coursework",
+      );
       setCourseworkError(errMsg);
 
       return;
@@ -271,18 +280,43 @@ const RecruitmentForm = () => {
 
     // WhyJoin + Experience are TextFields => backend accepts long, but cap for UX
     if (name === "whyJoin") {
-      setFormData((prev) => ({ ...prev, whyJoin: value.slice(0, LIMITS.whyJoin) }));
+      setFormData((prev) => ({
+        ...prev,
+        whyJoin: value.slice(0, LIMITS.whyJoin),
+      }));
       return;
     }
 
     if (name === "experience") {
-      setFormData((prev) => ({ ...prev, experience: value.slice(0, LIMITS.experience) }));
+      setFormData((prev) => ({
+        ...prev,
+        experience: value.slice(0, LIMITS.experience),
+      }));
       return;
     }
 
     // LinkedIn URL cap
     if (name === "linkedin") {
-      setFormData((prev) => ({ ...prev, linkedin: value.slice(0, LIMITS.linkedin) }));
+      setFormData((prev) => ({
+        ...prev,
+        linkedin: value.slice(0, LIMITS.linkedin),
+      }));
+      return;
+    }
+
+    // Note on program change: if user changes to a non-CS/SE/AI program, and they had CodeHub selected as preferred or secondary, we reset those fields since CodeHub is only for CS/SE/AI students. We also allow them to select CodeHub if they switch to a CS/SE/AI program.
+    if (name === "program") {
+      const isCS = ["BSSE", "BSCS", "BSAI"].includes(value);
+
+      setFormData((prev) => ({
+        ...prev,
+        program: value,
+        // If new program is NOT CS/SE/AI, and they had CodeHub selected, reset role
+        preferredRole:
+          !isCS && prev.preferredRole === "CODEHUB" ? "" : prev.preferredRole,
+        secondaryRole:
+          !isCS && prev.secondaryRole === "CODEHUB" ? "" : prev.secondaryRole,
+      }));
       return;
     }
 
@@ -323,7 +357,7 @@ const RecruitmentForm = () => {
     ];
 
     const filledFields = requiredFields.filter(
-      (field) => String(formData[field]).trim() !== ""
+      (field) => String(formData[field]).trim() !== "",
     ).length;
 
     setProgress((filledFields / requiredFields.length) * 100);
@@ -341,14 +375,18 @@ const RecruitmentForm = () => {
     }
 
     if (!sessionId) {
-      setAlertAndScroll("No active recruitment session found. Please try again later.");
+      setAlertAndScroll(
+        "No active recruitment session found. Please try again later.",
+      );
       return;
     }
 
     // frontend validations
     if (!regNoRegex.test(formData.regNumber)) {
       setRegError("Format must be like SP23-BSE-090");
-      setAlertAndScroll("Please fix Registration Number format before submitting.");
+      setAlertAndScroll(
+        "Please fix Registration Number format before submitting.",
+      );
       return;
     }
 
@@ -372,14 +410,22 @@ const RecruitmentForm = () => {
     const skillsArray = parseCommaList(formData.skills);
     const courseworkArray = parseCommaList(formData.coursework);
 
-    const skillsItemErr = validateCommaItems(skillsArray, LIMITS.skillItem, "Skills");
+    const skillsItemErr = validateCommaItems(
+      skillsArray,
+      LIMITS.skillItem,
+      "Skills",
+    );
     if (skillsItemErr) {
       setSkillsError(skillsItemErr);
       setAlertAndScroll(skillsItemErr);
       return;
     }
 
-    const courseItemErr = validateCommaItems(courseworkArray, LIMITS.courseworkItem, "Coursework");
+    const courseItemErr = validateCommaItems(
+      courseworkArray,
+      LIMITS.courseworkItem,
+      "Coursework",
+    );
     if (courseItemErr) {
       setCourseworkError(courseItemErr);
       setAlertAndScroll(courseItemErr);
@@ -388,7 +434,9 @@ const RecruitmentForm = () => {
 
     if (formData.availability.trim().length > LIMITS.availability) {
       setAvailabilityError(`Max ${LIMITS.availability} characters allowed.`);
-      setAlertAndScroll(`Weekly Availability max length is ${LIMITS.availability}.`);
+      setAlertAndScroll(
+        `Weekly Availability max length is ${LIMITS.availability}.`,
+      );
       return;
     }
 
@@ -450,14 +498,16 @@ const RecruitmentForm = () => {
 
   return (
     <div className="recruitment-page">
-      <Navbar/>
+      <Navbar />
 
       <div className="box-header">
         <div className="form-header">
           <h1>RECRUITMENT APPLICATION</h1>
           <p>Fill out the application form to join the ACM team</p>
           {sessionLoading && (
-            <p style={{ marginTop: 8, fontSize: 14 }}>Loading active session...</p>
+            <p style={{ marginTop: 8, fontSize: 14 }}>
+              Loading active session...
+            </p>
           )}
         </div>
       </div>
@@ -499,9 +549,15 @@ const RecruitmentForm = () => {
       {/* Progress */}
       <div className="progress-container">
         <div className="progress-tabs">
-          <div className="tab"><span>Personal Info</span></div>
-          <div className="tab"><span>Education</span></div>
-          <div className="tab"><span>Preferences</span></div>
+          <div className="tab">
+            <span>Personal Info</span>
+          </div>
+          <div className="tab">
+            <span>Education</span>
+          </div>
+          <div className="tab">
+            <span>Preferences</span>
+          </div>
         </div>
         <div className="progress-bar-container">
           <div className="progress-bar" style={{ width: `${progress}%` }} />
@@ -570,7 +626,9 @@ const RecruitmentForm = () => {
               style={{ borderColor: phoneError ? "crimson" : undefined }}
             />
             {phoneError && (
-              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+              <small
+                style={{ color: "crimson", marginTop: 6, display: "block" }}
+              >
                 {phoneError}
               </small>
             )}
@@ -595,7 +653,9 @@ const RecruitmentForm = () => {
                 style={{ borderColor: regError ? "crimson" : undefined }}
               />
               {regError && (
-                <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+                <small
+                  style={{ color: "crimson", marginTop: 6, display: "block" }}
+                >
                   {regError}
                 </small>
               )}
@@ -611,7 +671,9 @@ const RecruitmentForm = () => {
               >
                 <option value="">Select</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                  <option key={n} value={n}>{n}</option>
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
                 ))}
               </select>
             </div>
@@ -629,6 +691,13 @@ const RecruitmentForm = () => {
               <option value="BSSE">Bachelor of Software Engineering</option>
               <option value="BSCS">Bachelor of Computer Science</option>
               <option value="BSAI">Bachelor of Artificial Intelligence</option>
+              <option value="BSEE">Bachelor of Electrical Engineering</option>
+              <option value="BSCE">Bachelor of Computer Engineering</option>
+              <option value="BSME">Bachelor of Mechanical Engineering</option>
+              <option value="BSCVE">Bachelor of Civil Engineering</option>
+              <option value="BBA">Business Administration</option>
+              <option value="HUM">Humanities Department</option>
+              <option value="BS_MATH">Mathematics Department</option>
             </select>
           </div>
 
@@ -641,11 +710,13 @@ const RecruitmentForm = () => {
               rows="4"
               required
               maxLength={1000}
-              placeholder="e.g. React, Node, Python"
+              placeholder="e.g. Decorations, Event management, Coding, Graphic Designing or Media"
               style={{ borderColor: skillsError ? "crimson" : undefined }}
             />
             {skillsError && (
-              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+              <small
+                style={{ color: "crimson", marginTop: 6, display: "block" }}
+              >
                 {skillsError}
               </small>
             )}
@@ -666,7 +737,9 @@ const RecruitmentForm = () => {
               style={{ borderColor: courseworkError ? "crimson" : undefined }}
             />
             {courseworkError && (
-              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+              <small
+                style={{ color: "crimson", marginTop: 6, display: "block" }}
+              >
                 {courseworkError}
               </small>
             )}
@@ -690,9 +763,26 @@ const RecruitmentForm = () => {
                 required
               >
                 <option value="">Select Club</option>
-                <option value="CODEHUB">CodeHub (Development)</option>
+                <option
+                  value="CODEHUB"
+                  disabled={
+                    !["BSSE", "BSCS", "BSAI"].includes(formData.program)
+                  }
+                  style={
+                    !["BSSE", "BSCS", "BSAI"].includes(formData.program)
+                      ? { color: "#999" }
+                      : {}
+                  }
+                >
+                  CodeHub (Development){" "}
+                  {!["BSSE", "BSCS", "BSAI"].includes(formData.program)
+                    ? "(CS/SE/AI Only)"
+                    : ""}
+                </option>{" "}
                 <option value="GRAPHICS">Graphics / UI Design</option>
-                <option value="SOCIAL_MEDIA_MARKETING">Social Media Marketing</option>
+                <option value="SOCIAL_MEDIA_MARKETING">
+                  Social Media Marketing
+                </option>
                 <option value="MEDIA">Media & Coverage</option>
                 <option value="DECOR">Decor Team</option>
                 <option value="EVENTS_LOGISTICS">Events & Logistics</option>
@@ -708,9 +798,26 @@ const RecruitmentForm = () => {
                 required
               >
                 <option value="">Select Club</option>
-                <option value="CODEHUB">CodeHub (Development)</option>
+                <option
+                  value="CODEHUB"
+                  disabled={
+                    !["BSSE", "BSCS", "BSAI"].includes(formData.program)
+                  }
+                  style={
+                    !["BSSE", "BSCS", "BSAI"].includes(formData.program)
+                      ? { color: "#999" }
+                      : {}
+                  }
+                >
+                  CodeHub (Development){" "}
+                  {!["BSSE", "BSCS", "BSAI"].includes(formData.program)
+                    ? "(CS/SE/AI Only)"
+                    : ""}
+                </option>{" "}
                 <option value="GRAPHICS">Graphics / UI Design</option>
-                <option value="SOCIAL_MEDIA_MARKETING">Social Media Marketing</option>
+                <option value="SOCIAL_MEDIA_MARKETING">
+                  Social Media Marketing
+                </option>
                 <option value="MEDIA">Media & Coverage</option>
                 <option value="DECOR">Decor Team</option>
                 <option value="EVENTS_LOGISTICS">Events & Logistics</option>
@@ -761,7 +868,9 @@ const RecruitmentForm = () => {
               {formData.availability.length}/{LIMITS.availability}
             </small>
             {availabilityError && (
-              <small style={{ color: "crimson", marginTop: 6, display: "block" }}>
+              <small
+                style={{ color: "crimson", marginTop: 6, display: "block" }}
+              >
                 {availabilityError}
               </small>
             )}
@@ -796,8 +905,6 @@ const RecruitmentForm = () => {
           {submitting ? "Submitting..." : "Submit Application"}
         </button>
       </form>
-
-      
     </div>
   );
 };

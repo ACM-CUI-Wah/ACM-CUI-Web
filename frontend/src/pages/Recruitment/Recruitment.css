@@ -16,6 +16,20 @@
   align-items: center;
   padding: 2rem;
 }
+.rm-textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  resize: vertical;
+  font-size: 14px;
+}
+
+.rm-comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
 
 .submission-card {
   background-color: #242542; /* Slightly lighter than bg */

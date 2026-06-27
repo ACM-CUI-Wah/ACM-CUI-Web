@@ -15,10 +15,11 @@ const TeamPage = () => {
 
   const clubMap = {
     "Code Hub": "CODEHUB",
-    "Graphics and Media": "GRAPHICS",
+    "Graphics": "GRAPHICS",
     "Social Media & Marketing": "SOCIAL_MEDIA_MARKETING",
     "Decor": "DECOR",
-    "Events and Logistics": "EVENTS_LOGISTICS"
+    "Events and Logistics": "EVENTS_LOGISTICS",
+    "Media": "MEDIA"
   };
 
   useEffect(() => {
