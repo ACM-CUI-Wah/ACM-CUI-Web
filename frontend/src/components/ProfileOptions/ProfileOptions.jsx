@@ -4,7 +4,7 @@ import "./ProfileOptions.css";
 import useAuthStore from "../../store/authStore";
 import axiosInstance from "../../axios";
 
-const ProfileOptions = () => {
+const ProfileOptions = ({ closeDropdown }) => {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
 
@@ -21,8 +21,8 @@ const ProfileOptions = () => {
         const res = await axiosInstance.get(`/students/${studentId}`);
         const user = res.data;
 
-        if (user?.profile_pic) {
-          setProfilePic(user.profile_pic);
+        if (user?.profile_pic_url) {
+          setProfilePic(user.profile_pic_url);
         }
       } catch (err) {
         console.error("Failed to fetch profile picture:", err?.response?.data || err.message);
@@ -69,17 +69,35 @@ const ProfileOptions = () => {
         )}
       </div>
 
-      <button className="option-btn" onClick={() => navigate("/dashboard/edit-profile")}>
-        Profile
-      </button>
+      <button
+  className="option-btn"
+  onClick={() => {
+    closeDropdown();
+    navigate("/dashboard/edit-profile");
+  }}
+>
+  Profile
+</button>
 
-      <button className="option-btn" onClick={() => navigate("/dashboard/otp")}>
-        Reset Password
-      </button>
+<button
+  className="option-btn"
+  onClick={() => {
+    closeDropdown();
+    navigate("/dashboard/otp");
+  }}
+>
+  Reset Password
+</button>
 
-      <button className="option-btn" onClick={handleLogout}>
-        Logout
-      </button>
+      <button
+  className="option-btn"
+  onClick={() => {
+    closeDropdown();
+    handleLogout();
+  }}
+>
+  Logout
+</button>
     </div>
   );
 };

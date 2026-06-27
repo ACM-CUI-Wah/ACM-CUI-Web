@@ -31,11 +31,12 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
   useEffect(() => {
     if (member) {
       setFormData({
+        id: member.id,
         roll_no: member.roll_no || "",
         club: member.club || "",
         title: member.title || "",
         user: {
-          id: member.user.id, // Don't use fallback - ID must exist
+          id: member.user.id,
           first_name: member.user?.first_name || "",
           last_name: member.user?.last_name || "",
           email: member.user?.email || "",
@@ -57,6 +58,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
       setFormData((prev) => ({ ...prev, title: value.toUpperCase() }));
       return;
     }
+
     if (["roll_no", "club"].includes(name)) {
       setFormData((prev) => ({ ...prev, [name]: value }));
     } else {
@@ -76,84 +78,68 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
     setError(null);
 
     try {
+      // 1. Construct a standard JavaScript Object (JSON)
       const dataToSend = {};
 
+      // 2. Compare Top-Level Fields
       if (formData.roll_no !== member.roll_no) {
         dataToSend.roll_no = formData.roll_no;
       }
       if (formData.club !== member.club) {
         dataToSend.club = formData.club;
       }
-      if ((formData.title || "") !== (member.title || "")) {
-        dataToSend.title = formData.title.trim() === "" ? null : formData.title;
+      if (formData.title !== member.title) {
+        dataToSend.title = formData.title;
       }
 
-      const updatedUserFields = {};
+      // 3. Compare Nested User Fields
+      const userData = {};
       const userFields = [
         "first_name",
         "last_name",
         "email",
         "username",
-        "password",
-        "role",
         "phone_number",
+        "role",
       ];
 
-      userFields.forEach((field) => {
-        if (field === "password") {
-          if (formData.user.password.trim()) {
-            updatedUserFields.password = formData.user.password;
-          }
-        } else if (formData.user[field] !== member.user[field]) {
-          updatedUserFields[field] = formData.user[field];
+      userFields.forEach((key) => {
+        if (formData.user[key] !== member.user[key]) {
+          userData[key] = formData.user[key];
         }
       });
 
-      if (Object.keys(updatedUserFields).length > 0) {
-        updatedUserFields.id = member.user.id;
-        dataToSend.user = updatedUserFields;
+      if (formData.user.password && formData.user.password.trim() !== "") {
+        userData.password = formData.user.password;
       }
 
-      if (Object.keys(dataToSend).length === 0) {
-        alert("No changes detected!");
-        setIsSaving(false);
-        return;
+      if (Object.keys(userData).length > 0) {
+        userData.id = member.user.id; 
+        dataToSend.user = userData;
       }
 
-      const finalFormData = new FormData();
-
-      Object.keys(dataToSend).forEach((key) => {
-        if (key === "user" && typeof dataToSend.user === "object") {
-          Object.keys(dataToSend.user).forEach((userKey) => {
-            finalFormData.append(`user.${userKey}`, dataToSend.user[userKey]);
-          });
-        } else {
-          finalFormData.append(key, dataToSend[key]);
-        }
-      });
-
-      await axiosInstance.patch(`/students/${member.id}`, finalFormData, {
-        headers: {
-          // This overrides the default 'application/json' in your axiosInstance
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axiosInstance.patch(`/students/${member.id}`, dataToSend);
 
       alert("Member updated successfully!");
+      
+      
       onSave();
       onClose();
     } catch (err) {
       console.error("Update failed:", err.response?.data || err.message);
       if (err.response?.data?.user?.email) {
-        setError(err.response.data.user.email[0]);
-        alert("Error updating: Email issue");
+        setError("Email already exists or is invalid.");
       } else {
-        setError(err.response?.data?.detail || "Failed to update member.");
+        setError(
+          JSON.stringify(err.response?.data) || "Failed to update member."
+        );
       }
     } finally {
       setIsSaving(false);
     }
   };
+
+  
 
   return (
     <div className=" edit-member-modal modal-overlay" onClick={onClose}>
@@ -202,7 +188,9 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
                 <option value="CODEHUB">CodeHub</option>
                 <option value="GRAPHICS">Graphics</option>
                 <option value="MEDIA">Media</option>
-                <option value="SOCIAL_MEDIA_MARKETING">Social Media & Marketing</option>
+                <option value="SOCIAL_MEDIA_MARKETING">
+                  Social Media & Marketing
+                </option>
                 <option value="DECOR">Decor</option>
                 <option value="EVENTS_LOGISTICS">Events & Logistics</option>
               </select>

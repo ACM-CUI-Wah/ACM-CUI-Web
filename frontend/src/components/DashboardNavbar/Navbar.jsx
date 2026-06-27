@@ -127,7 +127,10 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
 
       {showOptions && (
         <div className="profile-dropdown">
-          <ProfileOptions navigate={navigate} />
+          <ProfileOptions
+      navigate={navigate}
+      closeDropdown={() => setShowOptions(false)}
+    />
         </div>
       )}
     </div>
@@ -194,6 +197,7 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
             <BsList size={22} />
           </Button>
         )}
+        
 
         <BootstrapNavbar.Toggle
           aria-controls="navbar-nav"
@@ -231,6 +235,10 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
             <Nav.Link as={Link} to="/contact" className="text-white fw-semibold">
               Contact us
             </Nav.Link>
+
+            <div className="d-lg-none mt-2 text-center">
+    {renderAuthButtons()}
+  </div>
           </Nav>
 
           {/* DESKTOP SEARCH - visible ONLY on /dashboard/blogs */}

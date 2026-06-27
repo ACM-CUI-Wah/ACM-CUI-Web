@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import TeamsCard from "./TeamsCard.jsx";
 import "./TeamSection.css";
 
-import codeHubImage from "../../assets/codehub.jpg";
-import socialImage from "../../assets/social.jpg";
-import eventsImage from "../../assets/events.jpg";
-import graphicsImage from "../../assets/graphics.jpg";
-import decorImage from "../../assets/decor.jpg";
+import codeHubImage from "../../assets/codehub_club01.png";
+import socialImage from "../../assets/marketing_club01.png";
+import mediaImage from "../../assets/media_club01.png";
+import eventsImage from "../../assets/events_club01.png";
+import graphicsImage from "../../assets/graphics_club01.png";
+import decorImage from "../../assets/decor_club01.png";
 
 import Navbar from "../DashboardNavbar/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
@@ -17,31 +18,37 @@ const teamData = [
     image: codeHubImage,
     title: "Code Hub",
     description:
-      "CodeHub is a dynamic club under ACM that brings together students passionate about coding, problem-solving, and technology."
+      "Introducing the heart of innovation our Code Hub team. This is where curiosity meets creation. From exploring new technologies to developing efficient solutions, the Code Hub empowers members to learn, collaborate, and grow as developers. Their mission? To turn ideas into impactful code and shape the next generation of tech leaders"
   },
   {
     image: socialImage,
     title: "Social Media & Marketing",
     description:
-      "Dedicated to building creativity, communication, and digital presence through modern marketing strategies."
+      "At ACM, our Social Media & Marketing team is the creative force behind our digital presence. From crafting strategic campaigns to designing engaging content, this team ensures that every post reflects our vision and connects with our audience. They bring ideas to life, build our community online, and make sure ACM’s story is heard across every platform."
+  },
+  {
+    image: mediaImage,
+    title: "Media",
+    description:
+      "Our Media team captures the essence of ACM one frame at a time. From event coverage to storytelling through visuals, they ensure that every moment is documented with creativity and precision. Their lens brings ACM’s spirit to life, preserving memories and showcasing the passion behind every project."
   },
   {
     image: eventsImage,
     title: "Events and Logistics",
     description:
-      "The backbone of planning, coordinating, and executing successful ACM events with precision."
+      "Every great experience starts with thoughtful planning and that’s exactly what our Events team does best. From concept to execution, they organize engaging sessions, workshops, and celebrations that bring our community together. Their creativity and coordination ensure that every ACM event leaves a lasting impact."
   },
   {
     image: graphicsImage,
-    title: "Graphics and Media",
+    title: "Graphics",
     description:
-      "Bringing creativity and technology together through design, animation, and visual storytelling."
+      "Design is intelligence made visible and our Graphics team embodies that perfectly. They transform ideas into visuals that communicate, inspire, and engage. From digital posters to event branding, their work adds aesthetic value and strengthens ACM’s identity across all platforms."
   },
   {
     image: decorImage,
     title: "Decor",
     description:
-      "Ensuring events feel welcoming, vibrant, and well-organized with creative decoration and planning."
+      "Creativity, color, and craftsmanship that’s what defines our Decor team. They transform simple spaces into inspiring experiences, giving every ACM event a unique and memorable identity. with attention to every detail, they ensure that the environment reflects the energy and vision of our society."
   }
 ];
 
@@ -222,3 +229,4 @@ const TeamSection = () => {
 };
 
 export default TeamSection;
+

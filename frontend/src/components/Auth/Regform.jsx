@@ -22,11 +22,12 @@ function Regform() {
   const [fullName, setFullName] = useState("");
 
   const clubOptions = [
-    { value: "codehub", label: "CodeHub" },
-    { value: "graphics_and_media", label: "Graphics and Media" },
-    { value: "social_media_and_marketing", label: "Social Media and Marketing" },
-    { value: "registration_and_decor", label: "Decor" },
-    { value: "events_and_logistics", label: "Events and Logistics" },
+    { value: "CODEHUB", label: "CodeHub" },
+    { value: "GRAPHICS", label: "Graphics" },
+    { value: "MEDIA", label: "Media" },
+    { value: "SOCIAL_MEDIA_MARKETING", label: "Social Media and Marketing" },
+    { value: "DECOR", label: "Decor" },
+    { value: "EVENTS_LOGISTICS", label: "Events and Logistics" },
   ];
 
   const executiveTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "TREASURER", "ADVISOR", "LEAD ADVISOR", "DIRECTOR OPERATIONS"];

@@ -47,7 +47,8 @@ const ClubsSection = () => {
             <img src={vector1} alt="Code Hub" />
           </div>
           <h4>CODE HUB</h4>
-          <p>Hands-on coding, real-world challenges, and technical growth.</p>
+          <p>HIntroducing the heart of innovation our Code Hub team.
+            This is where curiosity meets creation. </p>
         </motion.div>
 
         {/* EVENTS */}
@@ -56,7 +57,7 @@ const ClubsSection = () => {
             <img src={vector2} alt="Events & Logistics" />
           </div>
           <h4>EVENTS & LOGISTICS</h4>
-          <p>Planning and executing impactful technical events.</p>
+          <p>Every great experience starts with thoughtful planning and that’s exactly what our Events team does best.</p>
         </motion.div>
 
         {/* GRAPHICS */}
@@ -65,7 +66,7 @@ const ClubsSection = () => {
             <img src={vector3} alt="Graphics" />
           </div>
           <h4>GRAPHICS</h4>
-          <p>Designing visuals that communicate ideas beautifully.</p>
+          <p>Design is intelligence made visible and our Graphics team embodies that perfectly.</p>
         </motion.div>
 
         {/* SOCIAL MEDIA & MARKETING */}
@@ -83,7 +84,7 @@ const ClubsSection = () => {
             <img src={vector5} alt="Decor" />
           </div>
           <h4>DECOR</h4>
-          <p>Transforming spaces to reflect creativity and innovation.</p>
+          <p>Creativity, color, and craftsmanship that’s what defines our Decor team.</p>
         </motion.div>
 
 
@@ -109,3 +110,4 @@ const ClubsSection = () => {
 };
 
 export default ClubsSection;
+

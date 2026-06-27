@@ -1,5 +1,6 @@
 import React from 'react';
 import './MemberCard.css';
+import defaultProfile from '../../assets/profile-nill.png';
 
 const MemberCard = ({ image, name, designation }) => {
   // Truncate designation to 50 characters
@@ -11,7 +12,12 @@ const MemberCard = ({ image, name, designation }) => {
   return (
     <div className="member-card">
       <div className="member-img-wrapper">
-        <img src={image} alt={name} className="member-img" />
+        <img
+          src={image || defaultProfile}
+          alt={name}
+          className="member-img"
+          onError={(e) => { e.target.src = defaultProfile; }}
+        />
       </div>
       <div className="member-content">
         <h3 className="member-name">{name}</h3>
