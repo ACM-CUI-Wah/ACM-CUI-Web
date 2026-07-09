@@ -27,7 +27,9 @@ const useAuthStore = create((set, get) => ({
       const token = res.data?.token || res.data?.data?.token;
       const role = res.data?.role || res.data?.data?.role;
       const user_id = res.data?.user || res.data?.data?.user_id;
-      const student_id = res.data?.user || res.data?.data?.student_id;
+      
+      // Fallback: If student_id isn't provided, use user_id
+      const student_id = res.data?.data?.student_id || user_id; 
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
