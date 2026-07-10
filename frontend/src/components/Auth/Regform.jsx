@@ -13,6 +13,7 @@ function Regform() {
       password: "12345",
       role: "STUDENT",
       phone_number: "",
+      birthday: "",
     },
     roll_no: "",
     club: "",
@@ -128,6 +129,8 @@ function Regform() {
       setFormData((prev) => ({ ...prev, user: { ...prev.user, email: value } }));
     } else if (id === "username") {
       setFormData((prev) => ({ ...prev, user: { ...prev.user, username: value } }));
+    } else if (id === "birthday") {
+      setFormData((prev) => ({ ...prev, user: { ...prev.user, birthday: value } }));
     } else if (id === "pass") {
       setFormData((prev) => ({ ...prev, user: { ...prev.user, password: value } }));
     } else if (id === "club") {
@@ -190,6 +193,7 @@ function Regform() {
           password: "12345",
           role: "STUDENT",
           phone_number: "",
+          birthday: "",
         },
         roll_no: "",
         club: isLead ? currentUserClub : "",
@@ -392,6 +396,20 @@ function Regform() {
                 style={{ borderColor: phoneError ? "#dc3545" : "" }}
               />
               {phoneError && <small className="regform-error">{phoneError}</small>}
+            </div>
+          </div>
+
+          <div className="regform-row">
+            <div className="regform-group regform-w45">
+              <label htmlFor="birthday">Birthday</label>
+              <input
+                type="date"
+                id="birthday"
+                className="regform-control"
+                value={formData.user.birthday}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
 

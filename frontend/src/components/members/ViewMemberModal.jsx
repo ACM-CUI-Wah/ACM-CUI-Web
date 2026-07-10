@@ -36,6 +36,9 @@ const ViewMemberModal = ({ isOpen, onClose, member }) => {
           <div className="detail-item">
             <strong>Phone:</strong> <span>{member.user.phone_number}</span>
           </div>
+          <div className="detail-item">
+            <strong>Birthday:</strong> <span>{member.user.birthday}</span>
+          </div>
         </div>
         <div className="modal-footer">
         

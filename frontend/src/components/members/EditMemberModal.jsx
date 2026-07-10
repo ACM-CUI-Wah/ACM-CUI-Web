@@ -22,6 +22,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
       password: "",
       role: "STUDENT",
       phone_number: "",
+      birthday: "",
     },
   });
 
@@ -44,6 +45,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
           password: "",
           role: member.user?.role || "STUDENT",
           phone_number: member.user?.phone_number || "",
+          birthday: member.user?.birthday || "",
         },
       });
     }
@@ -101,6 +103,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         "username",
         "phone_number",
         "role",
+        "birthday",
       ];
 
       userFields.forEach((key) => {
@@ -252,6 +255,18 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
                 value={formData.user.phone_number}
                 onChange={handleChange}
                 placeholder="+92XXXXXXXXXX"
+                style={inputStyle}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="birthday">Birthday</label>
+              <input
+                type="date"
+                id="birthday"
+                name="birthday"
+                value={formData.user.birthday}
+                onChange={handleChange}
                 style={inputStyle}
               />
             </div>
