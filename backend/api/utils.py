@@ -18,7 +18,6 @@ def get_tokens_for_user(user, **claims):
     refresh = RefreshToken.for_user(user)
     refresh['user_id'] = user.id
     refresh['email'] = user.email
-    refresh['otp'] = claims.get('otp')
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
