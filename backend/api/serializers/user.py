@@ -9,7 +9,7 @@ from api.utils import upload_file, delete_from_bucket, get_bucket_public_url
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'username', 'password', 'role', 'phone_number']
+        fields = ['id', 'first_name', 'last_name', 'email', 'username', 'password', 'role', 'phone_number','birthday']
 
 
 class StudentSerializer(serializers.ModelSerializer):

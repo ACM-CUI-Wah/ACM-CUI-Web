@@ -27,7 +27,7 @@ class User(AbstractUser):
         max_length=13,
         unique=True
     )
-
+    birthday = models.DateField(null=True, blank=True)#added birthday field
     # def save(self, *args, **kwargs):
     #     if self.phone_number.startswith('0'):
     #         self.phone_number = '+92' + self.phone_number[1:]
