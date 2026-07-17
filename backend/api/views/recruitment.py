@@ -78,6 +78,15 @@ class ApplicationStatusUpdateViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         application.status = new_status
+
+        # Handle 2nd preference selection tracking fields
+        if "selected_preference" in request.data:
+            application.selected_preference = request.data["selected_preference"]
+        if "second_preference_comment" in request.data:
+            application.second_preference_comment = request.data["second_preference_comment"]
+        if "second_preference_club_label" in request.data:
+            application.second_preference_club_label = request.data["second_preference_club_label"]
+
         application.save()
         return Response({"status": "updated"})
 
@@ -195,13 +204,14 @@ class RecruitmentApplicationsExcelView(APIView):
         ws.title = "Recruitment Applications"
 
         headers = [
-            "Status",
+            "Status", "Selected Preference",
             "First Name", "Last Name", "Email", "Phone",
             "Registration No", "Program", "Current Semester",
             "Skills", "Relevant Coursework",
             "Preferred Role", "Secondary Role",
             "Join Purpose", "Previous Experience",
             "Weekly Availability", "LinkedIn",
+            "2nd Preference Comment", "2nd Preference Club",
         ]
         ws.append(headers)
 
@@ -213,6 +223,7 @@ class RecruitmentApplicationsExcelView(APIView):
 
             ws.append([
                 app.status,
+                app.selected_preference,
                 personal.first_name if personal else "",
                 personal.last_name if personal else "",
                 personal.email if personal else "",
@@ -228,6 +239,8 @@ class RecruitmentApplicationsExcelView(APIView):
                 role.previous_experience if role else "",
                 role.weekly_availability if role else "",
                 role.linkedin_profile if role else "",
+                app.second_preference_comment or "",
+                app.second_preference_club_label or "",
             ])
 
         response = HttpResponse(

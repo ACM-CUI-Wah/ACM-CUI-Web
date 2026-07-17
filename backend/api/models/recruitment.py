@@ -12,6 +12,11 @@ class ApplicationStatus(models.TextChoices):
     INTERVIEWS = "INTERVIEWS"
 
 
+class SelectionPreference(models.TextChoices):
+    FIRST_PREFERENCE = "FIRST_PREFERENCE"
+    SECOND_PREFERENCE = "SECOND_PREFERENCE"
+
+
 class Program(models.TextChoices):
     BSCS = "BSCS"
     BSSE = "BSSE"
@@ -93,6 +98,25 @@ class RecruitmentApplication(models.Model):
         default=ApplicationStatus.UNDER_REVIEW
     )
     comment = models.TextField(blank=True, null=True, default="")
+    selected_preference = models.CharField(
+        max_length=20,
+        choices=SelectionPreference.choices,
+        default=SelectionPreference.FIRST_PREFERENCE,
+        help_text="Whether the student was selected for their 1st or 2nd preference."
+    )
+    second_preference_comment = models.TextField(
+        blank=True,
+        null=True,
+        default="",
+        help_text="Interview comment specifically for the 2nd preference club."
+    )
+    second_preference_club_label = models.CharField(
+        max_length=30,
+        choices=Role.choices,
+        blank=True,
+        null=True,
+        help_text="The club/role that the 2nd preference comment is associated with."
+    )
 
     class Meta:
         ordering = ['id']

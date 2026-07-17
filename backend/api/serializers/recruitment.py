@@ -146,7 +146,9 @@ class RecruitmentApplicationSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = RecruitmentApplication
-        fields = ['id', 'recruitment_session', 'status', 'comment']
+        fields = ['id', 'recruitment_session', 'status', 'comment',
+                  'selected_preference', 'second_preference_comment',
+                  'second_preference_club_label']
 
 
 class RecruitmentApplicationDetailSerializer(serializers.ModelSerializer):
@@ -163,6 +165,8 @@ class RecruitmentApplicationDetailSerializer(serializers.ModelSerializer):
         model = RecruitmentApplication
         fields = [
             'id', 'recruitment_session', 'status', 'comment',
+            'selected_preference', 'second_preference_comment',
+            'second_preference_club_label',
             'personal_info', 'academic_info', 'role_preferences'
         ]
 
@@ -189,9 +193,13 @@ class RecruitmentApplicationSubmissionSerializer(serializers.ModelSerializer):
         model = RecruitmentApplication
         fields = [
             'id', 'recruitment_session', 'status', 'comment',
+            'selected_preference', 'second_preference_comment',
+            'second_preference_club_label',
             'personal_info', 'academic_info', 'role_preferences'
         ]
-        read_only_fields = ['id', 'status', 'comment']
+        read_only_fields = ['id', 'status', 'comment',
+                           'selected_preference', 'second_preference_comment',
+                           'second_preference_club_label']
     
     def create(self, validated_data):
         """
@@ -229,6 +237,9 @@ class RecruitmentApplicationSubmissionSerializer(serializers.ModelSerializer):
             'recruitment_session': instance.recruitment_session.id,
             'status': instance.status,
             'comment': instance.comment,
+            'selected_preference': instance.selected_preference,
+            'second_preference_comment': instance.second_preference_comment,
+            'second_preference_club_label': instance.second_preference_club_label,
             'personal_info': PersonalInfoSerializer(instance.personal_info).data,
             'academic_info': AcademicInfoSerializer(instance.academic_info).data,
             'role_preferences': RolePreferencesSerializer(instance.role_preferences).data,
@@ -242,4 +253,5 @@ class ApplicationStatusUpdateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = RecruitmentApplication
-        fields = ['status']
+        fields = ['status', 'selected_preference',
+                  'second_preference_comment', 'second_preference_club_label']
