@@ -1,6 +1,6 @@
 // src/components/ViewMemberModal.jsx
 import React from "react";
-import "./Modal.css"; 
+import "./Modal.css";
 
 const ViewMemberModal = ({ isOpen, onClose, member }) => {
   if (!isOpen || !member) return null;
@@ -36,10 +36,11 @@ const ViewMemberModal = ({ isOpen, onClose, member }) => {
           <div className="detail-item">
             <strong>Phone:</strong> <span>{member.user.phone_number}</span>
           </div>
+          <div className="detail-item">
+            <strong>Birthday:</strong> <span>{member.user.birthday}</span>
+          </div>
         </div>
-        <div className="modal-footer">
-        
-        </div>
+        <div className="modal-footer"></div>
       </div>
     </div>
   );
