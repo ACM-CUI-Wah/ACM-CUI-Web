@@ -96,15 +96,19 @@ const TrackMembersPage = () => {
   }, [memberToDelete]);
 
   // Memoized table headers
-  const tableHeaders = useMemo(() => [
-    { key: "username", label: "Username" },
-    { key: "roll_no", label: "Roll No." },
-    { key: "email", label: "Email" },
-    { key: "phone", label: "Phone" },
-    { key: "role", label: "Role" },
-    { key: "club", label: "Club" },
-    { key: "actions", label: "Actions", className: "actions-header" },
-  ], []);
+  const tableHeaders = useMemo(
+    () => [
+      { key: "username", label: "Username" },
+      { key: "roll_no", label: "Roll No." },
+      { key: "email", label: "Email" },
+      { key: "phone", label: "Phone" },
+      { key: "birthday", label: "Birthday" },
+      { key: "role", label: "Role" },
+      { key: "club", label: "Club" },
+      { key: "actions", label: "Actions", className: "actions-header" },
+    ],
+    [],
+  );
 
   // Render loading state
   if (loading) {
@@ -159,8 +163,11 @@ const TrackMembersPage = () => {
                 <td>{member.roll_no || "N/A"}</td>
                 <td>{member.user?.email || "N/A"}</td>
                 <td>{member.user?.phone_number || "N/A"}</td>
+                <td>{member.user?.birthday || "N/A"}</td>
                 <td>
-                  <span className={`role-badge ${getRoleClass(member.user?.role)}`}>
+                  <span
+                    className={`role-badge ${getRoleClass(member.user?.role)}`}
+                  >
                     {member.user?.role || "Unknown"}
                   </span>
                 </td>
@@ -202,7 +209,9 @@ const TrackMembersPage = () => {
         {members.map((member) => (
           <article key={member.user?.id || member.id} className="member-card">
             <header className="member-card-header">
-              <span className="member-name">{member.user?.username || "N/A"}</span>
+              <span className="member-name">
+                {member.user?.username || "N/A"}
+              </span>
               <span className={`role-badge ${getRoleClass(member.user?.role)}`}>
                 {member.user?.role || "Unknown"}
               </span>
@@ -215,11 +224,21 @@ const TrackMembersPage = () => {
               </div>
               <div className="card-item">
                 <span className="card-label">Email</span>
-                <span className="card-value">{member.user?.email || "N/A"}</span>
+                <span className="card-value">
+                  {member.user?.email || "N/A"}
+                </span>
               </div>
               <div className="card-item">
                 <span className="card-label">Phone</span>
-                <span className="card-value">{member.user?.phone_number || "N/A"}</span>
+                <span className="card-value">
+                  {member.user?.phone_number || "N/A"}
+                </span>
+              </div>
+              <div className="card-item">
+                <span className="card-label">Birthday</span>
+                <span className="card-value">
+                  {member.user?.birthday || "N/A"}
+                </span>
               </div>
               <div className="card-item">
                 <span className="card-label">Club</span>
@@ -273,10 +292,12 @@ const TrackMembersPage = () => {
           <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
             <h2>Delete Member</h2>
             <p>
-              Are you sure you want to delete <strong>{memberToDelete.user?.username}</strong>?
+              Are you sure you want to delete{" "}
+              <strong>{memberToDelete.user?.username}</strong>?
             </p>
             <p className="delete-warning">
-              This will permanently delete the member and their user account. This action cannot be undone.
+              This will permanently delete the member and their user account.
+              This action cannot be undone.
             </p>
             <div className="delete-modal-actions">
               <button
