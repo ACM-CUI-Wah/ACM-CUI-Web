@@ -13,6 +13,7 @@ function Regform() {
       password: "12345",
       role: "STUDENT",
       phone_number: "",
+      birthday: "",
     },
     roll_no: "",
     club: "",
@@ -30,7 +31,15 @@ function Regform() {
     { value: "EVENTS_LOGISTICS", label: "Events and Logistics" },
   ];
 
-  const executiveTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "TREASURER", "ADVISOR", "LEAD ADVISOR", "DIRECTOR OPERATIONS"];
+  const executiveTitles = [
+    "PRESIDENT",
+    "VICE PRESIDENT",
+    "SECRETARY",
+    "TREASURER",
+    "ADVISOR",
+    "LEAD ADVISOR",
+    "DIRECTOR OPERATIONS",
+  ];
   const isExecutiveTitle = executiveTitles.includes(formData.title);
 
   const [titleInputMode, setTitleInputMode] = useState(false);
@@ -63,7 +72,9 @@ function Regform() {
       return true;
     }
     if (!regPattern.test(value)) {
-      setRegNoError("Format: AB12-ABS-000 (2 letters, 2 digits, dash, 3 letters, dash, 3 digits)");
+      setRegNoError(
+        "Format: AB12-ABS-000 (2 letters, 2 digits, dash, 3 letters, dash, 3 digits)",
+      );
       return false;
     }
     setRegNoError("");
@@ -125,11 +136,25 @@ function Regform() {
       }));
       validatePhoneNumber(formatted);
     } else if (id === "email") {
-      setFormData((prev) => ({ ...prev, user: { ...prev.user, email: value } }));
+      setFormData((prev) => ({
+        ...prev,
+        user: { ...prev.user, email: value },
+      }));
     } else if (id === "username") {
-      setFormData((prev) => ({ ...prev, user: { ...prev.user, username: value } }));
+      setFormData((prev) => ({
+        ...prev,
+        user: { ...prev.user, username: value },
+      }));
+    } else if (id === "birthday") {
+      setFormData((prev) => ({
+        ...prev,
+        user: { ...prev.user, birthday: value },
+      }));
     } else if (id === "pass") {
-      setFormData((prev) => ({ ...prev, user: { ...prev.user, password: value } }));
+      setFormData((prev) => ({
+        ...prev,
+        user: { ...prev.user, password: value },
+      }));
     } else if (id === "club") {
       setFormData((prev) => ({ ...prev, club: value }));
     } else if (id === "role") {
@@ -165,7 +190,15 @@ function Regform() {
       return;
     }
 
-    const execTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "TREASURER", "ADVISOR", "LEAD ADVISOR", "DIRECTOR OPERATIONS"];
+    const execTitles = [
+      "PRESIDENT",
+      "VICE PRESIDENT",
+      "SECRETARY",
+      "TREASURER",
+      "ADVISOR",
+      "LEAD ADVISOR",
+      "DIRECTOR OPERATIONS",
+    ];
     const isExec = execTitles.includes(formData.title);
     if (!formData.club && !isExec) {
       alert("Club selection is required for non-executive members.");
@@ -190,6 +223,7 @@ function Regform() {
           password: "12345",
           role: "STUDENT",
           phone_number: "",
+          birthday: "",
         },
         roll_no: "",
         club: isLead ? currentUserClub : "",
@@ -267,7 +301,9 @@ function Regform() {
                 required
                 style={{ borderColor: regNoError ? "#dc3545" : "" }}
               />
-              {regNoError && <small className="regform-error">{regNoError}</small>}
+              {regNoError && (
+                <small className="regform-error">{regNoError}</small>
+              )}
             </div>
           </div>
 
@@ -326,7 +362,9 @@ function Regform() {
               <label htmlFor="club">
                 Club{" "}
                 {isExecutiveTitle && (
-                  <span className="regform-muted">(Optional for Executives)</span>
+                  <span className="regform-muted">
+                    (Optional for Executives)
+                  </span>
                 )}
               </label>
 
@@ -341,7 +379,9 @@ function Regform() {
                 {isAdmin ? (
                   <>
                     <option value="">
-                      {isExecutiveTitle ? "-- No Club (ACM Executive) --" : "-- Select Club --"}
+                      {isExecutiveTitle
+                        ? "-- No Club (ACM Executive) --"
+                        : "-- Select Club --"}
                     </option>
                     {clubOptions.map((club) => (
                       <option key={club.value} value={club.value}>
@@ -351,7 +391,8 @@ function Regform() {
                   </>
                 ) : isLead ? (
                   <option value={currentUserClub}>
-                    {clubOptions.find((c) => c.value === currentUserClub)?.label ||
+                    {clubOptions.find((c) => c.value === currentUserClub)
+                      ?.label ||
                       currentUserClub ||
                       "-- No Club Assigned --"}
                   </option>
@@ -391,7 +432,23 @@ function Regform() {
                 required
                 style={{ borderColor: phoneError ? "#dc3545" : "" }}
               />
-              {phoneError && <small className="regform-error">{phoneError}</small>}
+              {phoneError && (
+                <small className="regform-error">{phoneError}</small>
+              )}
+            </div>
+          </div>
+
+          <div className="regform-row">
+            <div className="regform-group regform-w45">
+              <label htmlFor="birthday">Birthday</label>
+              <input
+                type="date"
+                id="birthday"
+                className="regform-control"
+                value={formData.user.birthday}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
 
@@ -402,7 +459,13 @@ function Regform() {
               <select
                 id="title-select"
                 className="regform-control"
-                value={titleInputMode ? "custom" : formData.title === "" ? "NULL" : formData.title}
+                value={
+                  titleInputMode
+                    ? "custom"
+                    : formData.title === ""
+                      ? "NULL"
+                      : formData.title
+                }
                 onChange={handleChange}
               >
                 <option value="NULL">-- NULL (STUDENT AND LEADS) --</option>

@@ -22,6 +22,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
       password: "",
       role: "STUDENT",
       phone_number: "",
+      birthday: "",
     },
   });
 
@@ -44,6 +45,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
           password: "",
           role: member.user?.role || "STUDENT",
           phone_number: member.user?.phone_number || "",
+          birthday: member.user?.birthday || "",
         },
       });
     }
@@ -101,6 +103,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         "username",
         "phone_number",
         "role",
+        "birthday",
       ];
 
       userFields.forEach((key) => {
@@ -114,15 +117,14 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
       }
 
       if (Object.keys(userData).length > 0) {
-        userData.id = member.user.id; 
+        userData.id = member.user.id;
         dataToSend.user = userData;
       }
 
       await axiosInstance.patch(`/students/${member.id}`, dataToSend);
 
       alert("Member updated successfully!");
-      
-      
+
       onSave();
       onClose();
     } catch (err) {
@@ -131,15 +133,13 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         setError("Email already exists or is invalid.");
       } else {
         setError(
-          JSON.stringify(err.response?.data) || "Failed to update member."
+          JSON.stringify(err.response?.data) || "Failed to update member.",
         );
       }
     } finally {
       setIsSaving(false);
     }
   };
-
-  
 
   return (
     <div className=" edit-member-modal modal-overlay" onClick={onClose}>
@@ -252,6 +252,18 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
                 value={formData.user.phone_number}
                 onChange={handleChange}
                 placeholder="+92XXXXXXXXXX"
+                style={inputStyle}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="birthday">Birthday</label>
+              <input
+                type="date"
+                id="birthday"
+                name="birthday"
+                value={formData.user.birthday}
+                onChange={handleChange}
                 style={inputStyle}
               />
             </div>
