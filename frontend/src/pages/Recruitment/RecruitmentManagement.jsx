@@ -143,11 +143,17 @@ const RecruitmentManagement = () => {
     }
   };
 
-  const uiPreference = (pref) => {
-    if (pref === PREF_FIRST) return "1st Preference";
-    if (pref === PREF_SECOND) return "2nd Preference";
-    return "-";
-  };
+  const uiPreference = (pref, app) => {
+  if (pref === PREF_FIRST) {
+    return app?.role_preferences?.preferred_role || "-";
+  }
+
+  if (pref === PREF_SECOND) {
+    return app?.role_preferences?.secondary_role || "-";
+  }
+
+  return "-";
+};
 
   // -----------------------------
   // 1) Fetch ALL applications
@@ -428,6 +434,10 @@ const RecruitmentManagement = () => {
   // Every status change goes through a preference-confirmation popup
   // -----------------------------
   const handleStatusClick = (newStatus) => {
+    if (newStatus === "REJECTED") {
+    updateStatus(newStatus, selectedApp?.selected_preference);
+    return;
+  }
     setPendingStatus(newStatus);
     setChosenPreference(null);
     setShowPreferenceModal(true);
@@ -640,7 +650,7 @@ const RecruitmentManagement = () => {
                           {statusText}
                         </span>
                       </td>
-                      <td>{uiPreference(app?.selected_preference)}</td>
+                     <td>{uiPreference(app?.selected_preference, app)}</td>
                       <td>
                         <button
                           className="action-btn"
@@ -691,7 +701,7 @@ const RecruitmentManagement = () => {
 
                   {selectedApp?.selected_preference && (
                     <span className="rm-meta-chip">
-                      Selected for: {uiPreference(selectedApp.selected_preference)}
+                     Selected for: {uiPreference(selectedApp.selected_preference, selectedApp)}
                     </span>
                   )}
                 </div>
