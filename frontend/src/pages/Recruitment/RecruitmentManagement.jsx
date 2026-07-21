@@ -7,9 +7,16 @@ import {
   BsEye,
   BsX,
   BsDownload,
+  BsPersonFill,
+  BsMortarboardFill,
+  BsChatLeftText,
 } from "react-icons/bs";
 import "./Recruitment.css";
 import axiosInstance from "../../axios";
+
+// Backend uses these exact string values for selected_preference
+const PREF_FIRST = "FIRST_PREFERENCE";
+const PREF_SECOND = "SECOND_PREFERENCE";
 
 const RecruitmentManagement = () => {
   // data
@@ -35,9 +42,19 @@ const RecruitmentManagement = () => {
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState(null);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const [comment, setComment] = useState("");
-const [savingComment, setSavingComment] = useState(false);
 
+  // comment (1st preference) — model field: comment
+  const [comment, setComment] = useState("");
+  const [savingComment, setSavingComment] = useState(false);
+
+  // comment (2nd preference) — model field: second_preference_comment
+  const [secondaryComment, setSecondaryComment] = useState("");
+  const [savingSecondaryComment, setSavingSecondaryComment] = useState(false);
+
+  // confirm-preference popup, shown before every status change
+  const [showPreferenceModal, setShowPreferenceModal] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState(null);
+  const [chosenPreference, setChosenPreference] = useState(null); // PREF_FIRST | PREF_SECOND
 
   // -----------------------------
   // Helpers
@@ -52,9 +69,7 @@ const [savingComment, setSavingComment] = useState(false);
     setError(null);
 
     try {
-      // Build query params based on filters only (No session ID)
       const params = {};
-
       if (roleFilter) params.preferred_role = roleFilter;
       if (statusFilter) params.status = statusFilter;
 
@@ -63,7 +78,6 @@ const [savingComment, setSavingComment] = useState(false);
         responseType: "blob",
       });
 
-      // Try to get filename from headers
       let filename = `recruitment_export_all.xlsx`;
       const cd = res.headers?.["content-disposition"];
       if (cd && cd.includes("filename")) {
@@ -129,6 +143,12 @@ const [savingComment, setSavingComment] = useState(false);
     }
   };
 
+  const uiPreference = (pref) => {
+    if (pref === PREF_FIRST) return "1st Preference";
+    if (pref === PREF_SECOND) return "2nd Preference";
+    return "-";
+  };
+
   // -----------------------------
   // 1) Fetch ALL applications
   // -----------------------------
@@ -137,8 +157,6 @@ const [savingComment, setSavingComment] = useState(false);
     setError(null);
 
     try {
-      // Removed params: { recruitment_session: sessionId }
-      // This now fetches ALL applications in the DB
       const res = await axiosInstance.get("/recruitment/application-review/");
       const data = Array.isArray(res.data) ? res.data : [];
       setApplications(data);
@@ -171,7 +189,6 @@ const [savingComment, setSavingComment] = useState(false);
     try {
       const res = await axiosInstance.get("/recruitment/application-status/");
       const all = Array.isArray(res.data) ? res.data : [];
-      // Use ALL data (removed .filter by session)
       setStatusList(all);
     } catch (err) {
       const data = err.response?.data;
@@ -211,6 +228,23 @@ const [savingComment, setSavingComment] = useState(false);
     ).length;
 
     return { total, underReview, interviews, accepted };
+  }, [statusList]);
+
+  // Accepted-by-preference breakdown, using the real selected_preference values
+  const preferenceBreakdown = useMemo(() => {
+    const acceptedEntries = statusList.filter(
+      (x) => normalizeStatus(x.status) === "ACCEPTED"
+    );
+
+    const pref1 = acceptedEntries.filter(
+      (x) => x.selected_preference === PREF_FIRST
+    ).length;
+
+    const pref2 = acceptedEntries.filter(
+      (x) => x.selected_preference === PREF_SECOND
+    ).length;
+
+    return { pref1, pref2 };
   }, [statusList]);
 
   // -----------------------------
@@ -274,15 +308,16 @@ const [savingComment, setSavingComment] = useState(false);
     setDetailError(null);
     setDetailLoading(true);
     setComment("");
-
+    setSecondaryComment("");
 
     try {
       const res = await axiosInstance.get(
         `/recruitment/application-review/${id}/`
       );
       setSelectedApp(res.data);
-     
-    setComment(res.data?.comment || res.data?.admin_comment || "");
+
+      setComment(res.data?.comment || "");
+      setSecondaryComment(res.data?.second_preference_comment || "");
     } catch (err) {
       const data = err.response?.data;
       const message =
@@ -295,36 +330,68 @@ const [savingComment, setSavingComment] = useState(false);
       setDetailLoading(false);
     }
   };
-const saveComment = async () => {
-  if (!selectedId) return;
 
-  setSavingComment(true);
-  setDetailError(null);
+  const saveComment = async () => {
+    if (!selectedId) return;
 
-  try {
-    await axiosInstance.patch(
-      `/recruitment/application-status/${selectedId}/`,
-      { comment } 
-    );
+    setSavingComment(true);
+    setDetailError(null);
 
-    // Refresh details
-    const res = await axiosInstance.get(
-      `/recruitment/application-review/${selectedId}/`
-    );
-    setSelectedApp(res.data);
-    setComment(res.data?.comment || "");
-  } catch (err) {
-    const data = err.response?.data;
-    const message =
-      data?.detail ||
-      data?.message ||
-      (typeof data === "string" ? data : JSON.stringify(data)) ||
-      "Failed to save comment.";
-    setDetailError(message);
-  } finally {
-    setSavingComment(false);
-  }
-};
+    try {
+      await axiosInstance.patch(
+        `/recruitment/application-status/${selectedId}/`,
+        { comment }
+      );
+
+      const res = await axiosInstance.get(
+        `/recruitment/application-review/${selectedId}/`
+      );
+      setSelectedApp(res.data);
+      setComment(res.data?.comment || "");
+    } catch (err) {
+      const data = err.response?.data;
+      const message =
+        data?.detail ||
+        data?.message ||
+        (typeof data === "string" ? data : JSON.stringify(data)) ||
+        "Failed to save comment.";
+      setDetailError(message);
+    } finally {
+      setSavingComment(false);
+    }
+  };
+
+  // Saves the 2nd-preference comment. Also stamps second_preference_club_label
+  // with the applicant's secondary_role, since that's what the comment is about.
+  const saveSecondaryComment = async () => {
+    if (!selectedId) return;
+
+    setSavingSecondaryComment(true);
+    setDetailError(null);
+
+    try {
+      await axiosInstance.patch(
+        `/recruitment/application-status/${selectedId}/`,
+        { second_preference_comment: secondaryComment }
+      );
+
+      const res = await axiosInstance.get(
+        `/recruitment/application-review/${selectedId}/`
+      );
+      setSelectedApp(res.data);
+      setSecondaryComment(res.data?.second_preference_comment || "");
+    } catch (err) {
+      const data = err.response?.data;
+      const message =
+        data?.detail ||
+        data?.message ||
+        (typeof data === "string" ? data : JSON.stringify(data)) ||
+        "Failed to save comment.";
+      setDetailError(message);
+    } finally {
+      setSavingSecondaryComment(false);
+    }
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -334,22 +401,53 @@ const saveComment = async () => {
     setDetailLoading(false);
     setUpdatingStatus(false);
     setComment("");
-setSavingComment(false);
-
+    setSavingComment(false);
+    setSecondaryComment("");
+    setSavingSecondaryComment(false);
+    setShowPreferenceModal(false);
+    setPendingStatus(null);
+    setChosenPreference(null);
   };
 
   useEffect(() => {
     const onKeyDown = (e) => {
-      if (e.key === "Escape" && isModalOpen) closeModal();
+      if (e.key === "Escape") {
+        if (showPreferenceModal) {
+          cancelPreferenceModal();
+        } else if (isModalOpen) {
+          closeModal();
+        }
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isModalOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen, showPreferenceModal]);
 
   // -----------------------------
-  // Update status
+  // Every status change goes through a preference-confirmation popup
   // -----------------------------
-  const updateStatus = async (newStatus) => {
+  const handleStatusClick = (newStatus) => {
+    setPendingStatus(newStatus);
+    setChosenPreference(null);
+    setShowPreferenceModal(true);
+  };
+
+  const cancelPreferenceModal = () => {
+    setShowPreferenceModal(false);
+    setPendingStatus(null);
+    setChosenPreference(null);
+  };
+
+  const confirmStatusUpdate = async () => {
+    if (!chosenPreference || !pendingStatus) return;
+    await updateStatus(pendingStatus, chosenPreference);
+  };
+
+  // -----------------------------
+  // Update status: patches status + selected_preference together
+  // -----------------------------
+  const updateStatus = async (newStatus, preference) => {
     if (!selectedId) return;
 
     setUpdatingStatus(true);
@@ -358,18 +456,20 @@ setSavingComment(false);
     try {
       await axiosInstance.patch(
         `/recruitment/application-status/${selectedId}/`,
-        { status: newStatus }
+        { status: newStatus, selected_preference: preference }
       );
 
-      // refresh modal details
       const res = await axiosInstance.get(
         `/recruitment/application-review/${selectedId}/`
       );
       setSelectedApp(res.data);
 
-      // refresh list + stats
       await fetchApplications();
       await fetchStatuses();
+
+      setShowPreferenceModal(false);
+      setPendingStatus(null);
+      setChosenPreference(null);
     } catch (err) {
       const data = err.response?.data;
       const message =
@@ -439,7 +539,11 @@ setSavingComment(false);
             <div className="stat-value">
               {statsLoading ? "..." : stats.accepted}
             </div>
-            <div className="stat-sub">All time</div>
+            <div className="stat-sub">
+              {statsLoading
+                ? "All time"
+                : `1st: ${preferenceBreakdown.pref1} · 2nd: ${preferenceBreakdown.pref2}`}
+            </div>
           </div>
           <div className="stat-icon">
             <BsCheckCircle size={18} color="#a0a0a0" />
@@ -487,14 +591,17 @@ setSavingComment(false);
         {appsLoading ? (
           <p style={{ padding: 12 }}>Loading applications...</p>
         ) : (
-          <table className="r-table">
+          <div style={{ overflowX: "auto", width: "100%" }}>
+          <table className="r-table" style={{ minWidth: 900 }}>
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Roll No.</th>
                 <th>Email</th>
                 <th>Preferred Club</th>
+                <th>Secondary Club</th>
                 <th>Status</th>
+                <th>Selected For</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -502,7 +609,7 @@ setSavingComment(false);
             <tbody>
               {filteredApplications.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ padding: 14, textAlign: "center" }}>
+                  <td colSpan="8" style={{ padding: 14, textAlign: "center" }}>
                     No applications found.
                   </td>
                 </tr>
@@ -515,6 +622,8 @@ setSavingComment(false);
                   const rollNo = app?.academic_info?.reg_no || "-";
                   const email = app?.personal_info?.email || "-";
                   const role = app?.role_preferences?.preferred_role || "-";
+                  const secondaryRole =
+                    app?.role_preferences?.secondary_role || "-";
                   const statusText = uiStatus(app?.status);
 
                   return (
@@ -523,6 +632,7 @@ setSavingComment(false);
                       <td>{rollNo}</td>
                       <td>{email}</td>
                       <td>{role}</td>
+                      <td>{secondaryRole}</td>
                       <td>
                         <span
                           className={`status-badge ${getStatusClass(statusText)}`}
@@ -530,6 +640,7 @@ setSavingComment(false);
                           {statusText}
                         </span>
                       </td>
+                      <td>{uiPreference(app?.selected_preference)}</td>
                       <td>
                         <button
                           className="action-btn"
@@ -545,6 +656,7 @@ setSavingComment(false);
               )}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
@@ -576,6 +688,12 @@ setSavingComment(false);
                   >
                     {uiStatus(selectedApp?.status)}
                   </span>
+
+                  {selectedApp?.selected_preference && (
+                    <span className="rm-meta-chip">
+                      Selected for: {uiPreference(selectedApp.selected_preference)}
+                    </span>
+                  )}
                 </div>
 
                 {selectedApp?.personal_info?.email && (
@@ -606,7 +724,9 @@ setSavingComment(false);
                   <div className="rm-grid">
                     {/* Personal */}
                     <div className="rm-card">
-                      <div className="rm-card-title">👤 Personal</div>
+                      <div className="rm-card-title">
+                        <BsPersonFill /> Personal
+                      </div>
 
                       <div className="rm-kv">
                         <span>Name</span>
@@ -629,7 +749,9 @@ setSavingComment(false);
 
                     {/* Academic */}
                     <div className="rm-card">
-                      <div className="rm-card-title">🎓 Academic</div>
+                      <div className="rm-card-title">
+                        <BsMortarboardFill /> Academic
+                      </div>
 
                       <div className="rm-kv">
                         <span>Reg No</span>
@@ -652,7 +774,7 @@ setSavingComment(false);
 
                   {/* Skills + Coursework */}
                   <div className="rm-card rm-card-full">
-                    <div className="rm-card-title"> Skills & Coursework</div>
+                    <div className="rm-card-title">Skills & Coursework</div>
 
                     <div className="rm-tags-block">
                       <div className="rm-tags-title">Skills</div>
@@ -711,7 +833,6 @@ setSavingComment(false);
 
                     <div className="rm-divider" />
 
-                    {/* Join Purpose */}
                     <div className="rm-long-section">
                       <div className="rm-long-title">Join Purpose</div>
                       <div className="rm-longtext">
@@ -719,7 +840,6 @@ setSavingComment(false);
                       </div>
                     </div>
 
-                    {/* Experience */}
                     <div className="rm-long-section">
                       <div className="rm-long-title">Previous Experience</div>
                       <div className="rm-longtext">
@@ -728,7 +848,6 @@ setSavingComment(false);
                       </div>
                     </div>
 
-                    {/* Availability */}
                     <div className="rm-long-section">
                       <div className="rm-long-title">Weekly Availability</div>
                       <div className="rm-longtext">
@@ -737,7 +856,6 @@ setSavingComment(false);
                       </div>
                     </div>
 
-                    {/* LinkedIn */}
                     <div className="rm-divider" />
                     <div className="rm-kv rm-kv-stack">
                       <span>LinkedIn</span>
@@ -797,35 +915,71 @@ setSavingComment(false);
                       )}
                     </div>
                   </div>
+
+                  {/* Comment - 1st Preference */}
                   <div className="rm-card rm-card-full">
-  <div className="rm-card-title">📝 Comment</div>
+                    <div className="rm-card-title">
+                      <BsChatLeftText /> Comment (1st Preference
+                      {selectedApp.role_preferences?.preferred_role
+                        ? `: ${selectedApp.role_preferences.preferred_role}`
+                        : ""}
+                      )
+                    </div>
 
-  <textarea
-    className="rm-textarea"
-    rows={4}
-    placeholder="Write a comment about this applicant..."
-    value={comment}
-    onChange={(e) => setComment(e.target.value)}
-  />
+                    <textarea
+                      className="rm-textarea"
+                      rows={4}
+                      placeholder="Write a comment about this applicant..."
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
 
-  <div className="rm-comment-actions">
-    <button
-      type="button"
-      className="rm-btn rm-btn-success"
-      disabled={savingComment}
-      onClick={saveComment}
-    >
-      {savingComment ? "Saving..." : "Save Comment"}
-    </button>
-  </div>
-</div>
+                    <div className="rm-comment-actions">
+                      <button
+                        type="button"
+                        className="rm-btn rm-btn-success"
+                        disabled={savingComment}
+                        onClick={saveComment}
+                      >
+                        {savingComment ? "Saving..." : "Save Comment"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Comment - 2nd Preference */}
+                  <div className="rm-card rm-card-full">
+                    <div className="rm-card-title">
+                      <BsChatLeftText /> Comment (2nd Preference
+                      {selectedApp.role_preferences?.secondary_role
+                        ? `: ${selectedApp.role_preferences.secondary_role}`
+                        : ""}
+                      )
+                    </div>
+
+                    <textarea
+                      className="rm-textarea"
+                      rows={4}
+                      placeholder="Write a comment about this applicant for the secondary preference..."
+                      value={secondaryComment}
+                      onChange={(e) => setSecondaryComment(e.target.value)}
+                    />
+
+                    <div className="rm-comment-actions">
+                      <button
+                        type="button"
+                        className="rm-btn rm-btn-success"
+                        disabled={savingSecondaryComment}
+                        onClick={saveSecondaryComment}
+                      >
+                        {savingSecondaryComment ? "Saving..." : "Save Comment"}
+                      </button>
+                    </div>
+                  </div>
                 </>
               ) : (
                 <div className="rm-modal-loading">No data</div>
               )}
             </div>
-            
-
 
             {/* FOOTER */}
             <div className="rm-modal-footer">
@@ -834,7 +988,7 @@ setSavingComment(false);
                   type="button"
                   className="rm-btn rm-btn-ghost"
                   disabled={updatingStatus}
-                  onClick={() => updateStatus("UNDER_REVIEW")}
+                  onClick={() => handleStatusClick("UNDER_REVIEW")}
                 >
                   Under Review
                 </button>
@@ -843,7 +997,7 @@ setSavingComment(false);
                   type="button"
                   className="rm-btn rm-btn-warn"
                   disabled={updatingStatus}
-                  onClick={() => updateStatus("INTERVIEWS")}
+                  onClick={() => handleStatusClick("INTERVIEWS")}
                 >
                   Interviews
                 </button>
@@ -852,7 +1006,7 @@ setSavingComment(false);
                   type="button"
                   className="rm-btn rm-btn-success"
                   disabled={updatingStatus}
-                  onClick={() => updateStatus("ACCEPTED")}
+                  onClick={() => handleStatusClick("ACCEPTED")}
                 >
                   Accept
                 </button>
@@ -861,11 +1015,105 @@ setSavingComment(false);
                   type="button"
                   className="rm-btn rm-btn-danger"
                   disabled={updatingStatus}
-                  onClick={() => updateStatus("REJECTED")}
+                  onClick={() => handleStatusClick("REJECTED")}
                 >
                   Reject
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Preference confirmation popup — fires on every status change */}
+      {showPreferenceModal && (
+        <div
+          className="rm-modal-overlay"
+          style={{ zIndex: 99999, position: "fixed", inset: 0 }}
+          onMouseDown={(e) => {
+            if (e.target.classList.contains("rm-modal-overlay")) {
+              cancelPreferenceModal();
+            }
+          }}
+        >
+          <div
+            className="rm-modal"
+            role="dialog"
+            aria-modal="true"
+            style={{
+              maxWidth: 440,
+              padding: 24,
+              zIndex: 100000,
+              position: "relative",
+            }}
+          >
+            <h3 style={{ marginTop: 0, marginBottom: 6 }}>
+              Confirm Preference
+            </h3>
+            <p style={{ color: "#666", marginBottom: 16, fontSize: 14 }}>
+              Which preference is this candidate being set to "
+              {uiStatus(pendingStatus)}" for?
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+                marginBottom: 20,
+              }}
+            >
+              <button
+                type="button"
+                className={`rm-btn ${
+                  chosenPreference === PREF_FIRST
+                    ? "rm-btn-success"
+                    : "rm-btn-ghost"
+                }`}
+                onClick={() => setChosenPreference(PREF_FIRST)}
+              >
+                1st Preference:{" "}
+                {selectedApp?.role_preferences?.preferred_role || "-"}
+              </button>
+
+              <button
+                type="button"
+                className={`rm-btn ${
+                  chosenPreference === PREF_SECOND
+                    ? "rm-btn-success"
+                    : "rm-btn-ghost"
+                }`}
+                onClick={() => setChosenPreference(PREF_SECOND)}
+              >
+                2nd Preference:{" "}
+                {selectedApp?.role_preferences?.secondary_role || "-"}
+              </button>
+            </div>
+
+            {detailError && (
+              <div style={{ color: "crimson", marginBottom: 12, fontSize: 13 }}>
+                {detailError}
+              </div>
+            )}
+
+            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                className="rm-btn rm-btn-ghost"
+                onClick={cancelPreferenceModal}
+                disabled={updatingStatus}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="rm-btn rm-btn-success"
+                disabled={!chosenPreference || updatingStatus}
+                onClick={confirmStatusUpdate}
+              >
+                {updatingStatus ? "Updating..." : "Confirm"}
+              </button>
             </div>
           </div>
         </div>
