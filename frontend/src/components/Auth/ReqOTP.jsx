@@ -36,9 +36,13 @@ const ReqOTP = () => {
           </div>
 
           <div className="otp-button-row">
-            <button type="submit" className="btn-design" disabled={loading}>
-              SendOtp
-            </button>
+            <button
+  type="submit"
+  className="btn-design"
+  disabled={loading}
+>
+  {loading ? "Sending OTP..." : "Send OTP"}
+</button>
           </div>
         </form>
 

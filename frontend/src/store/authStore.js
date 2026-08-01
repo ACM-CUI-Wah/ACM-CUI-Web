@@ -171,9 +171,19 @@ const useAuthStore = create((set, get) => ({
   // ===========================
   logout: () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("club");
-    set({ role: null, token: null, user_id: null, club: null });
+  localStorage.removeItem("role");
+  localStorage.removeItem("user_id");
+  localStorage.removeItem("student_id");
+  localStorage.removeItem("club");
+  localStorage.removeItem("otpToken");
+
+  set({
+    token: null,
+    role: null,
+    user_id: null,
+    club: null,
+    otpToken: null,
+  });
   },
 
 }));
