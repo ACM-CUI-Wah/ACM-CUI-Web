@@ -8,7 +8,7 @@ const ResetPassword = () => {
   const [password, setPassword] = useState('')
   const [localError, setLocalError] = useState('')
   
-  const { resetPassword, loading, error } = useAuthStore()
+  const { resetPassword, logout, loading, error } = useAuthStore()
   const navigate = useNavigate()
 
   // HELPER: Decodes the Long Token to find the OTP inside it
@@ -61,6 +61,7 @@ const ResetPassword = () => {
     const res = await resetPassword(storedToken, password)
     
     if (res.success) {
+        logout();
       alert('Password reset successful! Please login again.')
       navigate('/login')
     }
