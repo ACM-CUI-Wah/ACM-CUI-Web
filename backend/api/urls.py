@@ -24,6 +24,9 @@ from api.views import (
     RegistrationStatusUpdateView,
     EventRegistrationDeleteView,
     EventRegistrationDetailView,
+
+    # Health Check View
+    health_check,
 )
 
 # NOTE: 'RUD' stands for Read, Update, Delete ops
@@ -39,6 +42,9 @@ recruitment_router.register(r'application-status', ApplicationStatusUpdateViewSe
 urlpatterns = [
     # Root
     path('', api_root, name='home'),
+    
+    # Health Check (For keeping Render awake)
+    path('health/', health_check, name='health_check'),
 
     # Authentication
     path('auth/signup/', SignupView.as_view(), name='signup'),
