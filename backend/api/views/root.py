@@ -1,6 +1,9 @@
 from rest_framework.decorators import api_view, schema
 from rest_framework.response import Response
+from django.http import JsonResponse
 
+def health_check(request):
+    return JsonResponse({"status": "ok", "message": "Render instance is awake"})
 
 @api_view(['GET', 'POST'])
 @schema(None)
