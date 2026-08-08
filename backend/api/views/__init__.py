@@ -5,7 +5,7 @@ from .blog import BlogEditView, BlogDeleteView, BlogUploadView, InlineImageUploa
 from .event import EventDetailView, EventTypeListCreateView, EventListCreateView, EventRegistrationListCreateView, RegistrationStatusUpdateView, EventRegistrationDeleteView, EventRegistrationDetailView
 from .meeting import MeetingPDFView, MeetingListView, MeetingRUDView, MeetingCreateView, MeetingAttendanceRUDView, \
     MeetingAttendanceListView
-from .root import api_root
+from .root import api_root, health_check
 from .user import StudentRUView, StudentsListView, PublicStudentsListView
 from .recruitment import RecruitmentSessionViewSet, ApplicationReviewViewSet, ApplicationStatusUpdateViewSet, \
     ApplicationSubmitView, ActiveRecruitmentSessionView, RecruitmentApplicationsExcelView
