@@ -1,4 +1,5 @@
 import logging
+import threading
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
@@ -10,8 +11,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import UntypedToken
 from api.permissions import SignUpPermission
 from api.serializers import StudentSerializer, LoginSerializer, OTPSerializer, PasswordChangeSerializer
-from api.utils import get_tokens_for_user, send_otp
-from api.utils import send_password
+from api.utils import get_tokens_for_user, send_otp, send_password
 
 # Initialize a logger
 logger = logging.getLogger(__name__)
@@ -64,6 +64,13 @@ class SignupView(APIView):
     serializer_class = StudentSerializer
     permission_classes = [SignUpPermission]
 
+    @staticmethod
+    def _send_password_async(email, username, password):
+        try:
+            send_password(destination=email, username=username, password=password)
+        except Exception as e:
+            logger.error(f"Failed to send welcome email to {email}: {str(e)}")
+
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -85,10 +92,11 @@ class SignupView(APIView):
                 }
             }
             
-            try:
-                send_password(destination=user.email, username=user.username, password=DEFAULT_PASSWORD)
-            except Exception as e:
-                logger.error(f"Failed to send welcome email to {user.email}: {str(e)}")
+            # Fire-and-forget email thread (prevents worker timeout)
+            threading.Thread(
+                target=self._send_password_async,
+                args=(user.email, user.username, DEFAULT_PASSWORD)
+            ).start()
                 
             return Response(response_data, status=status.HTTP_201_CREATED)
             
@@ -219,6 +227,13 @@ class OTPView(APIView):
 
     User = get_user_model()
 
+    @staticmethod
+    def _send_otp_async(email, otp):
+        try:
+            send_otp(email, otp=otp)
+        except Exception as e:
+            logger.error(f"Failed to send OTP email to {email}: {str(e)}")
+
     def post(self, request):
         import random
         otp = random.randint(1000, 9999)
@@ -226,17 +241,25 @@ class OTPView(APIView):
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=False):
             try:
-                send_otp(data['email'], otp=otp)
                 user = User.objects.get(email=data['email'])
                 token = get_tokens_for_user(user, otp=str(otp))
-                response_data = {
-                    'token': token
-                }
-                return Response(data=response_data, status=status.HTTP_200_OK)
+                
+                # Fire-and-forget OTP email thread
+                threading.Thread(
+                    target=self._send_otp_async,
+                    args=(data['email'], otp)
+                ).start()
+
+                return Response(data={'token': token}, status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                return Response({
+                    'errors': {'email': ['User with this email does not exist.']}
+                }, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 return Response({
-                    'error': f'Failed to send OTP email: {str(e)}'
+                    'error': f'Failed to process OTP request: {str(e)}'
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response({
             'errors': serializer.errors
         }, status.HTTP_400_BAD_REQUEST)
