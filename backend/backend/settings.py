@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'corsheaders',
     'django_filters',
+    'anymail',
 ]
 
 REST_FRAMEWORK = {
@@ -170,13 +171,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'api.User'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'ACM CUI Wah <acmcuidevs@gmail.com>'
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+# our old sendgrid configuration, in case we want to switch back
+# EMAIL_HOST = 'smtp.gmail.com'  
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = 'ACM CUI Wah <acmcuidevs@gmail.com>'
+# EMAIL_USE_TLS = True
+
+ANYMAIL = {
+    "RESEND_API_KEY": os.environ.get("RESEND_API_KEY"),
+}
+DEFAULT_FROM_EMAIL = 'ACM CUI Wah <acmcuidevs@acmcuiwah.com>'
 
 # Media files configuration
 MEDIA_URL = '/media/'
