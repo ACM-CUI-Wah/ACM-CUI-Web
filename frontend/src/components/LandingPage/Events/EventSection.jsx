@@ -24,6 +24,8 @@ const EventSection = () => {
         const filtered = res.data.filter(event => {
           // 1. Check if the event category is WORKSHOP
           const isWorkshop = event.event_type?.type?.toUpperCase() === "WORKSHOP";
+
+          const isSeminar = event.event_type?.type?.toUpperCase() === "SEMINAR";
           
           // 2. Check if the title is in your manually featured list
           const isFeaturedTitle = featuredTitles.includes(event.title);
@@ -33,8 +35,8 @@ const EventSection = () => {
             event.title.toLowerCase() !== "hackathon" && 
             event.event_type?.type?.toLowerCase() !== "hackathon";
 
-          // Include it if it's featured OR a workshop, provided it's NOT a hackathon
-          return (isFeaturedTitle || isWorkshop) && isNotHackathon;
+          // Include it if it's featured OR a workshop OR seminar, provided it's NOT a hackathon
+          return (isFeaturedTitle || isWorkshop || isSeminar) && isNotHackathon;
         });
 
         // Slice to 3 to keep the landing page layout clean
