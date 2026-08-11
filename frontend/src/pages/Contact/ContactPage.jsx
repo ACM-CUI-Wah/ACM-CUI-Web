@@ -17,8 +17,8 @@ const ContactPage = () => {
 
             <div className="contact-details">
               <p><strong>ACM Official Email:</strong> acmcuiwah@gmail.com</p>
-              <p><strong>President Email:</strong> kanwartaha0@gmai.com</p>
-              <p><strong>Faculty Head Email:</strong> mtalha@ciitwah.edu.pk</p>
+              <p><strong>President Email:</strong> muhahsxn@gmail.com</p>
+              <p><strong>Faculty Head Email:</strong>palwasha@ciitwah.edu.pk</p>
 
               <div className="social-icons1">
                 <a href="https://www.linkedin.com/company/acmcuiwah/" target="_blank" rel="noopener noreferrer">
