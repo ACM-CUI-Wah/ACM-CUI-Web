@@ -1,3 +1,4 @@
+import logging
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
@@ -11,6 +12,9 @@ from api.permissions import SignUpPermission
 from api.serializers import StudentSerializer, LoginSerializer, OTPSerializer, PasswordChangeSerializer
 from api.utils import get_tokens_for_user, send_otp
 from api.utils import send_password
+
+# Initialize a logger
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 DEFAULT_PASSWORD = '12345'
@@ -80,8 +84,14 @@ class SignupView(APIView):
                     "title": student.title,
                 }
             }
-            send_password(destination=user.email, username=user.username, password=DEFAULT_PASSWORD)
+            
+            try:
+                send_password(destination=user.email, username=user.username, password=DEFAULT_PASSWORD)
+            except Exception as e:
+                logger.error(f"Failed to send welcome email to {user.email}: {str(e)}")
+                
             return Response(response_data, status=status.HTTP_201_CREATED)
+            
         return Response({
             'status': 'error',
             'message': serializer.errors,

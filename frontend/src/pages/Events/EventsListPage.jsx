@@ -5,7 +5,6 @@ import "./EventsList.css";
 import "./EventsCreatePage.css";
 import { Link } from "react-router-dom";
 
-
 const EventListPage = () => {
   const [events, setEvents] = useState([]);
   const [editingEvent, setEditingEvent] = useState(null);
@@ -57,11 +56,11 @@ const EventListPage = () => {
         prev.map((event) =>
           event.id === eventId
             ? {
-              ...event,
-              images: event.images.filter((img) => img.id !== imgId),
-            }
-            : event
-        )
+                ...event,
+                images: event.images.filter((img) => img.id !== imgId),
+              }
+            : event,
+        ),
       );
     } catch (error) {
       console.error(error.response?.data || error.message);
@@ -86,18 +85,20 @@ const EventListPage = () => {
   const parseArrayField = (field) => {
     if (!field || !Array.isArray(field)) return [];
 
-    return field.map(item => {
-      try {
-        // If item is a JSON string, parse it
-        if (typeof item === 'string' && item.startsWith('[')) {
-          const parsed = JSON.parse(item);
-          return Array.isArray(parsed) ? parsed[0] : parsed;
+    return field
+      .map((item) => {
+        try {
+          // If item is a JSON string, parse it
+          if (typeof item === "string" && item.startsWith("[")) {
+            const parsed = JSON.parse(item);
+            return Array.isArray(parsed) ? parsed[0] : parsed;
+          }
+          return item;
+        } catch (e) {
+          return item;
         }
-        return item;
-      } catch (e) {
-        return item;
-      }
-    }).filter(item => item && String(item).trim());
+      })
+      .filter((item) => item && String(item).trim());
   };
 
   // Helper function to convert 12-hour time to 24-hour format
@@ -110,18 +111,18 @@ const EventListPage = () => {
     }
 
     // Parse 12-hour format
-    const [time, modifier] = time12h.split(' ');
-    let [hours, minutes] = time.split(':');
+    const [time, modifier] = time12h.split(" ");
+    let [hours, minutes] = time.split(":");
 
-    if (hours === '12') {
-      hours = '00';
+    if (hours === "12") {
+      hours = "00";
     }
 
-    if (modifier === 'PM') {
+    if (modifier === "PM") {
       hours = parseInt(hours, 10) + 12;
     }
 
-    return `${String(hours).padStart(2, '0')}:${minutes}`;
+    return `${String(hours).padStart(2, "0")}:${minutes}`;
   };
 
   const startEdit = (event) => {
@@ -159,7 +160,6 @@ const EventListPage = () => {
     setEditImages((prev) => [...prev, ...Array.from(e.target.files)]);
   };
 
-
   const saveEdit = async (eventId) => {
     const formData = new FormData();
     formData.append("title", editTitle);
@@ -174,18 +174,28 @@ const EventListPage = () => {
 
     // Convert comma-separated speakers to hosts array
     if (editSpeakers) {
-      const speakersStr = Array.isArray(editSpeakers) ? editSpeakers.join(", ") : String(editSpeakers);
+      const speakersStr = Array.isArray(editSpeakers)
+        ? editSpeakers.join(", ")
+        : String(editSpeakers);
       if (speakersStr.trim()) {
-        const hostsArray = speakersStr.split(",").map(s => s.trim()).filter(s => s);
+        const hostsArray = speakersStr
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s);
         formData.append("hosts", JSON.stringify(hostsArray));
       }
     }
 
     // Convert comma-separated tags to array
     if (editTags) {
-      const tagsStr = Array.isArray(editTags) ? editTags.join(", ") : String(editTags);
+      const tagsStr = Array.isArray(editTags)
+        ? editTags.join(", ")
+        : String(editTags);
       if (tagsStr.trim()) {
-        const tagsArray = tagsStr.split(",").map(t => t.trim()).filter(t => t);
+        const tagsArray = tagsStr
+          .split(",")
+          .map((t) => t.trim())
+          .filter((t) => t);
         formData.append("tags", JSON.stringify(tagsArray));
       }
     }
@@ -237,7 +247,10 @@ const EventListPage = () => {
               <div className="card-buttons">
                 {isAdminOrLead && (
                   <>
-                    <button onClick={() => startEdit(event)} className="btn-design">
+                    <button
+                      onClick={() => startEdit(event)}
+                      className="btn-design"
+                    >
                       Edit
                     </button>
                     <button
@@ -248,7 +261,11 @@ const EventListPage = () => {
                     </button>
                   </>
                 )}
-                <Link to={`/events/${event.id}`} className="btn-design" style={{ textDecoration: 'none' }}>
+                <Link
+                  to={`/events/${event.id}`}
+                  className="btn-design"
+                  style={{ textDecoration: "none" }}
+                >
                   Learn More
                 </Link>
               </div>
@@ -273,7 +290,9 @@ const EventListPage = () => {
               <form className="event-form-new">
                 {/* Event Title */}
                 <div className="form-field full-width">
-                  <label>Event Title <span className="required">*</span></label>
+                  <label>
+                    Event Title <span className="required">*</span>
+                  </label>
                   <input
                     type="text"
                     placeholder="e.g., Web Development Workshop"
@@ -319,7 +338,9 @@ const EventListPage = () => {
 
                 {/* Date Row */}
                 <div className="form-field full-width">
-                  <label>Date<span className="required">*</span></label>
+                  <label>
+                    Date<span className="required">*</span>
+                  </label>
                   <input
                     type="date"
                     placeholder="mm/dd/yyyy"
@@ -332,7 +353,9 @@ const EventListPage = () => {
                 {/* Time Interval Row */}
                 <div className="form-row">
                   <div className="form-field">
-                    <label>Start Time <span className="required">*</span></label>
+                    <label>
+                      Start Time <span className="required">*</span>
+                    </label>
                     <input
                       type="time"
                       placeholder="--:-- ---"
@@ -342,7 +365,9 @@ const EventListPage = () => {
                     />
                   </div>
                   <div className="form-field">
-                    <label>End Time <span className="required">*</span></label>
+                    <label>
+                      End Time <span className="required">*</span>
+                    </label>
                     <input
                       type="time"
                       placeholder="--:-- ---"
@@ -355,7 +380,9 @@ const EventListPage = () => {
 
                 {/* Venue */}
                 <div className="form-field full-width">
-                  <label>Venue <span className="required">*</span></label>
+                  <label>
+                    Venue <span className="required">*</span>
+                  </label>
                   <input
                     type="text"
                     placeholder="e.g., Computer Science Block Lecture Room F-09"
@@ -368,7 +395,9 @@ const EventListPage = () => {
                 {/* Capacity and Category Row */}
                 <div className="form-row">
                   <div className="form-field">
-                    <label>Capacity<span className="required">*</span></label>
+                    <label>
+                      Capacity<span className="required">*</span>
+                    </label>
                     <input
                       type="number"
                       placeholder="e.g., 50"
@@ -378,7 +407,9 @@ const EventListPage = () => {
                     />
                   </div>
                   <div className="form-field">
-                    <label>Category <span className="required">*</span></label>
+                    <label>
+                      Category <span className="required">*</span>
+                    </label>
                     <select
                       value={editCategory}
                       onChange={(e) => setEditCategory(e.target.value)}
@@ -387,7 +418,7 @@ const EventListPage = () => {
                       <option value="">Select a category</option>
                       {eventTypes.map((type) => (
                         <option key={type.id} value={type.id}>
-                          {type.name}
+                          {type.type}
                         </option>
                       ))}
                     </select>
@@ -406,10 +437,15 @@ const EventListPage = () => {
                       onChange={handleEditImageChange}
                       className="file-input-hidden"
                     />
-                    <label htmlFor="edit-event-image" className="file-upload-label">
+                    <label
+                      htmlFor="edit-event-image"
+                      className="file-upload-label"
+                    >
                       <span className="file-upload-btn">Choose file</span>
                       <span className="file-upload-text">
-                        {editImages.length > 0 ? `${editImages.length} file(s) selected` : 'no file choose'}
+                        {editImages.length > 0
+                          ? `${editImages.length} file(s) selected`
+                          : "no file choose"}
                       </span>
                     </label>
                   </div>
@@ -460,7 +496,7 @@ const EventListPage = () => {
                     type="button"
                     className="cancel-event-btn"
                     onClick={() => setShowEditModal(false)}
-                    style={{ marginLeft: '12px' }}
+                    style={{ marginLeft: "12px" }}
                   >
                     Cancel
                   </button>
