@@ -72,24 +72,41 @@ class StudentSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop('user', None)
         uploaded_file = validated_data.pop('profile_pic', None)
 
-        # Update Student fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
-        # Update user
+        user = instance.user
+        user_updated = False
+
         if user_data:
             for attr, value in user_data.items():
                 if attr == 'password':
-                    instance.user.set_password(value)
+                    user.set_password(value)
                 else:
-                    setattr(instance.user, attr, value)
-            instance.user.save()
+                    setattr(user, attr, value)
+            user_updated = True
 
-        # Handle profile pic replacement
+        raw_data = self.initial_data
+        if 'user[first_name]' in raw_data:
+            user.first_name = raw_data['user[first_name]']
+            user_updated = True
+        if 'user[last_name]' in raw_data:
+            user.last_name = raw_data['user[last_name]']
+            user_updated = True
+        if 'user[email]' in raw_data:
+            user.email = raw_data['user[email]']
+            user_updated = True
+        if 'user[username]' in raw_data:
+            user.username = raw_data['user[username]']
+            user_updated = True
+
+        if user_updated:
+            user.save()
+
         if uploaded_file:
             if instance.profile_pic:
                 delete_from_bucket("media", instance.profile_pic)
-
+            
             instance.profile_pic = upload_file(uploaded_file, "profiles")
 
         instance.save()
@@ -198,18 +215,26 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user', None)
+        
+        sentinel = object()
+        uploaded_file = validated_data.pop('profile_pic', sentinel)
 
-        # Update student fields
-        if 'profile_pic' in validated_data:
-            instance.profile_pic = validated_data['profile_pic']
+        if uploaded_file is not sentinel:
+            if instance.profile_pic:
+                delete_from_bucket("media", instance.profile_pic) 
+            
+            if uploaded_file is None:
+                instance.profile_pic = None
+            else:
+                instance.profile_pic = upload_file(uploaded_file, "profiles")
+
         if 'profile_desc' in validated_data:
             instance.profile_desc = validated_data['profile_desc']
 
-        # Update user fields if provided
         if user_data:
             user = instance.user
             for attr, value in user_data.items():
-                if attr != 'id':  # Don't update ID
+                if attr != 'id': 
                     setattr(user, attr, value)
             user.save()
 

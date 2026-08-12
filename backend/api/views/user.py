@@ -39,56 +39,55 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
-    # def get_serializer_class(self):
-    #     """Use ProfileUpdateSerializer for PATCH requests (profile updates)"""
-    #     if self.request.method == 'PATCH':
-    #         return ProfileUpdateSerializer
-    #     return StudentSerializer
+    def get_serializer_class(self):
+        """Use ProfileUpdateSerializer for PATCH requests (profile updates)"""
+        if self.request.method == 'PATCH':
+            return ProfileUpdateSerializer
+        return StudentSerializer
 
-    # def partial_update(self, request, *args, **kwargs):
-    #     """Handle PATCH requests for profile updates with nested user data"""
-    #     instance = self.get_object()
-    #     user = instance.user
-    #
-    #     # Parse nested user[field] format from multipart form data
-    #     data = {}
-    #     user_data = {}
-    #
-    #     for key, value in request.data.items():
-    #         if key == 'user':
-    #             try:
-    #                 nested = json.loads(value)
-    #             except json.JSONDecodeError:
-    #                 nested = {}
-    #             for field_name, field_value in nested.items():
-    #                 if field_name == 'id':
-    #                     continue
-    #                 current_value = getattr(user, field_name, None)
-    #                 if str(current_value) != str(field_value):
-    #                     user_data[field_name] = field_value
-    #         else:
-    #             data[key] = value
-    #
-    #     # Only include user data if there are actual changes
-    #     if user_data:
-    #         data['user'] = user_data
-    #
-    #     serializer = self.get_serializer(instance, data=data, partial=True)
-    #     if not serializer.is_valid():
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    #
-    #     self.perform_update(serializer)
-    #
-    #     # Return full student data after update
-    #     response_serializer = StudentSerializer(instance)
-    #     return Response(response_serializer.data)
+    def partial_update(self, request, *args, **kwargs):
+        """Handle PATCH requests and parse frontend FormData bracket notation"""
+        instance = self.get_object()
+        
+        # request.data is immutable for multipart/form-data. 
+        # We copy it so we can reformat the keys for the serializer.
+        data = request.data.copy()
+        user_data = {}
+        
+        # Intercept keys like 'user[first_name]' and build a proper Python dictionary
+        keys_to_remove = []
+        for key in data.keys():
+            if key.startswith('user[') and key.endswith(']'):
+                field_name = key[5:-1] # Extracts 'first_name' from the brackets
+                # Skip the ID to prevent accidental primary key updates
+                if field_name != 'id': 
+                    user_data[field_name] = data[key]
+                keys_to_remove.append(key)
+                
+        # Remove the raw flat keys
+        for key in keys_to_remove:
+            data.pop(key)
+            
+        # Assign the nested dictionary back to the 'user' key
+        if user_data:
+            data['user'] = user_data
+
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_update(serializer)
+
+        # Return full student data after update so the frontend UI refreshes properly
+        response_serializer = StudentSerializer(instance)
+        return Response(response_serializer.data)
 
     def destroy(self, request, *args, **kwargs):
         """Delete student and their associated user account"""
         student = self.get_object()
-        user = student.user  # Get the associated user
-        student.delete()  # Delete the student record
-        user.delete()  # Delete the user record
+        user = student.user  
+        student.delete()  
+        user.delete()  
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_destroy(self, instance):
