@@ -70,7 +70,7 @@ const ViewProfilePage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     if (!studentId) return;
-
+console.log("FRONTEND FILE STATE:", formData.profile_pic);
     setLoading(true);
     setMessage("");
 
