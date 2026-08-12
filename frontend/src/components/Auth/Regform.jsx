@@ -36,6 +36,7 @@ function Regform() {
     "VICE PRESIDENT",
     "SECRETARY",
     "TREASURER",
+    "COORDINATOR",
     "ADVISOR",
     "LEAD ADVISOR",
     "DIRECTOR OPERATIONS",
