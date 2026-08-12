@@ -82,8 +82,7 @@ useEffect(() => {
     try {
       const data = new FormData();
       if (formData.profile_desc) data.append("profile_desc", formData.profile_desc);
-      if (formData.profile_pic_url) data.append("profile_pic_url", formData.profile_pic_url);
-
+      if (formData.profile_pic) data.append("profile_pic", formData.profile_pic);
       data.append("user[id]", loggedInUserId);
       data.append("user[first_name]", formData.user.first_name);
       data.append("user[last_name]", formData.user.last_name);
