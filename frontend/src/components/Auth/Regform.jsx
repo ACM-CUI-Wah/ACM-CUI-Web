@@ -475,6 +475,7 @@ function Regform() {
                 <option value="PRESIDENT">PRESIDENT</option>
                 <option value="VICE PRESIDENT">VICE PRESIDENT</option>
                 <option value="TREASURER">TREASURER</option>
+                <option value="COORDINATOR">COORDINATOR</option>
                 <option value="SECRETARY">SECRETARY</option>
                 <option value="ADVISOR">ADVISOR</option>
                 <option value="LEAD ADVISOR">LEAD ADVISOR</option>
