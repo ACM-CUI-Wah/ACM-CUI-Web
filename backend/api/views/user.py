@@ -47,6 +47,11 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
 
     def partial_update(self, request, *args, **kwargs):
         """Handle PATCH requests and parse frontend FormData bracket notation"""
+        
+        print("INCOMING FILES:", request.FILES)
+        print("INCOMING DATA:", request.data)
+        print("CONTENT TYPE:", request.content_type)
+
         instance = self.get_object()
         
         # request.data is immutable for multipart/form-data. 

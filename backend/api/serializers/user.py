@@ -214,6 +214,8 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
+        print("VALIDATED DATA RECEIVED:", validated_data)
+
         user_data = validated_data.pop('user', None)
         
         sentinel = object()
