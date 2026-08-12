@@ -38,7 +38,7 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
       try {
         const res = await axiosInstance.get(`/students/${studentId}`);
         const user = res.data;
-        if (user && user.profile_pic) setProfilePic(user.profile_pic);
+        if (user && user.profile_pic_url) setProfilePic(user.profile_pic_url);
       } catch (err) {
         console.error("Failed to fetch student profile:", err);
       }
