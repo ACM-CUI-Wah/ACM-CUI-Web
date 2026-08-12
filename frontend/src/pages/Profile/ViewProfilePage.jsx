@@ -67,10 +67,14 @@ const ViewProfilePage = () => {
     }
   };
 
-  const handleSubmit = async e => {
+const handleSubmit = async e => {
     e.preventDefault();
     if (!studentId) return;
-console.log("FRONTEND FILE STATE:", formData.profile_pic);
+
+    // --- ADD THESE TWO DEBUG LINES ---
+    console.log("CHECKING FILE BEFORE APPEND:", formData.profile_pic);
+    // ---------------------------------
+
     setLoading(true);
     setMessage("");
 
@@ -78,7 +82,13 @@ console.log("FRONTEND FILE STATE:", formData.profile_pic);
       const data = new FormData();
       if (formData.title) data.append("title", formData.title);
       if (formData.profile_desc) data.append("profile_desc", formData.profile_desc);
-      if (formData.profile_pic) data.append("profile_pic", formData.profile_pic);
+      
+      if (formData.profile_pic) {
+        data.append("profile_pic", formData.profile_pic);
+        console.log("FILE SUCCESSFULLY APPENDED TO FORMDATA");
+      } else {
+        console.log("WARNING: NO PROFILE PIC FOUND IN STATE TO APPEND");
+      }
 
       data.append("user[id]", loggedInUserId);
       data.append("user[first_name]", formData.user.first_name);
