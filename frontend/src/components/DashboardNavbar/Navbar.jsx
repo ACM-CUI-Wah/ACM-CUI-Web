@@ -4,7 +4,7 @@ import {
   Nav,
   Container,
   Form,
-  Button
+  Button,
 } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { BsSearch, BsList } from "react-icons/bs";
@@ -12,6 +12,7 @@ import "./Navbar.css";
 import useAuthStore from "../../store/authStore";
 import ProfileOptions from "../ProfileOptions/ProfileOptions";
 import axiosInstance from "../../axios";
+import defaultProfilePic from "../../assets/default_profile.jpg";
 
 const Navbar = ({ onMenuClick, showMenuButton }) => {
   const navigate = useNavigate();
@@ -59,12 +60,20 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
     try {
       const [blogsRes, eventsRes] = await Promise.all([
         axiosInstance.get(`/blogs/?search=${query}`),
-        axiosInstance.get(`/events/?search=${query}`)
+        axiosInstance.get(`/events/?search=${query}`),
       ]);
 
       const results = [
-        ...blogsRes.data.map((b) => ({ id: b.id, title: b.title, type: "blog" })),
-        ...eventsRes.data.map((ev) => ({ id: ev.id, title: ev.title, type: "event" }))
+        ...blogsRes.data.map((b) => ({
+          id: b.id,
+          title: b.title,
+          type: "blog",
+        })),
+        ...eventsRes.data.map((ev) => ({
+          id: ev.id,
+          title: ev.title,
+          type: "event",
+        })),
       ];
 
       setSearchResults(results);
@@ -77,66 +86,63 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
   const handleResultClick = (result) => {
     setShowDropdown(false);
     setSearchQuery("");
-    navigate(result.type === "blog" ? `/blog/${result.id}` : `/events/${result.id}`);
+    navigate(
+      result.type === "blog" ? `/blog/${result.id}` : `/events/${result.id}`,
+    );
   };
 
- const renderAuthButtons = () => {
-  if (!token) {
-    return (
-      <Link
-        to="/login"
-        className="login-link px-4 py-2 ms-lg-3 fw-semibold"
-        style={{ backgroundColor: "#ffffff", cursor: "pointer", textDecoration: "none" }}
-      >
-        Login
-      </Link>
-    );
-  }
+  const renderAuthButtons = () => {
+    if (!token) {
+      return (
+        <Link
+          to="/login"
+          className="login-link px-4 py-2 ms-lg-3 fw-semibold"
+          style={{
+            backgroundColor: "#ffffff",
+            cursor: "pointer",
+            textDecoration: "none",
+          }}
+        >
+          Login
+        </Link>
+      );
+    }
 
-  return (
-    <div className="profile-wrapper position-relative">
-      <Button
-        variant="light"
-        className="login-link px-0 py-0 ms-lg-3"
-        style={{ backgroundColor: "transparent", border: "none" }}
-        onClick={() => setShowOptions((v) => !v)}
-      >
-        {profilePic ? (
+    return (
+      <div className="profile-wrapper position-relative">
+        <Button
+          variant="light"
+          className="login-link px-0 py-0 ms-lg-3"
+          style={{ backgroundColor: "transparent", border: "none" }}
+          onClick={() => setShowOptions((v) => !v)}
+        >
           <img
-            src={profilePic}
+            src={profilePic || defaultProfilePic}
             alt="Profile"
             className="navbar-profile-pic"
             style={{
               width: "36px",
               height: "36px",
               borderRadius: "50%",
-              objectFit: "cover"
+              objectFit: "cover",
+            }}
+            onError={(e) => {
+              e.target.src = defaultProfilePic;
             }}
           />
-        ) : (
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              borderRadius: "50%",
-              backgroundColor: "#ccc"
-            }}
-          />
+        </Button>
+
+        {showOptions && (
+          <div className="profile-dropdown">
+            <ProfileOptions
+              navigate={navigate}
+              closeDropdown={() => setShowOptions(false)}
+            />
+          </div>
         )}
-      </Button>
-
-      {showOptions && (
-        <div className="profile-dropdown">
-          <ProfileOptions
-      navigate={navigate}
-      closeDropdown={() => setShowOptions(false)}
-    />
-        </div>
-      )}
-    </div>
-  );
-};
-
+      </div>
+    );
+  };
 
   return (
     <BootstrapNavbar expand="lg" className="custom-navbar1 shadow-sm">
@@ -197,7 +203,6 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
             <BsList size={22} />
           </Button>
         )}
-        
 
         <BootstrapNavbar.Toggle
           aria-controls="navbar-nav"
@@ -211,12 +216,19 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
               Blog
             </Nav.Link>
 
-            {/* ✅ Added Recruitment */}
-            <Nav.Link as={Link} to="/recruitment" className="text-white fw-semibold">
+            <Nav.Link
+              as={Link}
+              to="/recruitment"
+              className="text-white fw-semibold"
+            >
               Recruitment
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/achievement" className="text-white fw-semibold">
+            <Nav.Link
+              as={Link}
+              to="/achievement"
+              className="text-white fw-semibold"
+            >
               Achievement
             </Nav.Link>
 
@@ -228,17 +240,25 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
               Teams
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/mission" className="text-white fw-semibold">
+            <Nav.Link
+              as={Link}
+              to="/mission"
+              className="text-white fw-semibold"
+            >
               Our Mission
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/contact" className="text-white fw-semibold">
+            <Nav.Link
+              as={Link}
+              to="/contact"
+              className="text-white fw-semibold"
+            >
               Contact us
             </Nav.Link>
 
             <div className="d-lg-none mt-2 text-center">
-    {renderAuthButtons()}
-  </div>
+              {renderAuthButtons()}
+            </div>
           </Nav>
 
           {/* DESKTOP SEARCH - visible ONLY on /dashboard/blogs */}
