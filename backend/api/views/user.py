@@ -40,9 +40,11 @@ class StudentRUView(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_serializer_class(self):
-        """Use ProfileUpdateSerializer for PATCH requests (profile updates)"""
         if self.request.method == 'PATCH':
-            return ProfileUpdateSerializer
+            student = self.get_object()
+            if student.user_id == self.request.user.id:
+                return ProfileUpdateSerializer   
+            return StudentSerializer             
         return StudentSerializer
 
     def partial_update(self, request, *args, **kwargs):
