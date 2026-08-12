@@ -8,6 +8,7 @@ import mediaImage from "../../assets/media_club01.png";
 import eventsImage from "../../assets/events_club01.png";
 import graphicsImage from "../../assets/graphics_club01.png";
 import decorImage from "../../assets/decor_club01.png";
+import defaultProfilePic from "../../assets/default_profile.jpg";
 
 import Navbar from "../DashboardNavbar/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
@@ -18,43 +19,47 @@ const teamData = [
     image: codeHubImage,
     title: "Code Hub",
     description:
-      "Introducing the heart of innovation our Code Hub team. This is where curiosity meets creation. From exploring new technologies to developing efficient solutions, the Code Hub empowers members to learn, collaborate, and grow as developers. Their mission? To turn ideas into impactful code and shape the next generation of tech leaders"
+      "Introducing the heart of innovation our Code Hub team. This is where curiosity meets creation. From exploring new technologies to developing efficient solutions, the Code Hub empowers members to learn, collaborate, and grow as developers. Their mission? To turn ideas into impactful code and shape the next generation of tech leaders",
   },
   {
     image: socialImage,
     title: "Social Media & Marketing",
     description:
-      "At ACM, our Social Media & Marketing team is the creative force behind our digital presence. From crafting strategic campaigns to designing engaging content, this team ensures that every post reflects our vision and connects with our audience. They bring ideas to life, build our community online, and make sure ACM’s story is heard across every platform."
+      "At ACM, our Social Media & Marketing team is the creative force behind our digital presence. From crafting strategic campaigns to designing engaging content, this team ensures that every post reflects our vision and connects with our audience. They bring ideas to life, build our community online, and make sure ACM’s story is heard across every platform.",
   },
   {
     image: mediaImage,
     title: "Media",
     description:
-      "Our Media team captures the essence of ACM one frame at a time. From event coverage to storytelling through visuals, they ensure that every moment is documented with creativity and precision. Their lens brings ACM’s spirit to life, preserving memories and showcasing the passion behind every project."
+      "Our Media team captures the essence of ACM one frame at a time. From event coverage to storytelling through visuals, they ensure that every moment is documented with creativity and precision. Their lens brings ACM’s spirit to life, preserving memories and showcasing the passion behind every project.",
   },
   {
     image: eventsImage,
     title: "Events and Logistics",
     description:
-      "Every great experience starts with thoughtful planning and that’s exactly what our Events team does best. From concept to execution, they organize engaging sessions, workshops, and celebrations that bring our community together. Their creativity and coordination ensure that every ACM event leaves a lasting impact."
+      "Every great experience starts with thoughtful planning and that’s exactly what our Events team does best. From concept to execution, they organize engaging sessions, workshops, and celebrations that bring our community together. Their creativity and coordination ensure that every ACM event leaves a lasting impact.",
   },
   {
     image: graphicsImage,
     title: "Graphics",
     description:
-      "Design is intelligence made visible and our Graphics team embodies that perfectly. They transform ideas into visuals that communicate, inspire, and engage. From digital posters to event branding, their work adds aesthetic value and strengthens ACM’s identity across all platforms."
+      "Design is intelligence made visible and our Graphics team embodies that perfectly. They transform ideas into visuals that communicate, inspire, and engage. From digital posters to event branding, their work adds aesthetic value and strengthens ACM’s identity across all platforms.",
   },
   {
     image: decorImage,
     title: "Decor",
     description:
-      "Creativity, color, and craftsmanship that’s what defines our Decor team. They transform simple spaces into inspiring experiences, giving every ACM event a unique and memorable identity. with attention to every detail, they ensure that the environment reflects the energy and vision of our society."
-  }
+      "Creativity, color, and craftsmanship that’s what defines our Decor team. They transform simple spaces into inspiring experiences, giving every ACM event a unique and memorable identity. with attention to every detail, they ensure that the environment reflects the energy and vision of our society.",
+  },
 ];
 
 const TeamSection = () => {
-  const [activeIndex, setActiveIndex] = useState(Math.floor(teamData.length / 2));
-  const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+  const [activeIndex, setActiveIndex] = useState(
+    Math.floor(teamData.length / 2),
+  );
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200,
+  );
 
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,10 +82,10 @@ const TeamSection = () => {
           "ADVISOR",
           "LEAD ADVISOR",
           "DIRECTOR OPERATIONS",
-          "COORDINATOR"
+          "COORDINATOR",
         ];
         const filtered = data.filter(
-          m => m.title && executiveTitles.includes(m.title.toUpperCase())
+          (m) => m.title && executiveTitles.includes(m.title.toUpperCase()),
         );
 
         setMembers(filtered);
@@ -98,8 +103,8 @@ const TeamSection = () => {
     navigate(`/team/${encodeURIComponent(team.title)}`, {
       state: {
         image: team.image,
-        description: team.description
-      }
+        description: team.description,
+      },
     });
   };
 
@@ -140,17 +145,18 @@ const TeamSection = () => {
     }
 
     // Calculate the distance from the start of the track to the center of the active card
-    const distanceToActiveCardCenter = (activeIndex * (cardWidth + gap)) + (cardWidth / 2);
+    const distanceToActiveCardCenter =
+      activeIndex * (cardWidth + gap) + cardWidth / 2;
 
     return {
-      // We translate NEGATIVE distance. 
+      // We translate NEGATIVE distance.
       // Since 'left' is 50%, this pulls the active card perfectly to the middle.
       transform: `translateX(-${distanceToActiveCardCenter}px) translateY(-50%)`,
-      
+
       // Inline flex styles to ensure exact math sync
       display: "flex",
-      gap: `${gap}px`, 
-      
+      gap: `${gap}px`,
+
       // Ensure these override any potential CSS conflicts
       position: "absolute",
       left: "50%",
@@ -166,7 +172,11 @@ const TeamSection = () => {
           <h1 className="team-title">Our Teams</h1>
 
           <div className="carousel-wrapper">
-            <button className="nav-btn prev-btn" onClick={handlePrev} aria-label="Previous team">
+            <button
+              className="nav-btn prev-btn"
+              onClick={handlePrev}
+              aria-label="Previous team"
+            >
               &#8249;
             </button>
 
@@ -190,7 +200,11 @@ const TeamSection = () => {
               })}
             </div>
 
-            <button className="nav-btn next-btn" onClick={handleNext} aria-label="Next team">
+            <button
+              className="nav-btn next-btn"
+              onClick={handleNext}
+              aria-label="Next team"
+            >
               &#8250;
             </button>
           </div>
@@ -209,12 +223,16 @@ const TeamSection = () => {
                   <div
                     className="preview-member"
                     key={m.id}
-                    onClick={() =>
-                      navigate(`/member/${m.id}`, { state: m })
-                    }
+                    onClick={() => navigate(`/member/${m.id}`, { state: m })}
                     style={{ cursor: "pointer" }}
                   >
-                    <img src={m.profile_pic} alt={m.full_name} />
+                    <img
+                      src={m.profile_pic || defaultProfilePic}
+                      alt={m.full_name}
+                      onError={(e) => {
+                        e.target.src = defaultProfilePic;
+                      }} // Catches broken URLs
+                    />{" "}
                     <p className="name">{m.full_name}</p>
                     <p className="role">{m.title}</p>
                   </div>
@@ -229,4 +247,3 @@ const TeamSection = () => {
 };
 
 export default TeamSection;
-
