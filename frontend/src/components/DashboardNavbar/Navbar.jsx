@@ -212,10 +212,15 @@ const Navbar = ({ onMenuClick, showMenuButton }) => {
         <BootstrapNavbar.Collapse id="navbar-nav" className="w-100">
           {/* Navigation Links */}
           <Nav className="nav-links d-flex flex-lg-row flex-column align-items-lg-center align-items-center justify-content-lg-center mx-lg-auto mt-lg-0 mt-2">
-            <Nav.Link as={Link} to="/blogs" className="text-white fw-semibold">
-              Blog
+
+            <Nav.Link as={Link} to="/" className="text-white fw-semibold">
+              Home
             </Nav.Link>
 
+            {/* <Nav.Link as={Link} to="/blogs" className="text-white fw-semibold">
+              Blog
+            </Nav.Link> */}
+            
             <Nav.Link
               as={Link}
               to="/recruitment"
