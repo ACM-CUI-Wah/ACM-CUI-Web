@@ -53,6 +53,21 @@ const teamData = [
   },
 ];
 
+const getHierarchyRank = (title) => {
+  const t = title?.toUpperCase() || "";
+  switch (t) {
+    case "PRESIDENT": return 1;
+    case "VICE PRESIDENT": return 2;
+    case "SECRETARY": return 3;
+    case "DIRECTOR OPERATIONS": return 4;
+    case "TREASURER": return 5;
+    case "LEAD ADVISOR": return 6;
+    case "ADVISOR": return 7;
+    case "COORDINATOR": return 8;
+    default: return 99;
+  }
+};
+
 const TeamSection = () => {
   const [activeIndex, setActiveIndex] = useState(
     Math.floor(teamData.length / 2),
@@ -65,7 +80,6 @@ const TeamSection = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // ✅ Fetch all members from PUBLIC endpoint
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -73,7 +87,6 @@ const TeamSection = () => {
         const res = await axiosInstance.get("/students/public/");
         const data = res.data;
 
-        // Filter only executive members (not leads or general members)
         const executiveTitles = [
           "PRESIDENT",
           "VICE PRESIDENT",
@@ -84,9 +97,12 @@ const TeamSection = () => {
           "DIRECTOR OPERATIONS",
           "COORDINATOR",
         ];
+        
         const filtered = data.filter(
           (m) => m.title && executiveTitles.includes(m.title.toUpperCase()),
         );
+
+        filtered.sort((a, b) => getHierarchyRank(a.title) - getHierarchyRank(b.title));
 
         setMembers(filtered);
       } catch (error) {
