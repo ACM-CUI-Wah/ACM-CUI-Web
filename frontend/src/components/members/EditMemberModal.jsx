@@ -28,6 +28,39 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
 
   const [error, setError] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const currentUserRole = localStorage.getItem("role");
+  const currentUsername = localStorage.getItem("username");
+  const isSuperAdmin = currentUsername === "testadmin" || localStorage.getItem("is_superuser") === "true";
+  const isAdmin = currentUserRole === "ADMIN";
+  const isLead = currentUserRole === "LEAD";
+
+  const targetMemberRole = member?.user?.role;
+
+  const canEditTitle =
+    isSuperAdmin || (isAdmin && targetMemberRole !== "ADMIN");
+
+  // Title Options List
+  const allTitles = [
+    { value: "NULL", label: "-- NULL --" },
+    { value: "GENERAL MEMBER", label: "GENERAL MEMBER" },
+    { value: "CLUB LEAD", label: "CLUB LEAD" },
+    { value: "COORDINATOR", label: "COORDINATOR" },
+    { value: "PRESIDENT", label: "PRESIDENT" },
+    { value: "VICE PRESIDENT", label: "VICE PRESIDENT" },
+    { value: "TREASURER", label: "TREASURER" },
+    { value: "SECRETARY", label: "SECRETARY" },
+    { value: "ADVISOR", label: "ADVISOR" },
+    { value: "LEAD ADVISOR", label: "LEAD ADVISOR" },
+    { value: "DIRECTOR OPERATIONS", label: "DIRECTOR OPERATIONS" },
+  ];
+
+  const availableTitles = allTitles.filter((t) => {
+    if (isSuperAdmin) return true;
+    if (isAdmin) {
+      return !["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "DIRECTOR OPERATIONS"].includes(t.value);
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (member) {
@@ -80,10 +113,20 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
     setError(null);
 
     try {
-      // 1. Construct a standard JavaScript Object (JSON)
+      const adminTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "DIRECTOR OPERATIONS"];
+      const leadTitles = ["COORDINATOR", "CLUB LEAD"];
+
+      const selectedTitle = formData.title === "" ? "NULL" : formData.title;
+      let assignedRole = "STUDENT";
+
+      if (adminTitles.includes(selectedTitle)) {
+        assignedRole = "ADMIN";
+      } else if (leadTitles.includes(selectedTitle)) {
+        assignedRole = "LEAD";
+      }
+
       const dataToSend = {};
 
-      // 2. Compare Top-Level Fields
       if (formData.roll_no !== member.roll_no) {
         dataToSend.roll_no = formData.roll_no;
       }
@@ -91,10 +134,9 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         dataToSend.club = formData.club;
       }
       if (formData.title !== member.title) {
-        dataToSend.title = formData.title;
+        dataToSend.title = selectedTitle;
       }
 
-      // 3. Compare Nested User Fields
       const userData = {};
       const userFields = [
         "first_name",
@@ -102,7 +144,6 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         "email",
         "username",
         "phone_number",
-        "role",
         "birthday",
       ];
 
@@ -111,6 +152,10 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
           userData[key] = formData.user[key];
         }
       });
+
+      if (assignedRole !== member.user.role) {
+        userData.role = assignedRole;
+      }
 
       if (formData.user.password && formData.user.password.trim() !== "") {
         userData.password = formData.user.password;
@@ -124,7 +169,6 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
       await axiosInstance.patch(`/students/${member.id}`, dataToSend);
 
       alert("Member updated successfully!");
-
       onSave();
       onClose();
     } catch (err) {
@@ -133,7 +177,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         setError("Email already exists or is invalid.");
       } else {
         setError(
-          JSON.stringify(err.response?.data) || "Failed to update member.",
+          JSON.stringify(err.response?.data) || "Failed to update member."
         );
       }
     } finally {
@@ -282,29 +326,25 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
             </div>
             <div className="form-group">
               <label htmlFor="title">Title</label>
-              <input
-                type="text"
+              <select
                 id="title"
                 name="title"
-                value={formData.title}
+                value={formData.title === "" ? "NULL" : formData.title}
                 onChange={handleChange}
-                style={{ ...inputStyle, textTransform: "uppercase" }}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="role">Role</label>
-              <select
-                id="role"
-                name="role"
-                value={formData.user.role}
-                onChange={handleChange}
+                disabled={!canEditTitle}
                 style={inputStyle}
               >
-                <option value="STUDENT">Student</option>
-                <option value="LEAD">Lead</option>
-                <option value="ADMIN">Admin</option>
+                {availableTitles.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
               </select>
+              {!canEditTitle && (
+                <small style={{ color: "#888", fontSize: "12px" }}>
+                  You do not have permission to change this member's title.
+                </small>
+              )}
             </div>
 
             <div className="modal-footer">
