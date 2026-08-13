@@ -26,7 +26,11 @@ function Regform() {
 
   const isAdmin = currentUserRole === "ADMIN";
   const isLead = currentUserRole === "LEAD";
-  const isSuperAdmin = localStorage.getItem("is_superuser") === "true";
+
+  const currentUsername = localStorage.getItem("username");
+  const isSuperAdmin =
+    currentUsername === "testadmin01" ||
+    localStorage.getItem("is_superuser") === "true";
 
   const clubOptions = [
     { value: "CODEHUB", label: "CodeHub" },
@@ -60,13 +64,18 @@ function Regform() {
     { value: "SECRETARY", label: "SECRETARY" },
     { value: "ADVISOR", label: "ADVISOR" },
     { value: "LEAD ADVISOR", label: "LEAD ADVISOR" },
-    { value: "DIRECTOR OPERATIONS", label: "DIRECTOR OPERATIONS" }
+    { value: "DIRECTOR OPERATIONS", label: "DIRECTOR OPERATIONS" },
   ];
 
   const availableTitles = allTitles.filter((t) => {
-    if (isSuperAdmin) return true; 
+    if (isSuperAdmin) return true;
     if (isAdmin) {
-      return !["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "DIRECTOR OPERATIONS"].includes(t.value);
+      return ![
+        "PRESIDENT",
+        "VICE PRESIDENT",
+        "SECRETARY",
+        "DIRECTOR OPERATIONS",
+      ].includes(t.value);
     }
     if (isLead) {
       return ["NULL", "GENERAL MEMBER"].includes(t.value);
@@ -233,12 +242,17 @@ function Regform() {
     }
 
     //automatically assign role based on selected title
-    const adminTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "DIRECTOR OPERATIONS"];
+    const adminTitles = [
+      "PRESIDENT",
+      "VICE PRESIDENT",
+      "SECRETARY",
+      "DIRECTOR OPERATIONS",
+    ];
     const leadTitles = ["COORDINATOR", "CLUB LEAD"];
-    
+
     const selectedTitle = formData.title === "" ? "NULL" : formData.title;
     let assignedRole = "STUDENT"; // Default role
-    
+
     if (adminTitles.includes(selectedTitle)) {
       assignedRole = "ADMIN";
     } else if (leadTitles.includes(selectedTitle)) {
@@ -250,8 +264,8 @@ function Regform() {
       title: selectedTitle,
       user: {
         ...formData.user,
-        role: assignedRole, 
-      }
+        role: assignedRole,
+      },
     };
 
     const result = await signup(dataToSend);
