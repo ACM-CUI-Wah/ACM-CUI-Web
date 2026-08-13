@@ -21,6 +21,12 @@ function Regform() {
   });
 
   const [fullName, setFullName] = useState("");
+  const currentUserRole = localStorage.getItem("role");
+  const currentUserClub = localStorage.getItem("club");
+
+  const isAdmin = currentUserRole === "ADMIN";
+  const isLead = currentUserRole === "LEAD";
+  const isSuperAdmin = localStorage.getItem("is_superuser") === "true";
 
   const clubOptions = [
     { value: "CODEHUB", label: "CodeHub" },
@@ -43,6 +49,31 @@ function Regform() {
   ];
   const isExecutiveTitle = executiveTitles.includes(formData.title);
 
+  const allTitles = [
+    { value: "NULL", label: "-- NULL --" },
+    { value: "GENERAL MEMBER", label: "GENERAL MEMBER" },
+    { value: "CLUB LEAD", label: "CLUB LEAD" },
+    { value: "COORDINATOR", label: "COORDINATOR" },
+    { value: "PRESIDENT", label: "PRESIDENT" },
+    { value: "VICE PRESIDENT", label: "VICE PRESIDENT" },
+    { value: "TREASURER", label: "TREASURER" },
+    { value: "SECRETARY", label: "SECRETARY" },
+    { value: "ADVISOR", label: "ADVISOR" },
+    { value: "LEAD ADVISOR", label: "LEAD ADVISOR" },
+    { value: "DIRECTOR OPERATIONS", label: "DIRECTOR OPERATIONS" }
+  ];
+
+  const availableTitles = allTitles.filter((t) => {
+    if (isSuperAdmin) return true; 
+    if (isAdmin) {
+      return !["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "DIRECTOR OPERATIONS"].includes(t.value);
+    }
+    if (isLead) {
+      return ["NULL", "GENERAL MEMBER"].includes(t.value);
+    }
+    return false;
+  });
+
   const [titleInputMode, setTitleInputMode] = useState(false);
   const { signup, loading } = useAuthStore();
   const navigate = useNavigate();
@@ -50,12 +81,6 @@ function Regform() {
 
   const [regNoError, setRegNoError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-
-  const currentUserRole = localStorage.getItem("role");
-  const currentUserClub = localStorage.getItem("club");
-
-  const isAdmin = currentUserRole === "ADMIN";
-  const isLead = currentUserRole === "LEAD";
 
   useEffect(() => {
     if (isLead && currentUserClub) {
@@ -207,9 +232,26 @@ function Regform() {
       return;
     }
 
+    //automatically assign role based on selected title
+    const adminTitles = ["PRESIDENT", "VICE PRESIDENT", "SECRETARY", "DIRECTOR OPERATIONS"];
+    const leadTitles = ["COORDINATOR", "CLUB LEAD"];
+    
+    const selectedTitle = formData.title === "" ? "NULL" : formData.title;
+    let assignedRole = "STUDENT"; // Default role
+    
+    if (adminTitles.includes(selectedTitle)) {
+      assignedRole = "ADMIN";
+    } else if (leadTitles.includes(selectedTitle)) {
+      assignedRole = "LEAD";
+    }
+
     const dataToSend = {
       ...formData,
-      title: formData.title === "" ? "NULL" : formData.title,
+      title: selectedTitle,
+      user: {
+        ...formData.user,
+        role: assignedRole, 
+      }
     };
 
     const result = await signup(dataToSend);
@@ -404,24 +446,8 @@ function Regform() {
               </select>
             </div>
           </div>
-
-          {/* Role + Phone */}
+          {/* Phone + Birthday  */}
           <div className="regform-row">
-            <div className="regform-group regform-w45">
-              <label htmlFor="role">Role</label>
-              <select
-                id="role"
-                className="regform-control"
-                value={formData.user.role}
-                onChange={handleChange}
-                required
-              >
-                <option value="STUDENT">STUDENT</option>
-                <option value="LEAD">LEAD</option>
-                <option value="ADMIN">ADMIN</option>
-              </select>
-            </div>
-
             <div className="regform-group regform-w45">
               <label htmlFor="phone">Phone Number</label>
               <input
@@ -438,9 +464,7 @@ function Regform() {
                 <small className="regform-error">{phoneError}</small>
               )}
             </div>
-          </div>
 
-          <div className="regform-row">
             <div className="regform-group regform-w45">
               <label htmlFor="birthday">Birthday</label>
               <input
@@ -470,17 +494,11 @@ function Regform() {
                 }
                 onChange={handleChange}
               >
-                <option value="NULL">-- NULL (STUDENT AND LEADS) --</option>
-                <option value="GENERAL MEMBER">GENERAL MEMBER</option>
-                <option value="PRESIDENT">PRESIDENT</option>
-                <option value="VICE PRESIDENT">VICE PRESIDENT</option>
-                <option value="TREASURER">TREASURER</option>
-                <option value="COORDINATOR">COORDINATOR</option>
-                <option value="SECRETARY">SECRETARY</option>
-                <option value="ADVISOR">ADVISOR</option>
-                <option value="LEAD ADVISOR">LEAD ADVISOR</option>
-                <option value="DIRECTOR OPERATIONS">DIRECTOR OPERATIONS</option>
-                <option value="custom">-- ENTER CUSTOM TITLE --</option>
+                {availableTitles.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
               </select>
 
               {titleInputMode && (
