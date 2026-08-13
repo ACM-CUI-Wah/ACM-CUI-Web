@@ -160,7 +160,7 @@ class ProfileUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'username']
+        fields = ['id', 'first_name', 'last_name', 'email', 'username', 'birthday']
         read_only_fields = ['id']
         # Disable default unique validators - we handle them manually
         extra_kwargs = {
