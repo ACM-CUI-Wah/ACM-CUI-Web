@@ -5,13 +5,46 @@ import ViewMemberModal from "../../components/members/ViewMemberModal";
 import EditMemberModal from "../../components/members/EditMemberModal";
 import "./TrackMemberPage.css";
 
-// Role badge styling helper
 const getRoleClass = (role) => {
   const roleLower = role?.toLowerCase() || "other";
   if (roleLower.includes("student")) return "role-student";
   if (roleLower.includes("lead")) return "role-lead";
   return "role-other";
 };
+
+const getHierarchyRank = (title) => {
+  const t = title?.toUpperCase() || "NULL";
+  switch (t) {
+    case "PRESIDENT": return 1;
+    case "VICE PRESIDENT": return 2;
+    case "SECRETARY": return 3;
+    case "DIRECTOR OPERATIONS": return 4;
+    case "TREASURER": return 5;
+    case "LEAD ADVISOR": return 6;
+    case "ADVISOR": return 7;
+    case "COORDINATOR": return 8;
+    case "CLUB LEAD": return 9;
+    case "GENERAL MEMBER": return 10;
+    default: return 11; 
+  }
+};
+
+const sortMembers = (a, b) => {
+  const rankA = getHierarchyRank(a.title);
+  const rankB = getHierarchyRank(b.title);
+
+  if (rankA >= 8 && rankB >= 8) {
+    const clubA = a.club || "";
+    const clubB = b.club || "";
+    
+    if (clubA !== clubB) {
+      return clubA.localeCompare(clubB);
+    }
+  }
+
+  return rankA - rankB;
+};
+// -----------------------------------
 
 const TrackMembersPage = () => {
   // Data state
@@ -35,7 +68,11 @@ const TrackMembersPage = () => {
       setLoading(true);
       setError(null);
       const res = await axiosInstance.get("/students/");
-      setMembers(res.data);
+      
+      // Apply the custom sort before saving to state
+      const sortedData = [...res.data].sort(sortMembers);
+      
+      setMembers(sortedData);
     } catch (err) {
       setError(err.response?.data?.detail || "Failed to fetch members");
     } finally {
