@@ -22,19 +22,40 @@ const TeamPage = () => {
     "Media": "MEDIA"
   };
 
+  const getHierarchyRank = (designation) => {
+    const title = designation?.toUpperCase() || "";
+    
+    if (title === "COORDINATOR") return 1;
+    if (title === "CLUB LEAD") return 2;
+    if (title === "GENERAL MEMBER") return 3;
+    
+    return 4; 
+  };
+
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         setLoading(true);
-        // Fetch from PUBLIC endpoint
         const res = await axiosInstance.get("/students/public/");
         const data = res.data;
 
         const decodedTitle = decodeURIComponent(title);
         const backendClub = clubMap[decodedTitle];
 
-        // Filter by club
-        const filtered = data.filter(student => student.club === backendClub);
+        const excludedTitles = [
+          "PRESIDENT", 
+          "VICE PRESIDENT", 
+          "SECRETARY", 
+          "TREASURER", 
+          "DIRECTOR OPERATIONS", 
+          "ADVISOR", 
+          "LEAD ADVISOR"
+        ];
+
+        const filtered = data.filter(student => {
+          const studentTitle = student.title?.toUpperCase() || "";
+          return student.club === backendClub && !excludedTitles.includes(studentTitle);
+        });
 
         const formatted = filtered.map(student => ({
           id: student.user_id,
@@ -42,6 +63,8 @@ const TeamPage = () => {
           designation: student.title && student.title !== "NULL" ? student.title : "",
           image: student.profile_pic
         }));
+
+        formatted.sort((a, b) => getHierarchyRank(a.designation) - getHierarchyRank(b.designation));
 
         setMembers(formatted);
       } catch (err) {
