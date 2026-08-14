@@ -19,7 +19,6 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
       last_name: "",
       email: "",
       username: "",
-      password: "",
       role: "STUDENT",
       phone_number: "",
       birthday: "",
@@ -75,7 +74,6 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
           last_name: member.user?.last_name || "",
           email: member.user?.email || "",
           username: member.user?.username || "",
-          password: "",
           role: member.user?.role || "STUDENT",
           phone_number: member.user?.phone_number || "",
           birthday: member.user?.birthday || "",
@@ -157,9 +155,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         userData.role = assignedRole;
       }
 
-      if (formData.user.password && formData.user.password.trim() !== "") {
-        userData.password = formData.user.password;
-      }
+      
 
       if (Object.keys(userData).length > 0) {
         userData.id = member.user.id;
@@ -312,18 +308,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.user.password}
-                onChange={handleChange}
-                placeholder="Leave blank if unchanged"
-                style={inputStyle}
-              />
-            </div>
+           
             <div className="form-group">
               <label htmlFor="title">Title</label>
               <select
