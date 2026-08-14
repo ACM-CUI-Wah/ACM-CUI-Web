@@ -33,6 +33,10 @@ const sortMembers = (a, b) => {
   const rankA = getHierarchyRank(a.title);
   const rankB = getHierarchyRank(b.title);
 
+  if (rankA !== rankB) {
+    return rankA - rankB;
+  }
+
   if (rankA >= 8 && rankB >= 8) {
     const clubA = a.club || "";
     const clubB = b.club || "";
@@ -42,9 +46,12 @@ const sortMembers = (a, b) => {
     }
   }
 
-  return rankA - rankB;
+  
+  const nameA = a.user?.username?.toLowerCase() || "";
+  const nameB = b.user?.username?.toLowerCase() || "";
+  
+  return nameA.localeCompare(nameB);
 };
-// -----------------------------------
 
 const TrackMembersPage = () => {
   // Data state
