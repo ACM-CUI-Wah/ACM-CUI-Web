@@ -166,6 +166,7 @@ class LoginView(APIView):
                     "token": token.key,
                     "user_id": user.id,
                     "role": user.role,
+                    "is_superuser": user.is_superuser,
                     "student_id": student_id
                 }
             }, status=status.HTTP_200_OK)

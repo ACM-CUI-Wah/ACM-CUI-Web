@@ -27,9 +27,7 @@ function Regform() {
   const isAdmin = currentUserRole === "ADMIN";
   const isLead = currentUserRole === "LEAD";
 
-  const currentUsername = localStorage.getItem("username");
   const isSuperAdmin =
-    currentUsername === "testadmin01" ||
     localStorage.getItem("is_superuser") === "true";
 
   const clubOptions = [
@@ -86,7 +84,6 @@ function Regform() {
   const [titleInputMode, setTitleInputMode] = useState(false);
   const { signup, loading } = useAuthStore();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
 
   const [regNoError, setRegNoError] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -184,11 +181,6 @@ function Regform() {
       setFormData((prev) => ({
         ...prev,
         user: { ...prev.user, birthday: value },
-      }));
-    } else if (id === "pass") {
-      setFormData((prev) => ({
-        ...prev,
-        user: { ...prev.user, password: value },
       }));
     } else if (id === "club") {
       setFormData((prev) => ({ ...prev, club: value }));
@@ -392,28 +384,11 @@ function Regform() {
             </div>
           </div>
 
-          {/* Password + Club */}
           <div className="regform-row">
-            <div className="regform-group regform-w45 regform-passwordWrapper">
-              <label htmlFor="pass">Password</label>
-
-              <div className="regform-passwordField">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="regform-control"
-                  id="pass"
-                  value={formData.user.password}
-                  onChange={handleChange}
-                  required
-                />
-                <button
-                  type="button"
-                  className="regform-togglePassword"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
+            <div className="regform-group regform-w45" style={{ display: 'flex', alignItems: 'center', backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '6px', border: '1px solid #e9ecef' }}>
+              <small style={{ color: '#6c757d', margin: 0 }}>
+                <strong>Note:</strong> A default password will automatically be emailed to this member upon registration.
+              </small>
             </div>
 
             <div className="regform-group regform-w45">

@@ -28,8 +28,8 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
   const [error, setError] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const currentUserRole = localStorage.getItem("role");
-  const currentUsername = localStorage.getItem("username");
-  const isSuperAdmin = currentUsername === "testadmin01" || localStorage.getItem("is_superuser") === "true";
+  
+  const isSuperAdmin = localStorage.getItem("is_superuser") === "true";
   const isAdmin = currentUserRole === "ADMIN";
   const isLead = currentUserRole === "LEAD";
 
