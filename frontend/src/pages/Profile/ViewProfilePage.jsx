@@ -166,12 +166,21 @@ const handleSubmit = async e => {
             <div key={field}>
               <label>{field.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}</label>
               {editMode ? (
-                <input
-                  type={field === "email" ? "email" : "text"}
-                  name={field}
-                  value={formData.user[field]}
-                  onChange={handleChange}
-                />
+                <>
+                  <input
+                    type={field === "email" ? "email" : "text"}
+                    name={field}
+                    value={formData.user[field]}
+                    onChange={handleChange}
+                    disabled={field === "email"}
+                    style={field === "email" ? { backgroundColor: "#f0f0f0", color: "#666" } : {}}
+                  />
+                  {field === "email" && (
+                    <small style={{ color: "#888", fontSize: "12px", display: "block", marginTop: "4px" }}>
+                      You can not change your own email
+                    </small>
+                  )}
+                </>
               ) : (
                 <p>{student.user[field]}</p>
               )}

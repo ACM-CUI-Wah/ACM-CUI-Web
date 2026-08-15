@@ -27,16 +27,40 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
 
   const [error, setError] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
-  const currentUserRole = localStorage.getItem("role");
   
+  const currentUserRole = localStorage.getItem("role");
   const isSuperAdmin = localStorage.getItem("is_superuser") === "true";
   const isAdmin = currentUserRole === "ADMIN";
   const isLead = currentUserRole === "LEAD";
+  const loggedInUserId = String(localStorage.getItem("user_id"));
 
   const targetMemberRole = member?.user?.role;
+  const targetUserId = String(member?.user?.id);
+  const isSelf = loggedInUserId === targetUserId;
 
   const canEditTitle =
     isSuperAdmin || (isAdmin && targetMemberRole !== "ADMIN");
+
+  let canEditEmail = false;
+  let emailHelperText = "";
+
+  if (isSuperAdmin) {
+    canEditEmail = true;
+  } else if (isAdmin) {
+    if (isSelf || targetMemberRole === "ADMIN") {
+      canEditEmail = false;
+      emailHelperText = "Ask a Superadmin to change this email.";
+    } else {
+      canEditEmail = true;
+    }
+  } else if (isLead) {
+    if (isSelf || targetMemberRole === "ADMIN" || targetMemberRole === "LEAD") {
+      canEditEmail = false;
+      emailHelperText = "Ask an Admin to change this email.";
+    } else {
+      canEditEmail = true;
+    }
+  }
 
   // Title Options List
   const allTitles = [
@@ -155,8 +179,6 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
         userData.role = assignedRole;
       }
 
-      
-
       if (Object.keys(userData).length > 0) {
         userData.id = member.user.id;
         dataToSend.user = userData;
@@ -268,8 +290,14 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
                 name="email"
                 value={formData.user.email}
                 onChange={handleChange}
+                disabled={!canEditEmail}
                 style={inputStyle}
               />
+              {!canEditEmail && (
+                <small style={{ color: "#888", fontSize: "12px", display: "block", marginTop: "4px" }}>
+                  {emailHelperText}
+                </small>
+              )}
             </div>
 
             <div className="form-group">
@@ -326,7 +354,7 @@ const EditMemberModal = ({ isOpen, onClose, member, onSave }) => {
                 ))}
               </select>
               {!canEditTitle && (
-                <small style={{ color: "#888", fontSize: "12px" }}>
+                <small style={{ color: "#888", fontSize: "12px", display: "block", marginTop: "4px" }}>
                   You do not have permission to change this member's title.
                 </small>
               )}
