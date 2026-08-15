@@ -33,20 +33,31 @@ const sortMembers = (a, b) => {
   const rankA = getHierarchyRank(a.title);
   const rankB = getHierarchyRank(b.title);
 
-  if (rankA !== rankB) {
+  const isAClubLevel = rankA >= 8;
+  const isBClubLevel = rankB >= 8;
+
+  if (isAClubLevel !== isBClubLevel) {
     return rankA - rankB;
   }
 
-  if (rankA >= 8 && rankB >= 8) {
+  if (!isAClubLevel && !isBClubLevel) {
+    if (rankA !== rankB) {
+      return rankA - rankB; 
+    }
+  }
+  if (isAClubLevel && isBClubLevel) {
     const clubA = a.club || "";
     const clubB = b.club || "";
     
     if (clubA !== clubB) {
       return clubA.localeCompare(clubB);
     }
+    
+    if (rankA !== rankB) {
+      return rankA - rankB;
+    }
   }
 
-  
   const nameA = a.user?.username?.toLowerCase() || "";
   const nameB = b.user?.username?.toLowerCase() || "";
   
