@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axios";
-import "./ViewProfilePage.css"; 
-
+import "./ViewProfilePage.css";
 
 const ViewProfilePage = () => {
   const loggedInUserId = parseInt(localStorage.getItem("user_id"));
@@ -16,14 +15,16 @@ const ViewProfilePage = () => {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [editMode, setEditMode] = useState(false); 
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     const fetchStudent = async () => {
       try {
         const res = await axiosInstance.get("/students/");
         const students = Array.isArray(res.data) ? res.data : [res.data];
-        const foundStudent = students.find(s => s.user && s.user.id === loggedInUserId);
+        const foundStudent = students.find(
+          (s) => s.user && s.user.id === loggedInUserId,
+        );
 
         if (!foundStudent) {
           setMessage("Student record not found");
@@ -55,22 +56,23 @@ const ViewProfilePage = () => {
     fetchStudent();
   }, [loggedInUserId]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value, files } = e.target;
-    
-    if (name === "email") return;
 
     if (files) {
       setFormData({ ...formData, [name]: files[0] });
       setPreview(URL.createObjectURL(files[0]));
     } else if (["first_name", "last_name", "username"].includes(name)) {
-      setFormData(prev => ({ ...prev, user: { ...prev.user, [name]: value } }));
+      setFormData((prev) => ({
+        ...prev,
+        user: { ...prev.user, [name]: value },
+      }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!studentId) return;
 
@@ -82,8 +84,9 @@ const ViewProfilePage = () => {
     try {
       const data = new FormData();
       if (formData.title) data.append("title", formData.title);
-      if (formData.profile_desc) data.append("profile_desc", formData.profile_desc);
-      
+      if (formData.profile_desc)
+        data.append("profile_desc", formData.profile_desc);
+
       if (formData.profile_pic) {
         data.append("profile_pic", formData.profile_pic);
         console.log("FILE SUCCESSFULLY APPENDED TO FORMDATA");
@@ -94,7 +97,7 @@ const ViewProfilePage = () => {
       data.append("user[id]", loggedInUserId);
       data.append("user[first_name]", formData.user.first_name);
       data.append("user[last_name]", formData.user.last_name);
-      
+
       data.append("user[username]", formData.user.username);
 
       await axiosInstance.patch(`/students/${studentId}`, data, {
@@ -135,7 +138,12 @@ const ViewProfilePage = () => {
           <div>
             <label>Title</label>
             {editMode ? (
-              <input type="text" name="title" value={formData.title} onChange={handleChange} />
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+              />
             ) : (
               <p>{student.title || "-"}</p>
             )}
@@ -158,31 +166,34 @@ const ViewProfilePage = () => {
           <div>
             <label>Profile Picture</label>
             {editMode ? (
-              <input type="file" name="profile_pic" accept="image/*" onChange={handleChange} />
+              <input
+                type="file"
+                name="profile_pic"
+                accept="image/*"
+                onChange={handleChange}
+              />
             ) : null}
-            {preview && <img src={preview} alt="Preview" className="profile-preview" />}
+            {preview && (
+              <img src={preview} alt="Preview" className="profile-preview" />
+            )}
           </div>
 
-          {["first_name", "last_name", "email", "username"].map(field => (
+          {["first_name", "last_name", "email", "username"].map((field) => (
             <div key={field}>
-              <label>{field.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}</label>
-              {editMode ? (
-                <>
-                  <input
-                    type={field === "email" ? "email" : "text"}
-                    name={field}
-                    value={formData.user[field]}
-                    onChange={handleChange}
-                    disabled={field === "email"}
-                    readOnly={field === "email"}
-                    style={field === "email" ? { backgroundColor: "#f0f0f0", color: "#666", cursor: "not-allowed" } : {}}
-                  />
-                  {field === "email" && (
-                    <small style={{ color: "#888", fontSize: "12px", display: "block", marginTop: "4px" }}>
-                      You can not change your own email
-                    </small>
-                  )}
-                </>
+              <label>
+                {field
+                  .replace("_", " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+              </label>
+              {field === "email" ? (
+                <p>{student.user.email}</p>
+              ) : editMode ? (
+                <input
+                  type="text"
+                  name={field}
+                  value={formData.user[field]}
+                  onChange={handleChange}
+                />
               ) : (
                 <p>{student.user[field]}</p>
               )}
