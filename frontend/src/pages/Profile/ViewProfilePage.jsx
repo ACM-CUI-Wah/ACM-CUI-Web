@@ -57,23 +57,24 @@ const ViewProfilePage = () => {
 
   const handleChange = e => {
     const { name, value, files } = e.target;
+    
+    if (name === "email") return;
+
     if (files) {
       setFormData({ ...formData, [name]: files[0] });
       setPreview(URL.createObjectURL(files[0]));
-    } else if (["first_name", "last_name", "email", "username"].includes(name)) {
+    } else if (["first_name", "last_name", "username"].includes(name)) {
       setFormData(prev => ({ ...prev, user: { ...prev.user, [name]: value } }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
-const handleSubmit = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (!studentId) return;
 
-    // --- ADD THESE TWO DEBUG LINES ---
     console.log("CHECKING FILE BEFORE APPEND:", formData.profile_pic);
-    // ---------------------------------
 
     setLoading(true);
     setMessage("");
@@ -93,7 +94,7 @@ const handleSubmit = async e => {
       data.append("user[id]", loggedInUserId);
       data.append("user[first_name]", formData.user.first_name);
       data.append("user[last_name]", formData.user.last_name);
-      data.append("user[email]", formData.user.email);
+      
       data.append("user[username]", formData.user.username);
 
       await axiosInstance.patch(`/students/${studentId}`, data, {
@@ -173,7 +174,8 @@ const handleSubmit = async e => {
                     value={formData.user[field]}
                     onChange={handleChange}
                     disabled={field === "email"}
-                    style={field === "email" ? { backgroundColor: "#f0f0f0", color: "#666" } : {}}
+                    readOnly={field === "email"}
+                    style={field === "email" ? { backgroundColor: "#f0f0f0", color: "#666", cursor: "not-allowed" } : {}}
                   />
                   {field === "email" && (
                     <small style={{ color: "#888", fontSize: "12px", display: "block", marginTop: "4px" }}>
