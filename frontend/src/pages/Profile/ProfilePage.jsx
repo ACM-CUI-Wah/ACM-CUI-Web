@@ -172,7 +172,12 @@ useEffect(() => {
           <div key={field}>
             <label>{field.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}</label>
             {field === "email" ? (
-              <p>{student.user.email}</p>
+              <>
+                <p>{student.user.email}</p>
+                <small style={{ color: "#888", fontSize: "12px", display: "block", marginTop: "4px" }}>
+                  You can not change your own email
+                </small>
+              </>
             ) : editMode ? (
               <input
                 type="text"
