@@ -55,13 +55,13 @@ const Blog = () => {
         }
 
         // 3) Map blogs into BlogPost props
-        const mapped = blogsData.map((blog, idx) => {
+        const mapped = blogsData.slice(0, 3).map((blog, idx) => {
           const authorProfile = studentsData.find((s) => s.user_id === blog?.created_by?.id);
 
           const rawDesc = blog.description ?? blog.content ?? '';
           const safeDesc = htmlToText(rawDesc);
 
-          // ✅ only preview text so height stays more consistent
+          // only preview text so height stays more consistent
           const shortDesc = truncateText(safeDesc, 180);
 
           return {
