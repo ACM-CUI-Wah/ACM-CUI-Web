@@ -86,7 +86,6 @@ useEffect(() => {
       data.append("user[id]", loggedInUserId);
       data.append("user[first_name]", formData.user.first_name);
       data.append("user[last_name]", formData.user.last_name);
-      data.append("user[email]", formData.user.email);
       data.append("user[username]", formData.user.username);
 
       await axiosInstance.patch(`/students/${studentId}`, data, {
@@ -172,9 +171,11 @@ useEffect(() => {
         {["first_name", "last_name", "email", "username"].map(field => (
           <div key={field}>
             <label>{field.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}</label>
-            {editMode ? (
+            {field === "email" ? (
+              <p>{student.user.email}</p>
+            ) : editMode ? (
               <input
-                type={field === "email" ? "email" : "text"}
+                type="text"
                 name={field}
                 value={formData.user[field]}
                 onChange={handleChange}

@@ -1,3 +1,7 @@
+//This file is just a duplicate of ProfilePage.jsx
+//any changes made here will not affect anything in website.
+//if you want to make changes to the profile page, please do it in ProfilePage.jsx
+
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axios";
 import "./ViewProfilePage.css";
