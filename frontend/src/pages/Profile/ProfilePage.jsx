@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axios";
-import { FiEdit } from "react-icons/fi"; // <-- Import pencil icon
+import { FiEdit } from "react-icons/fi"; 
 import "./ProfilePage.css"; 
 
 const ProfilePage = () => {
@@ -18,42 +18,42 @@ const ProfilePage = () => {
   const [message, setMessage] = useState("");
   const [editMode, setEditMode] = useState(false);
 
-useEffect(() => {
-  const fetchStudent = async () => {
-    try {
-      const studentIdFromLS = localStorage.getItem("student_id");
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        const studentIdFromLS = localStorage.getItem("student_id");
 
-      if (!studentIdFromLS) {
-        setMessage("student_id missing in localStorage. Please login again.");
-        return;
+        if (!studentIdFromLS) {
+          setMessage("student_id missing in localStorage. Please login again.");
+          return;
+        }
+
+        const res = await axiosInstance.get(`/students/${studentIdFromLS}`);
+        const foundStudent = res.data;
+
+        setStudentId(foundStudent.id);
+        setStudent(foundStudent);
+
+        setFormData({
+          profile_desc: foundStudent.profile_desc || "",
+          profile_pic_url: null,
+          user: {
+            first_name: foundStudent.user?.first_name || "",
+            last_name: foundStudent.user?.last_name || "",
+            email: foundStudent.user?.email || "",
+            username: foundStudent.user?.username || "",
+          },
+        });
+
+        setPreview(foundStudent.profile_pic_url);
+      } catch (err) {
+        console.error(err);
+        setMessage("Failed to fetch student record");
       }
+    };
 
-      const res = await axiosInstance.get(`/students/${studentIdFromLS}`);
-      const foundStudent = res.data;
-
-      setStudentId(foundStudent.id);
-      setStudent(foundStudent);
-
-      setFormData({
-        profile_desc: foundStudent.profile_desc || "",
-        profile_pic_url: null,
-        user: {
-          first_name: foundStudent.user?.first_name || "",
-          last_name: foundStudent.user?.last_name || "",
-          email: foundStudent.user?.email || "",
-          username: foundStudent.user?.username || "",
-        },
-      });
-
-      setPreview(foundStudent.profile_pic_url);
-    } catch (err) {
-      console.error(err);
-      setMessage("Failed to fetch student record");
-    }
-  };
-
-  fetchStudent();
-}, []);
+    fetchStudent();
+  }, []);
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -71,7 +71,7 @@ useEffect(() => {
     e.preventDefault();
     if (!studentId) return;
 
-    if (formData.profile_desc.length > 200) {
+    if (formData.profile_desc && formData.profile_desc.length > 200) {
       alert("Profile description cannot exceed 200 characters.");
       return;
     }
@@ -80,25 +80,38 @@ useEffect(() => {
     setMessage("");
 
     try {
-      const data = new FormData();
-      if (formData.profile_desc) data.append("profile_desc", formData.profile_desc);
-      if (formData.profile_pic) data.append("profile_pic", formData.profile_pic);
-      data.append("user[id]", loggedInUserId);
-      data.append("user[first_name]", formData.user.first_name);
-      data.append("user[last_name]", formData.user.last_name);
-      data.append("user[username]", formData.user.username);
+      const jsonPayload = {
+        profile_desc: formData.profile_desc,
+        user: {
+          first_name: formData.user.first_name,
+          last_name: formData.user.last_name,
+          username: formData.user.username,
+        }
+      };
 
-      await axiosInstance.patch(`/students/${studentId}`, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axiosInstance.patch(`/students/${studentId}`, jsonPayload);
+
+      if (formData.profile_pic) {
+        const imageFormData = new FormData();
+        imageFormData.append("profile_pic", formData.profile_pic);
+
+        await axiosInstance.patch(`/students/${studentId}`, imageFormData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
 
       setMessage("Profile updated successfully!");
       alert("Profile updated successfully!");
       setStudent({ ...student, ...formData, user: { ...formData.user } });
       setEditMode(false);
     } catch (err) {
-      console.error(err.response?.data || err.message);
-      setMessage("Failed to update profile");
+      console.error("Update error:", err.response?.data || err.message);
+      
+      if (err.response?.data?.user?.username) {
+        alert("That username is already taken. Please try another one.");
+      } else {
+        setMessage("Failed to update profile.");
+      }
     } finally {
       setLoading(false);
     }
@@ -132,7 +145,7 @@ useEffect(() => {
           onClick={() => setEditMode(!editMode)}
           style={{ cursor: "pointer" }}
         >
-          <FiEdit size={20} /> {/* <-- Pencil icon */}
+          <FiEdit size={20} />
         </span>
       </h2>
       {message && <p className="message">{message}</p>}
