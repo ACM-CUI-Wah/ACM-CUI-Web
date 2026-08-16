@@ -30,15 +30,24 @@ const EventCreatePage = () => {
   const fetchEventTypes = async () => {
     try {
       const res = await axiosInstance.get("/events/types/");
-      setEventTypes(res.data);
+      
+      let fetchedData = res.data;
+      if (res.data && res.data.results) fetchedData = res.data.results;
+      else if (res.data && res.data.data) fetchedData = res.data.data;
+
+      if (Array.isArray(fetchedData) && fetchedData.length > 0) {
+        setEventTypes(fetchedData);
+      } else {
+        throw new Error("API returned an empty array or invalid format");
+      }
     } catch (error) {
       console.error("Error fetching event types:", error);
-      // Fallback to default categories if API fails
       setEventTypes([
-        { id: 1, type: "WORKSHOP" },
+        { id: 1, type: "HACKATHON" },
         { id: 2, type: "SEMINAR" },
-        { id: 3, type: "COMPETITION" },
+        { id: 3, type: "WORKSHOP" },
         { id: 4, type: "NETWORKING" },
+        { id: 5, type: "STUDENT WEEK" },
       ]);
     }
   };
