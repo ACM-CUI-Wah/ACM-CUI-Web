@@ -32,7 +32,8 @@ const Footer = () => {
             <h5 className="fw-bold mb-5">Clubs</h5>
             <ul className="list-unstyled">
               <li><Link to="/teams">CodeHub</Link></li>
-              <li><Link to="/teams">Media & Marketing</Link></li>
+              <li><Link to="/teams">Media</Link></li>
+              <li><Link to="/teams">Social Media & Marketing</Link></li>
               <li><Link to="/teams">Graphics</Link></li>
               <li><Link to="/teams">Events & Logistics</Link></li>
               <li><Link to="/teams">Decor</Link></li>
