@@ -47,7 +47,7 @@ const ClubsSection = () => {
             <img src={vector1} alt="Code Hub" />
           </div>
           <h4>CODE HUB</h4>
-          <p>HIntroducing the heart of innovation our Code Hub team.
+          <p>Introducing the heart of innovation our Code Hub team.
             This is where curiosity meets creation. </p>
         </motion.div>
 
