@@ -155,6 +155,7 @@ useEffect(() => {
 
   const renderLeadNav = () => (
     <>
+       <NavLink to="/dashboard/recruitment">Recruitment</NavLink>
       {/* Attendance Group */}
       <DropdownGroup
         name="attendance"
