@@ -11,7 +11,7 @@ const RecruitmentHero = () => {
 
         <div className="recruitment-badge">
           <span className="badge-icon">⚡</span>
-          Spring 2026 Recruitment Now Open
+          Fall 2026 Recruitment Now Open
         </div>
 
         <h1 className="hero-title">ACM CUI WAH CHAPTER</h1>
