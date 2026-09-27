@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import UntypedToken
 from api.permissions import SignUpPermission
@@ -148,6 +149,7 @@ class SignupView(APIView):
 class LoginView(APIView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -225,6 +227,7 @@ class LoginView(APIView):
 class OTPView(APIView):
     permission_classes = [AllowAny]
     serializer_class = OTPSerializer
+    throttle_classes = [AnonRateThrottle]
 
     User = get_user_model()
 
@@ -302,6 +305,7 @@ class OTPView(APIView):
 )
 class PasswordChangeView(APIView):
     serializer_class = PasswordChangeSerializer
+    throttle_classes = [AnonRateThrottle]
 
     def put(self, request):
         serializer = self.serializer_class(data=request.data)
